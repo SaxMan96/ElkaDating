@@ -16,13 +16,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    message.cpp \
-    server.cpp \
     Client.cpp \
-    SingletonClientList.cpp
+    SingletonClientList.cpp \
+    Server.cpp \
+    Message.cpp \
+    Messagehandler.cpp
 
 HEADERS += \
-    message.hpp \
-    server.hpp \
     Client.hpp \
-    SingletonClientList.hpp
+    SingletonClientList.hpp \
+    Message.hpp \
+    Server.hpp \
+    Messagehandler.hpp

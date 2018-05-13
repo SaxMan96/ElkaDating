@@ -19,8 +19,8 @@
 
 // headers
 #include "SingletonClientList.hpp"
-#include "message.hpp"
-#include "server.hpp"
+#include "Message.hpp"
+#include "Server.hpp"
 
 void* client_thread_read(void *connection);
 void* client_thread_logic(void *connection);

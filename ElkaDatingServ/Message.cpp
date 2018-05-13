@@ -1,4 +1,4 @@
-#include "message.hpp"
+#include "Message.hpp"
 
 Message::Message(char* header){
     protocolName_[0] = header[0];
