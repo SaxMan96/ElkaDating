@@ -14,7 +14,7 @@
 // cpp things
 #include <unordered_map>
 #include <queue>
-#include "message.hpp"
+#include "Message.hpp"
 
 #include "SingletonClientList.hpp"
 
