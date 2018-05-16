@@ -13,15 +13,24 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include <package.cpp>
+#include <Package.hpp>
+#include <SecureHandler.hpp>
+
+// crypt things
+#include <openssl/rsa.h>
+#include <openssl/ssl.h>
+#include <openssl/pem.h>
 
 int main(int argc, char *argv[])
 {
+    Package *package;
+    SecureHandler *encryptedMessage;
+
     int socketID;
     sockaddr_in server;
 
     server.sin_family = AF_INET; // połączenie TCP/!P
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_addr.s_addr = inet_addr("192.168.1.107");
     server.sin_port = htons(8000);
 
     socketID = socket(AF_INET, SOCK_STREAM, 0 ); // TCP
@@ -35,13 +44,20 @@ int main(int argc, char *argv[])
         return 2;
     }
 
-    Package* package = new Package("1", 50,15,1431,1431);
+    package = new Package("1", 50,15,1431,1431);
+        std::cout<<"jestem tu\n";
+    encryptedMessage = new SecureHandler(package);
 
+    std::cout<<"jestem tu\n";
 
-    if(write(socketID, package->getPackage(), package->getPackageLength()) == -1){
+    std::cout<<"encryptedMessage->getData() "<<encryptedMessage->getData()[0]<<std::endl;
+    std::cout<<"encryptedMessage->getDataLength()"<<encryptedMessage->getDataLength()<<std::endl;
+
+    if(write(socketID, encryptedMessage->getData(), encryptedMessage->getDataLength()) == -1){
         std::cout<<"3\n";
         return 3;
     }
+
 
 //    char bufor[8];
 //    while(1)
