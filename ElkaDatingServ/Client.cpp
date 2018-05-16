@@ -14,7 +14,6 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
 
-    pthread_detach(readThread_);
     pthread_detach(logicThread_);
 }
 
