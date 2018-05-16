@@ -14,8 +14,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+LIBS += -lssl -lcrypto
+
 SOURCES += \
         main.cpp \
-    package.cpp
+    SecureHandler.cpp \
+    Package.cpp
 
-HEADERS +=
+HEADERS += \
+    Package.hpp \
+    SecureHandler.hpp
+
+DISTFILES += \
+    crypto/cryptology_init.sh \
+    crypto/private_key.pem \
+    crypto/public_key.pem \
+    crypto/letters.txt \
+    crypto/database.sql \
+    public_key.pem \
+    publicServer_key.pem
