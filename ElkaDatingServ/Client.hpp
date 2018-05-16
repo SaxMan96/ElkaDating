@@ -14,12 +14,15 @@
 // cpp things
 #include <unordered_map>
 #include <queue>
+
 #include "Message.hpp"
-
 #include "SingletonClientList.hpp"
-
+#include "Securehandler.hpp"
+#include "Messagehandler.hpp"
+#include "Socketreader.hpp"
 
 const int MESSAGE_HEADER_SIZE = 16;
+const int ENCRYPTED_DATA_SIZE = 256*8;
 
 
 class Client
@@ -43,10 +46,11 @@ private:
     sem_t msgSem_;
 
     bool isStillRunning_;
+    SecureHandler *sh_synchro_;
+    SecureHandler *sh_asynchro_;
+    SocketReader *sr_;
 
-    void sendMessage(Message *msg){
-
-    }
+    void sendMessage(Message *msg);
 
 public:
     Client(int clientSockfd, sockaddr client_addr, socklen_t length);
@@ -65,6 +69,7 @@ public:
 
     Message* getMessage();
     Message *readMessage();
+    int readBytes(int, char*);
 };
 
 #endif // CLIENT_HPP
