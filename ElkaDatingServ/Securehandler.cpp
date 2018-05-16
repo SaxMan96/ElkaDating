@@ -1,10 +1,57 @@
 #include "Securehandler.hpp"
 
-SecureHandler::SecureHandler(std::string privateKeyFileName, std::string publicKeyFileName)
+SecureHandler::SecureHandler(SocketReader *sc, int packetLength,
+                             int encryptedBuforSize, int decryptedBuforSize)
 {
+    sc_ = sc;
+    packetLength_ = packetLength;
+    decryptedBuforSize_ = decryptedBuforSize;
+    encryptedBuforSize_ = encryptedBuforSize;
+    decryptedBuforIndex_ = 0;
+    encryptedBuforIndex_ = 0;
+    encrypted_bufor_ = nullptr;
+    decrypted_bufor_ = nullptr;
+}
+
+int SecureHandler::getPacketLength() const
+{
+    return packetLength_;
+}
+
+
+SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName)
+    :SecureHandler(sc, 256, 256, 245), paddingType_(RSA_PKCS1_PADDING)
+{
+    std::cout<<"wchodzę do secureHandler RSA\n";
+    FILE * fp = fopen(publicKeyFileName.c_str(), "rb");
+    if(fp == NULL)
+    {
+        std::cout<<"Public ERROR!\n";
+        // TODO THROW
+    }
+
+    rsaPublicKey_ = RSA_new();
+    rsaPublicKey_ = PEM_read_RSA_PUBKEY(fp, &rsaPublicKey_, NULL, NULL);
+    fclose(fp);
+
+
+    fp = fopen(privateKeyFileName.c_str(), "rb");
+    if(fp == NULL)
+    {
+        std::cout<<"Private ERROR!\n";
+        // TODO THROW
+    }
+
+    rsaPrivateKey_ = RSA_new();
+    rsaPrivateKey_ = PEM_read_RSAPrivateKey(fp, &rsaPrivateKey_, NULL, NULL);
+    fclose(fp);
+
+    std::cout<<"Koniec SecureHandler RSA\n";
 
 }
 
+
+//char*
 
 /*
 
