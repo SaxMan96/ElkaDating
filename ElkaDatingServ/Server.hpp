@@ -2,6 +2,7 @@
 #define SERVER_HPP
 
 #include "Client.hpp"
+#include "Myexceptions.hpp"
 
 class SingletonSocketServer
 {
@@ -20,8 +21,8 @@ public:
         return *pInstance_;
     }
     void init(int portNumber, int backlog);
-    void stopAcceptinNewConnestions();
-    Client* acceptNewConnections();
+    void stopAcceptinNewConnections();
+    void acceptNewConnections();
 
 private:
     SingletonSocketServer()

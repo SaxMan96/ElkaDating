@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <semaphore.h>
+#include <pthread.h>
 #include <unistd.h>
 
 // cpp things
@@ -45,6 +45,10 @@ public:
     bool unregisterClient(unsigned int clientID);
     bool pushMessage(unsigned int clientID, Message* msg);
 
+    void closeAllClientConnections();
+
+    ~SingletonClientList();
+
 private:
     SingletonClientList();
     SingletonClientList(const SingletonClientList&) = delete;
@@ -52,7 +56,7 @@ private:
 
     static SingletonClientList* pInstance_;
     std::unordered_map<unsigned int, Client*> clients_;
-    sem_t mapSem_;
+    pthread_mutex_t mapMutex_;
     unsigned int nextClientID_;
 };
 

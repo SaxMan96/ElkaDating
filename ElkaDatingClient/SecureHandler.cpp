@@ -35,7 +35,7 @@ int SecureHandler::encrypt(){
 
     unsigned char plainText[2048/8];
 
-    FILE * fp = fopen("/home/karol/GitRepos/ElkaDating/ElkaDatingClient/publicServer_key.pem", "rb");
+    FILE * fp = fopen("public_key.pem", "rb");
 
     if(fp == NULL)
     {
