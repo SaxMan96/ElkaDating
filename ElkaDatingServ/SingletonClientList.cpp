@@ -31,7 +31,6 @@ bool SingletonClientList::unregisterClient(unsigned int clientID){
     if(foundClient != clients_.end())
     {
         clients_.erase(foundClient);
-        std::cout<<"What the hell!?\n";
     }
     else
         success = false;

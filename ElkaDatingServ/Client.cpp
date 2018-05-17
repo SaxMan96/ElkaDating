@@ -69,6 +69,12 @@ Message* Client::getMessage()
 
 void Client::messageHandler(Message* msg)
 {
+    if(msg->getMsgType()==CLIENT_DISCONNECT)
+    {
+        this->setStillRunningFalse();
+        return;
+    }
+
     mh_.handleMessage(msg);
 }
 

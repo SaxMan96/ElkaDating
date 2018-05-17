@@ -49,7 +49,7 @@ void* client_thread_read(void *client)
             clientOfThread->pushMessage(msg);
     }
 
-    // TODO wygeneruj komunikat zakończenia!!! !!! !!!
+    clientOfThread->pushMessage(new Message(CLIENT_DISCONNECT, 0, 0, 0, nullptr, 0));
 
     std::cout<<"CLIENT READ END ID "<<clientOfThread->getID()<<std::endl;
     return nullptr;
@@ -96,16 +96,19 @@ void* client_thread_logic(void *client)
 
 int main(int argc, char *argv[])
 {
+    pthread_t creator;
+
     try
     {
         SingletonSocketServer::getInstance().init(8000, 32);
-        pthread_t creator;
+
 
         pthread_create(&creator, NULL, connection_creator_thread, NULL);
 
         std::cin.get();
 
         pthread_cancel(creator);
+
     }
     catch(MyException &ex)
     {
@@ -115,7 +118,6 @@ int main(int argc, char *argv[])
     {
         std::cout<<ex.what()<<std::endl;
     }
-
     SingletonClientList::getInstance().closeAllClientConnections();
 
     return 0;

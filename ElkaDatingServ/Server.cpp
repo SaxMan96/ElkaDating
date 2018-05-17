@@ -20,20 +20,25 @@ void SingletonSocketServer::init(int portNumber, int backlog){
  }
 
 void SingletonSocketServer::stopAcceptinNewConnections(){
-       isAcceptingNewConnections_ = false;
+    isAcceptingNewConnections_ = false;
+    close(sockfd_);
 }
 
 void SingletonSocketServer::acceptNewConnections()
 {
-    while(isAcceptingNewConnections_){
+    while(isAcceptingNewConnections_)
+    {
 
         int clientSockfd;
         sockaddr client_addr;
         socklen_t length = sizeof(client_addr);
 
-        if( (clientSockfd = accept(sockfd_, &client_addr, &length)) == -1){
+        clientSockfd = accept(sockfd_, &client_addr, &length);
+
+        if( clientSockfd ==-1){
             throw ServerAcceptError();
         }
+
 
         new Client(clientSockfd, client_addr, length);
         // socket przekaza w konstruktorze

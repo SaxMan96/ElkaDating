@@ -7,8 +7,10 @@
 const int MESSAGE_HEADER_SIZE = 16;
 
 enum MessageType{
-    HAND_SHAKE,NOTIFICATION, CONFIRMATION, LOGIN
+    HAND_SHAKE,NOTIFICATION, CONFIRMATION, LOGIN,
     /*REGISTRATION, TERM_CHOOSE, EDIT_TERMS, ACCEPT_TERMS*/
+    /*rozłączenie*/
+    CLIENT_DISCONNECT
 };
 enum MessageSubType{
     /*logowanie*/
@@ -17,8 +19,7 @@ enum MessageSubType{
     ACCEPTANCE_OF_TERM, DECLINE_OF_TERM, CHANGE_OF_TERM, NEW_TERM,
     /*info od serwera*/
     SERVER_FAILURE, SERVER_BREAK,
-    /*rozłączenie*/
-    CLIEN_DISCONNECT
+
 };
 struct Message{
 
