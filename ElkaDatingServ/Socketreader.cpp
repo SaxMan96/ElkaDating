@@ -21,7 +21,9 @@ int SocketReader::readBytes(int numberOfBytes, char *bufor)
 
         else if(returnVal==-1)
         {
-            return -1;
+            // TODO THROW EXCEPTION
+            std::cout<<"READ -1!\n";
+            return 0;
         }
 
         else

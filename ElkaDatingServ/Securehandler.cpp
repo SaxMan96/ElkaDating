@@ -1,7 +1,6 @@
 #include "Securehandler.hpp"
 
-SecureHandler::SecureHandler(SocketReader *sc, int packetLength,
-                             int encryptedBuforSize, int decryptedBuforSize)
+SecureHandler::SecureHandler(SocketReader *sc, int packetLength, int encryptedBuforSize, int decryptedBuforSize)
 {
     sc_ = sc;
     packetLength_ = packetLength;
@@ -22,12 +21,12 @@ int SecureHandler::getPacketLength() const
 SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc, 256, 256, 245), paddingType_(RSA_PKCS1_PADDING)
 {
-    std::cout<<"wchodzę do secureHandler RSA\n";
-    FILE * fp = fopen(publicKeyFileName.c_str(), "rb");
+    FILE * fp;
+
+    fp = fopen(publicKeyFileName.c_str(), "rb");
     if(fp == NULL)
     {
-        std::cout<<"Public ERROR!\n";
-        // TODO THROW
+        throw CannotOpenPublicPem();
     }
 
     rsaPublicKey_ = RSA_new();
@@ -38,18 +37,67 @@ SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFil
     fp = fopen(privateKeyFileName.c_str(), "rb");
     if(fp == NULL)
     {
-        std::cout<<"Private ERROR!\n";
-        // TODO THROW
+        throw CannotOpenPublicPem();
     }
 
     rsaPrivateKey_ = RSA_new();
     rsaPrivateKey_ = PEM_read_RSAPrivateKey(fp, &rsaPrivateKey_, NULL, NULL);
     fclose(fp);
-
-    std::cout<<"Koniec SecureHandler RSA\n";
-
 }
 
+int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
+{
+    int  result = RSA_private_decrypt(data_len, enc_data, decrypted, rsa, paddingType_);
+    if(result == -1 )
+        throw DecryptError();
+
+    return result;
+}
+
+
+int SecureHandler_RSA::getDecryptedData(int numberOfBytes, char *data_bufor)
+{
+    int data_bufor_index = 0;
+    int returnVal;
+
+    if(encrypted_bufor_ == nullptr && decrypted_bufor_ == nullptr)
+    {
+
+        encrypted_bufor_ = new char[encryptedBuforSize_];
+        decrypted_bufor_ = new char[decryptedBuforSize_];
+
+        returnVal = sc_->readBytes(packetLength_, encrypted_bufor_);
+        if(returnVal == 0)
+            return 0;
+
+        decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
+    }
+
+    while(data_bufor_index < numberOfBytes)
+    {
+
+        if(decryptedBuforIndex_ >= decryptedDataLength_)
+        {
+            returnVal = sc_->readBytes(packetLength_, encrypted_bufor_);
+            if(returnVal == 0)
+                return 0;
+
+            decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
+
+            decryptedBuforIndex_ = 0;
+        }
+
+        else
+        {
+            for(; data_bufor_index < numberOfBytes && decryptedBuforIndex_ < decryptedDataLength_; ++decryptedBuforIndex_)
+            {
+                *(data_bufor + data_bufor_index) = *(decrypted_bufor_ + decryptedBuforIndex_);
+                ++data_bufor_index;
+            }
+        }
+    }
+    return data_bufor_index;
+}
 
 //char*
 

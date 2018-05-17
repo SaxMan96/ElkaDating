@@ -7,7 +7,8 @@ class MessageHandler
     Message *msg_;
 public:
 
-    MessageHandler();
+    MessageHandler()
+    {}
     void handleMessage(Message*);
 };
 

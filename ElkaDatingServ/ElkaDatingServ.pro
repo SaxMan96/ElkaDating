@@ -24,7 +24,8 @@ SOURCES += \
     Message.cpp \
     Messagehandler.cpp \
     Securehandler.cpp \
-    Socketreader.cpp
+    Socketreader.cpp \
+    Myexceptions.cpp
 
 HEADERS += \
     Client.hpp \
@@ -33,4 +34,5 @@ HEADERS += \
     Server.hpp \
     Messagehandler.hpp \
     Securehandler.hpp \
-    Socketreader.hpp
+    Socketreader.hpp \
+    Myexceptions.hpp

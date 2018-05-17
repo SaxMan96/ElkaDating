@@ -20,9 +20,9 @@
 #include "Securehandler.hpp"
 #include "Messagehandler.hpp"
 #include "Socketreader.hpp"
+#include "Myexceptions.hpp"
 
-const int MESSAGE_HEADER_SIZE = 16;
-const int ENCRYPTED_DATA_SIZE = 256*8;
+
 
 
 class Client
@@ -46,6 +46,8 @@ private:
     sem_t msgSem_;
 
     bool isStillRunning_;
+
+    MessageHandler mh_;
     SecureHandler *sh_synchro_;
     SecureHandler *sh_asynchro_;
     SocketReader *sr_;
@@ -53,23 +55,26 @@ private:
     void sendMessage(Message *msg);
 
 public:
-    Client(int clientSockfd, sockaddr client_addr, socklen_t length);
-    void setID(unsigned int clientID);
+    Client(int clientSockfd, sockaddr client_addr, socklen_t length);  
 
     bool checkIfStillRunning() const;
-    bool login();
-
-    void setStillRunningFalse();
-    void pushMessage(Message *msg);
-    void clean();
-    void messageHandler(Message *msg);
     pthread_t getReadThreadID() const;
-
+    int getID() const;
     int getSocket() const;
 
+    void setStillRunningFalse();
+    void setID(unsigned int clientID);
+
+    bool login();
+    void closeConnection();
+    void unregister();
+
+    void messageHandler(Message *msg);
+    void pushMessage(Message *msg);
     Message* getMessage();
     Message *readMessage();
-    int readBytes(int, char*);
+
+    ~Client();
 };
 
 #endif // CLIENT_HPP

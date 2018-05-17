@@ -8,21 +8,28 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     client_addr_=client_addr;
     length_=length;
 
-    sem_init(&consumerSem_, 0, 0);
-    sem_init(&msgSem_, 0, 1); // binary sem
+    if(sem_init(&consumerSem_, 0, 0) == -1)
+    {
+        throw ClientInitSemError();
+    }
+
+    if(sem_init(&msgSem_, 0, 1) == -1)
+    {
+        throw ClientInitSemError();
+    }
 
     isStillRunning_=true;
 
     sr_ = new SocketReader(clientSockfd_);
-    std::cout<<"jestem przed sh_asynchro = new\n";
-    sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
-    //sh_synchro_ = new SecureHandler_AES(sr_);
-    std::cout<<"jestem po sh_asynchro = new\n";
 
+    sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
+    //sh_synchro_ = new SecureHander_AES(sr_);
 
     isRegister_=SingletonClientList::getInstance().registerClient(this);
+
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
+
     pthread_detach(logicThread_);
 }
 
@@ -60,41 +67,32 @@ Message* Client::getMessage()
     return msg;
 }
 
-void Client::messageHandler(Message* msg){
-    std::string c = "CLOSE";
-    char* buf;
-    if (c.compare(msg->getBufor()))
-    {
-        buf = "mam";
-        write(clientSockfd_,buf, 3 );
-    }
-    else{
-        buf = "zamykam";
-        write(clientSockfd_,buf, 7 );
-        this->clean();
-    }
+void Client::messageHandler(Message* msg)
+{
+    mh_.handleMessage(msg);
 }
 
 bool Client::login(){
     return true;
 }
 
-void Client::clean(){
+
+void Client::closeConnection()
+{
     this->setStillRunningFalse();
-    sem_destroy(&consumerSem_);
-    sem_destroy(&msgSem_);
 
-    close(clientSockfd_);
-
-    while(!isStillRunning_);
-
-    while(msgQueue_.size()!=0){
-        delete(msgQueue_.front());
-        msgQueue_.pop();
-    }
+    if(close(clientSockfd_)==-1)
+        throw ClientCloseError();
 }
 
-int Client::getSocket()const{
+void Client::unregister()
+{
+    SingletonClientList::getInstance().unregisterClient(clientID_);
+}
+
+
+int Client::getSocket()const
+{
     return clientSockfd_;
 }
 
@@ -105,29 +103,56 @@ Message * Client::readMessage(){
     char headerBufor[MESSAGE_HEADER_SIZE];
     Message *msg;
     numOfReadBytes = sh_asynchro_->getDecryptedData(MESSAGE_HEADER_SIZE, headerBufor);
-    std::cout<<"numOfReadBytes: "<<numOfReadBytes<<"MESSAGE_HEADER_SIZE: "<<MESSAGE_HEADER_SIZE<<"\n";
+
+    if( numOfReadBytes == 0)
+    {
+        this->setStillRunningFalse();
+        return nullptr;
+    }
+
     if( numOfReadBytes != MESSAGE_HEADER_SIZE)
     {
         return nullptr;
     }
-    std::cout<<"readMessage22\n";
+
     msg = new Message(headerBufor);
 
-    numOfReadBytes = sh_asynchro_->getDecryptedData(msg->getDataLength(), msg->getBufor());
-        std::cout<<numOfReadBytes << "READ data\n";
-    if( numOfReadBytes != msg->getDataLength())
+    if(msg -> getMsgDataLength() != 0)
     {
-        return nullptr;
-    }
+        numOfReadBytes = sh_asynchro_->getDecryptedData(msg->getMsgDataLength(), msg->getMsgDataBufor());
 
-    std::cout<<msg->headerToSting();
-    printf("------>>>MESSAGE: %s \n", msg->getBufor());
+        if( numOfReadBytes != msg->getMsgDataLength())
+        {
+            this->setStillRunningFalse();
+            return nullptr;
+        }
+
+        std::cout<<msg->headerToString();
+        printf("------>>>MESSAGE: %s \n", msg->getMsgDataBufor());
+    }
 
     return msg;
 }
 
 pthread_t Client::getReadThreadID() const{
     return readThread_;
+}
+
+
+Client::~Client()
+{
+    sem_destroy(&consumerSem_);
+    sem_destroy(&msgSem_);
+
+    while(msgQueue_.size()!=0){
+        delete(msgQueue_.front());
+        msgQueue_.pop();
+    }
+}
+
+int Client::getID() const
+{
+    return clientID_;
 }
 
 /*

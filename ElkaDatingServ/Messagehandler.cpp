@@ -3,7 +3,8 @@
 
 
 
-void MessageHandler::handleMessage(Message *m){
+void MessageHandler::handleMessage(Message *m)
+{
     msg_ = m;
 
     if(msg_->getMsgType() == HAND_SHAKE){

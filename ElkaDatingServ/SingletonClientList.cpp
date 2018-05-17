@@ -4,38 +4,46 @@
 #include<utility>
 
 SingletonClientList::SingletonClientList(){
-    sem_init(&mapSem_, 0, 1);   // binary sem to synchornize list od Clients
+    mapMutex_ = PTHREAD_MUTEX_INITIALIZER;   // mutex to synchornize list od Clients
     nextClientID_=1;
 }
 
 bool SingletonClientList::registerClient(Client *client){
 
-    sem_wait(&mapSem_);
+    pthread_mutex_lock(&mapMutex_);
 
     ++nextClientID_;
     client->setID(nextClientID_);
     clients_.insert(std::make_pair(nextClientID_, client));
 
-    sem_post(&mapSem_);
+    pthread_mutex_unlock(&mapMutex_);
 
     return true;
 }
 
 bool SingletonClientList::unregisterClient(unsigned int clientID){
 
-    sem_wait(&mapSem_);
+    pthread_mutex_lock(&mapMutex_);
 
+    bool success = true;
     auto foundClient = clients_.find(clientID);
-    clients_.erase(foundClient);
 
-    sem_post(&mapSem_);
+    if(foundClient != clients_.end())
+    {
+        clients_.erase(foundClient);
+        std::cout<<"What the hell!?\n";
+    }
+    else
+        success = false;
 
-    return true;
+    pthread_mutex_unlock(&mapMutex_);
+
+    return success;
 }
 
 bool SingletonClientList::pushMessage(unsigned int clientID, Message* msg){
 
-    sem_wait(&mapSem_);
+    pthread_mutex_lock(&mapMutex_);
 
     bool success = true;
     auto foundClient = clients_.find(clientID);
@@ -47,8 +55,34 @@ bool SingletonClientList::pushMessage(unsigned int clientID, Message* msg){
     else
         success = false;
 
-    sem_post(&mapSem_);
+    pthread_mutex_unlock(&mapMutex_);
 
     return success;
+}
+
+void SingletonClientList::closeAllClientConnections()
+{
+    pthread_mutex_lock(&mapMutex_);
+
+    std::cout << clients_.size()<<std::endl;
+    if(clients_.size()!=0)
+    for (auto it = clients_.begin(); it != clients_.end(); ++it)
+    {
+        it->second->setStillRunningFalse();
+    }
+
+    pthread_mutex_unlock(&mapMutex_);
+    // będzie się kręcił aż każdy klient zakończy się poprawnie
+    // a jak chce zakończyć szybko?
+    // to wtedy Ctrl+C! Jak mam zapewnić wtedy żeby wszystko się dobrze skończyło?
+    while(clients_.size()!=0);
+
+    pthread_mutex_destroy(&mapMutex_);
+}
+
+
+SingletonClientList::~SingletonClientList()
+{
+    closeAllClientConnections();
 }
 

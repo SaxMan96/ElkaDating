@@ -1,7 +1,5 @@
 #include "Server.hpp"
 
-
-
 void SingletonSocketServer::init(int portNumber, int backlog){
     portNumber_=portNumber;
     server_addr_.sin_family = AF_INET;
@@ -13,21 +11,19 @@ void SingletonSocketServer::init(int portNumber, int backlog){
     sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
 
     if ( bind(sockfd_, (struct sockaddr *) &server_addr_, sizeof (server_addr_)) == -1){
-        std::cout<<"binding stream socket error";       // TODO THROW
-        return;
+        throw ServerBindError();
     }
 
     if( listen(sockfd_, backlog_) == -1){
-        std::cout<<"listen error";                      // TODO THROW
-        return;
+        throw ServerListenError();
     }
  }
 
-void SingletonSocketServer::stopAcceptinNewConnestions(){
+void SingletonSocketServer::stopAcceptinNewConnections(){
        isAcceptingNewConnections_ = false;
 }
 
-Client* SingletonSocketServer::acceptNewConnections()
+void SingletonSocketServer::acceptNewConnections()
 {
     while(isAcceptingNewConnections_){
 
@@ -35,10 +31,13 @@ Client* SingletonSocketServer::acceptNewConnections()
         sockaddr client_addr;
         socklen_t length = sizeof(client_addr);
 
-        clientSockfd = accept(sockfd_, &client_addr, &length);
-        // TODO THROW
+        if( (clientSockfd = accept(sockfd_, &client_addr, &length)) == -1){
+            throw ServerAcceptError();
+        }
 
-        Client *client = new Client(clientSockfd, client_addr, length);   // socket przekaza w konstruktorze
+        new Client(clientSockfd, client_addr, length);
+        // socket przekaza w konstruktorze
+        // niby sam wskaźnik, ale on później sam siebie zwolni
     }
 }
 
