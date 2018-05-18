@@ -24,6 +24,12 @@ public:
     const char * what() const throw();
 };
 
+class EncryptError : public MyException
+{
+public:
+    const char * what() const throw();
+};
+
 class CannotOpenPrivatePem : public MyException
 {
 public:

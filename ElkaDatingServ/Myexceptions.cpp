@@ -12,6 +12,11 @@ const char* CannotOpenFile::what() const throw()
 
 const char* DecryptError::what() const throw()
 {
+    return "Error when try to decrypt data!";
+}
+
+const char* EncryptError::what() const throw()
+{
     return "Error when try to encrypt data!";
 }
 

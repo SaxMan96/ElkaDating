@@ -23,7 +23,12 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     sr_ = new SocketReader(clientSockfd_);
 
     sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
-    //sh_synchro_ = new SecureHander_AES(sr_);
+    unsigned char key [64];
+    int i = 0;
+
+    for (char e :"52443563524435635244356352443563")
+        key[i++] = (unsigned char)e;
+    sh_synchro_ = new SecureHandler_AES(sr_, 256, (unsigned char*)key);
 
     isRegister_=SingletonClientList::getInstance().registerClient(this);
 
@@ -108,6 +113,7 @@ Message * Client::readMessage(){
     int numOfReadBytes;
     char headerBufor[MESSAGE_HEADER_SIZE];
     Message *msg;
+
     numOfReadBytes = sh_asynchro_->getDecryptedData(MESSAGE_HEADER_SIZE, headerBufor);
 
     if( numOfReadBytes == 0)

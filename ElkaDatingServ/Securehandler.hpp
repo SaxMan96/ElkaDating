@@ -20,6 +20,19 @@
  *  - int getDecryptedData(int, char *)
  *  - ...
  */
+static void hex_print(const void* pv, size_t len)
+{
+    const unsigned char * p = (const unsigned char*)pv;
+    if (NULL == pv)
+        printf("NULL");
+    else
+    {
+        size_t i = 0;
+        for (; i<len;++i)
+            printf("%02X ", *p++);
+    }
+    printf("\n");
+}
 
 class SecureHandler
 {
@@ -41,7 +54,7 @@ public:
 
     virtual int getDecryptedData(int numberOfBytes, char *data_bufor) = 0;
 
-    //virtual int public_encrypt(unsigned char *data, int data_len, unsigned char *encrypted) = 0;
+    virtual int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted) = 0;
 
     int getPacketLength() const;
 };
@@ -54,6 +67,7 @@ class SecureHandler_No_Secure : public SecureHandler
 class SecureHandler_RSA : public SecureHandler
 {
 private:
+    const int padding = RSA_PKCS1_PADDING;
     int paddingType_;
     RSA *rsaPublicKey_;
     RSA *rsaPrivateKey_;
@@ -61,18 +75,20 @@ private:
 
     int private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted);
 
+    int encrypt();
+    int private_encrypt(unsigned char *data, int data_len, RSA *rsa, unsigned char *encrypted);
 public:
     SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName);
 
     int getDecryptedData(int numberOfBytes, char *data_bufor);
-
+    int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted);
 };
 
 class SecureHandler_AES : public SecureHandler
 {
     int AES_HEADER_LENGTH = 16;
     unsigned char *iv_enc;
-    unsigned char *iv_dec;
+    char *iv_dec;
 
 private:
     int keyLength_;
@@ -84,10 +100,11 @@ private:
     short dataLength_;
 
     // SecureHandler interface
+    int private_encrypt(unsigned char *data, int data_len, unsigned char *encrypted);
 public:
     SecureHandler_AES(SocketReader *sc, int keyLength, unsigned char *aes_key);
     int getDecryptedData(int numberOfBytes, char *data_bufor);
-
+    int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted);
 };
 
 #endif // SECUREHANDLER_HPP
