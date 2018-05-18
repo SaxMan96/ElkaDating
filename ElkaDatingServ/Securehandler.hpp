@@ -8,6 +8,8 @@
 #include <openssl/rsa.h>
 #include <openssl/ssl.h>
 #include <openssl/pem.h>
+#include <openssl/aes.h>
+#include <openssl/rand.h>
 
 #include "Socketreader.hpp"
 #include "Myexceptions.hpp"
@@ -68,7 +70,23 @@ public:
 
 class SecureHandler_AES : public SecureHandler
 {
+    int AES_HEADER_LENGTH = 16;
+    unsigned char *iv_enc;
+    unsigned char *iv_dec;
+
 private:
+    int keyLength_;
+    unsigned char *aes_key_;
+    AES_KEY enc_key, dec_key;
+    bool loadHeader = true;
+    int encryptedDataLength_;
+    int decryptedDataLength_;
+    short dataLength_;
+
+    // SecureHandler interface
+public:
+    SecureHandler_AES(SocketReader *sc, int keyLength, unsigned char *aes_key);
+    int getDecryptedData(int numberOfBytes, char *data_bufor);
 
 };
 

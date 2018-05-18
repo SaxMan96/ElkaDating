@@ -54,7 +54,6 @@ int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA
     return result;
 }
 
-
 int SecureHandler_RSA::getDecryptedData(int numberOfBytes, char *data_bufor)
 {
     int data_bufor_index = 0;
@@ -99,83 +98,79 @@ int SecureHandler_RSA::getDecryptedData(int numberOfBytes, char *data_bufor)
     return data_bufor_index;
 }
 
-//char*
 
-/*
-
-const int padding = RSA_PKCS1_PADDING;
-
-int public_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
+SecureHandler_AES::SecureHandler_AES(SocketReader *sc, int keyLength, unsigned char *aes_key)
+    :SecureHandler(sc,1,(AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE, AES_HEADER_LENGTH)
 {
-    int result = RSA_public_encrypt(data_len,data,encrypted,rsa,padding);
-    return result;
+    keyLength_ = keyLength;
+    aes_key_ = new unsigned char [keyLength_];
+    for (int i = 0; i < keyLength_; ++i)
+        aes_key_[i] = aes_key[i];
+
+    iv_enc = new unsigned char[ sizeof( unsigned char ) * AES_BLOCK_SIZE];
+    iv_dec = new unsigned char[ sizeof( unsigned char ) * AES_BLOCK_SIZE];
+
+    RAND_bytes(iv_enc, AES_BLOCK_SIZE);
+    memcpy(iv_dec, iv_enc, AES_BLOCK_SIZE);
+
+    AES_set_encrypt_key(aes_key, keyLength_, &enc_key);
+    AES_set_decrypt_key(aes_key, keyLength_, &dec_key);
+
 }
 
-int private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
+int SecureHandler_AES::getDecryptedData(int numberOfBytes, char *data_bufor)
 {
-    int  result = RSA_private_decrypt(data_len,enc_data,decrypted,rsa,padding);
-    return result;
+    int data_bufor_index = 0;
+    int returnVal;
+
+    if( loadHeader || (encrypted_bufor_ == nullptr && decrypted_bufor_ == nullptr) )
+    {
+        encryptedDataLength_ = (AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE;
+        decryptedDataLength_ = AES_HEADER_LENGTH;
+
+        encrypted_bufor_ = new char[encryptedDataLength_];
+        decrypted_bufor_ = new char[decryptedDataLength_];
+
+        returnVal = sc_->readBytes(encryptedDataLength_, encrypted_bufor_);
+        if(returnVal == 0)
+            return 0;
+
+        AES_cbc_encrypt((unsigned char*) encrypted_bufor_, (unsigned char*)decrypted_bufor_, encryptedDataLength_, &dec_key, iv_dec, AES_DECRYPT);
+
+        dataLength_ = *(short*)(decrypted_bufor_+14);
+        loadHeader = false;
+    }
+
+    while(data_bufor_index < numberOfBytes)
+    {
+
+        if(decryptedBuforIndex_ >= decryptedDataLength_)
+        {
+            loadHeader = true;
+            delete [] encrypted_bufor_;
+            delete [] decrypted_bufor_;
+
+            encryptedDataLength_ = (dataLength_/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE;
+            decryptedDataLength_ = dataLength_;
+
+            encrypted_bufor_ = new char[encryptedDataLength_];
+            decrypted_bufor_ = new char[decryptedDataLength_];
+
+            returnVal = sc_->readBytes(encryptedDataLength_, encrypted_bufor_);
+            if(returnVal == 0)
+                return 0;
+
+            AES_cbc_encrypt((unsigned char*)encrypted_bufor_, (unsigned char*)decrypted_bufor_, encryptedDataLength_, &dec_key, iv_dec, AES_DECRYPT);
+            decryptedBuforIndex_ = 0;
+        }
+        else
+        {
+            for(; data_bufor_index < numberOfBytes && decryptedBuforIndex_ < decryptedDataLength_; ++decryptedBuforIndex_)
+            {
+                *(data_bufor + data_bufor_index) = *(decrypted_bufor_ + decryptedBuforIndex_);
+                ++data_bufor_index;
+            }
+        }
+    }
+    return data_bufor_index;
 }
-
-
-
-
-unsigned char plainText[2048/8] = "We are on a mission from God!\0";
-
-// --------------------------------------------------------
-
-    FILE * fp = fopen("public_key.pem", "rb");
-
-    if(fp == NULL)
-    {
-        std::cout<<"Public ERROR!\n";
-        return 0;
-    }
-
-    RSA *rsaPubKey = RSA_new();
-
-    rsaPubKey = PEM_read_RSA_PUBKEY(fp, &rsaPubKey, NULL, NULL);
-
-    fclose(fp);
-
-    unsigned char data[] = "Blues";
-
-
-
-// --------------------------------------------------------
-
-    fp = fopen("private_key.pem", "rb");
-
-    if(fp == NULL)
-    {
-        std::cout<<"Private ERROR!\n";
-        return 0;
-    }
-
-    RSA *rsaPrivateKey = RSA_new();
-
-    rsaPrivateKey = PEM_read_RSAPrivateKey(fp, &rsaPrivateKey, NULL, NULL);
-
-    fclose(fp);
-
-    unsigned char  encrypted[4098];
-    unsigned char decrypted[4098];
-
-    int encrypted_length= public_encrypt(plainText,6,rsaPubKey,encrypted);
-    if(encrypted_length == -1)
-    {
-        printf("Public Encrypt failed \n");
-        exit(0);
-    }
-    printf("Encrypted length =%d\n",encrypted_length);
-
-
-    int decrypted_length = private_decrypt(encrypted,encrypted_length,rsaPrivateKey, decrypted);
-    if(decrypted_length == -1)
-    {
-        printf("Private Decrypt failed\n");
-        exit(0);
-    }
-    printf("Decrypted Text =%s\n",decrypted);
-    printf("Decrypted Length =%d\n",decrypted_length);
-*/
