@@ -1,17 +1,18 @@
 #include "Package.hpp"
 
-Package::Package(std::string data, int type, int subType, int packetID, int sessionID)
+Package::Package(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID)
 {
+    dataSize_ = dataSize;
     type_ = type;
     subType_ = subType;
     packetID_ = packetID;
     sessionID_ = sessionID;
 
-    dataLength_ = data.length()+1;
+    dataLength_ = dataSize+1;
     std::cout<<"dataLength "<<dataLength_<<std::endl;
 
     //allocating memory
-    data_ = new char[16+dataLength_];
+    data_ = new unsigned char[HEADER_SIZE+dataLength_];
 
     //header name
     strcpy((char*)(data_), "DKPS");
@@ -39,7 +40,11 @@ Package::Package(std::string data, int type, int subType, int packetID, int sess
     data_[14] = dataLength_ & 0xFF;
 
     //data
-    strcpy((char*)(data_+16), data.c_str());
+    for (int i = 0; i < dataSize; ++i)
+    {
+        data_[i + HEADER_SIZE] = *(data+i);
+    }
+//    strcpy((char*)(data_+16), data.c_str());
 
 //        std::cout<<"\nPackage: \n";
 //        for (int i = 0; i < 16+dataLength_; ++i){
@@ -48,13 +53,7 @@ Package::Package(std::string data, int type, int subType, int packetID, int sess
 //        std::cout<<"KONIEC\n";
 }
 
-char* Package::getPackage() const {
-    data_[0]='P';
-    data_[1]='a';
-    data_[2]='t';
-    data_[3]='r';
-    data_[4]='y';
-    data_[5]='k';
+unsigned char* Package::getPackage() const {
     return data_;
 }
 

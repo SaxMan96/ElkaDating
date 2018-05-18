@@ -18,12 +18,16 @@ LIBS += -lssl -lcrypto
 
 SOURCES += \
         main.cpp \
-    SecureHandler.cpp \
-    Package.cpp
+    Package.cpp \
+    Myexceptions.cpp \
+    Socketreader.cpp \
+    Securehandler.cpp
 
 HEADERS += \
     Package.hpp \
-    SecureHandler.hpp
+    Securehandler.hpp \
+    Myexceptions.hpp \
+    Socketreader.hpp
 
 DISTFILES += \
     crypto/cryptology_init.sh \
@@ -31,5 +35,4 @@ DISTFILES += \
     crypto/public_key.pem \
     crypto/letters.txt \
     crypto/database.sql \
-    public_key.pem \
-    publicServer_key.pem
+    public_key.pem

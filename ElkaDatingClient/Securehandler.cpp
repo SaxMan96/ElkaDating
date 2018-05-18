@@ -45,6 +45,22 @@ SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFil
     fclose(fp);
 }
 
+SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::__cxx11::string publicKeyFileName)
+    :SecureHandler(sc, 256, 256, 245), paddingType_(RSA_PKCS1_PADDING)
+{
+    FILE * fp;
+
+    fp = fopen(publicKeyFileName.c_str(), "rb");
+    if(fp == NULL)
+    {
+        throw CannotOpenPublicPem();
+    }
+
+    rsaPublicKey_ = RSA_new();
+    rsaPublicKey_ = PEM_read_RSA_PUBKEY(fp, &rsaPublicKey_, NULL, NULL);
+    fclose(fp);
+}
+
 int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
 {
     int  result = RSA_private_decrypt(data_len, enc_data, decrypted, rsa, paddingType_);
@@ -108,7 +124,7 @@ int SecureHandler_RSA::getDecryptedData(int numberOfBytes, char *data_bufor)
 
 int SecureHandler_RSA::getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted)
 {
-    int encrypted_length = private_encrypt(data, data_len, rsaPrivateKey_, encrypted);
+    int encrypted_length = private_encrypt(data, data_len, rsaPublicKey_, encrypted);
     if(encrypted_length == -1)
     {
         printf("Public Encrypt failed \n");
@@ -216,8 +232,7 @@ int SecureHandler_AES::getEncryptedData(unsigned char *data, int data_len, unsig
     RAND_bytes(iv_enc, AES_BLOCK_SIZE);
     memcpy(encrypted, iv_enc, AES_BLOCK_SIZE);
 
-    AES_cbc_encrypt(data, encrypted, data_len, &enc_key, iv_enc, AES_ENCRYPT);
-    return 1;
+    AES_cbc_encrypt(data, (encrypted + 16), data_len, &enc_key, iv_enc, AES_ENCRYPT);
 }
 
 
