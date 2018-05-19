@@ -160,6 +160,9 @@ Client::~Client()
         delete(msgQueue_.front());
         msgQueue_.pop();
     }
+    delete sr_;
+    delete sh_asynchro_;
+    delete sh_synchro_;
 }
 
 int Client::getID() const

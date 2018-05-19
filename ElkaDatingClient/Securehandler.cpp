@@ -12,11 +12,16 @@ SecureHandler::SecureHandler(SocketReader *sc, int packetLength, int encryptedBu
     decrypted_bufor_ = nullptr;
 }
 
+SecureHandler::~SecureHandler()
+{
+    delete [] encrypted_bufor_;
+    delete [] decrypted_bufor_;
+}
+
 int SecureHandler::getPacketLength() const
 {
     return packetLength_;
 }
-
 
 SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc, 256, 256, 245), paddingType_(RSA_PKCS1_PADDING)
@@ -133,6 +138,13 @@ int SecureHandler_RSA::getEncryptedData(unsigned char *data, int data_len, unsig
     return 1;
 }
 
+SecureHandler_AES::~SecureHandler_AES()
+{
+    delete [] encrypted_bufor_;
+    delete [] decrypted_bufor_;
+    delete [] aes_key_;
+}
+
 SecureHandler_AES::SecureHandler_AES(SocketReader *sc, int keyLength, unsigned char *aes_key)
     :SecureHandler(sc,1,(AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE, AES_HEADER_LENGTH)
 {
@@ -141,8 +153,6 @@ SecureHandler_AES::SecureHandler_AES(SocketReader *sc, int keyLength, unsigned c
     for (int i = 0; i < keyLength_; ++i)
         aes_key_[i] = aes_key[i];
 
-    iv_enc = new unsigned char[ sizeof( unsigned char ) * AES_BLOCK_SIZE];
-    iv_dec = new char[ sizeof( unsigned char ) * AES_BLOCK_SIZE];
 
     RAND_bytes(iv_enc, AES_BLOCK_SIZE);
     memcpy(iv_dec, iv_enc, AES_BLOCK_SIZE);
