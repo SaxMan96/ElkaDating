@@ -18,6 +18,7 @@ private:
     int HEADER_SIZE = 16;
 
 public:
+    ~Package();
     Package(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID);
     unsigned char* getPackage() const;
 

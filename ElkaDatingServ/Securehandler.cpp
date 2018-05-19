@@ -12,6 +12,11 @@ SecureHandler::SecureHandler(SocketReader *sc, int packetLength, int encryptedBu
     decrypted_bufor_ = nullptr;
 }
 
+SecureHandler::~SecureHandler(){
+    delete [] encrypted_bufor_;
+    delete [] decrypted_bufor_;
+}
+
 int SecureHandler::getPacketLength() const
 {
     return packetLength_;
@@ -133,6 +138,12 @@ SecureHandler_AES::SecureHandler_AES(SocketReader *sc, int keyLength, unsigned c
 
     AES_set_encrypt_key(aes_key, keyLength_, &enc_key);
     AES_set_decrypt_key(aes_key, keyLength_, &dec_key);
+}
+
+SecureHandler_AES::~SecureHandler_AES(){
+    delete [] encrypted_bufor_;
+    delete [] decrypted_bufor_;
+    delete aes_key_;
 }
 
 int SecureHandler_AES::getDecryptedData(int numberOfBytes, char *data_bufor)

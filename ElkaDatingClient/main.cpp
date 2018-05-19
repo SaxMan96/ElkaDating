@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
     // creating package with random key
     unsigned char symetricKey [64];
     RAND_bytes(symetricKey, 64);
+    delete package;
     package = new Package(symetricKey, 64, 50,15,1431,1431);
 
     // encrypting package
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
     // sending package encrypted with AES
     const char *dataToSend = "TEST AES ENCRYPTING AND DECRYPTING";
     unsigned char *dataToSend2 = (unsigned char*) dataToSend;
+    delete package;
     package = new Package(dataToSend2, 35, 50,15,1431,1431);
     delete []encrypted;
     encrypted = new unsigned char [(16/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE+16];

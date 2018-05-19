@@ -1,5 +1,10 @@
 #include "Package.hpp"
 
+Package::~Package()
+{
+    delete [] data_;
+}
+
 Package::Package(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID)
 {
     dataSize_ = dataSize;

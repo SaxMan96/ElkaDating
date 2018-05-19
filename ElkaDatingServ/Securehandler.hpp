@@ -50,6 +50,7 @@ protected:
     int encryptedBuforIndex_;
 
 public:
+    ~SecureHandler();
     SecureHandler(SocketReader*, int ,int,int );
 
     virtual int getDecryptedData(int numberOfBytes, char *data_bufor) = 0;
@@ -78,6 +79,7 @@ private:
     int encrypt();
     int private_encrypt(unsigned char *data, int data_len, RSA *rsa, unsigned char *encrypted);
 public:
+    ~SecureHandler_RSA();
     SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName);
 
     int getDecryptedData(int numberOfBytes, char *data_bufor);
@@ -102,6 +104,7 @@ private:
     // SecureHandler interface
     int private_encrypt(unsigned char *data, int data_len, unsigned char *encrypted);
 public:
+    ~SecureHandler_AES();
     SecureHandler_AES(SocketReader *sc, int keyLength, unsigned char *aes_key);
     int getDecryptedData(int numberOfBytes, char *data_bufor);
     int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted);
