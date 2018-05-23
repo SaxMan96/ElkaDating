@@ -29,7 +29,6 @@ SOURCES += main.cpp \
     Secure/SecureHandlerRSA_AES.cpp \
     Socket/SocketHandler.cpp \
     Socket/SocketHandlerBSD.cpp \
-    Socket/SocketHandlerNoSecure.cpp \
     Client.cpp \
     Message.cpp \
     Server.cpp \
@@ -54,5 +53,4 @@ HEADERS += \
     Server.hpp \
     SingletonClientList.hpp \
     SocketReader.hpp \
-    Term.hpp \
-    Socket/SocketHandlerNoSecure.hpp
+    Term.hpp

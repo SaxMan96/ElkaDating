@@ -13,8 +13,16 @@
 class SecureHandler_RSA : public SecureHandler
 {
 private:
+
+    char *encrypted_bufor_;
+    char *decrypted_bufor_;
+    int decryptedBuforIndex_;
+
     const int padding = RSA_PKCS1_PADDING;
-    int paddingType_;
+    const int packetLength_ = 256;
+    const int encryptedBuforSize_ = 256;
+    const int decryptedBuforSize_ = 245;
+
     RSA *rsaPublicKey_;
     RSA *rsaPrivateKey_;
     int decryptedDataLength_;
@@ -28,7 +36,7 @@ public:
     SecureHandler_RSA(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName);
 
     int getData(int numberOfBytes, char *data_bufor);
-    int sendData(unsigned char *data, int data_len, unsigned char *encrypted);
+    int sendData(int numberOfBytes, char *data_bufor);
 
 };
 

@@ -2,8 +2,10 @@
 
 
 SecureHandler_AES::SecureHandler_AES(SocketHandler *sc, int keyLength, unsigned char *aes_key)
-    :SecureHandler(sc,1,(AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE, AES_HEADER_LENGTH)
+    :SecureHandler(sc)
 {
+    encryptedBuforSize_ = (AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE;
+    decryptedBuforSize_ = AES_HEADER_LENGTH;
     keyLength_ = keyLength;
     aes_key_ = new unsigned char [keyLength_];
     for (int i = 0; i < keyLength_; ++i)
@@ -49,7 +51,7 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
             if(returnVal == 0)
                 return 0;
             std::cout<<"iv_dec\n";
-            hex_print(iv_dec,16);
+//            hex_print(iv_dec,16);
 
             returnVal = sc_->readBytes(encryptedDataLength_, encrypted_bufor_);
             if(returnVal == 0)

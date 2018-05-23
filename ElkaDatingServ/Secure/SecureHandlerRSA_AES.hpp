@@ -13,7 +13,10 @@
 class SecureHandlerRSA_AES : public SecureHandler
 {
 public:
-    SecureHandlerRSA_AES();
+    SecureHandlerRSA_AES(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName);
+    int getData(int numberOfBytes, char* dataBufor);
+    int sendData(int numberOfBytes, char* dataBufor);
+
 };
 
 #endif // SECUREHANDLERRSA_AES_HPP

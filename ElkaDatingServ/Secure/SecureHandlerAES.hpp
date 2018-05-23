@@ -17,6 +17,16 @@ class SecureHandler_AES : public SecureHandler
     char *iv_dec;
 
 private:
+    int packetLength_;
+    int currentBuforSize_;
+    char *encrypted_bufor_;
+    char *decrypted_bufor_;
+    int decryptedBuforSize_;
+    int decryptedBuforIndex_;
+    int encryptedBuforSize_;
+    int encryptedBuforIndex_;
+
+
     int keyLength_;
     unsigned char *aes_key_;
     AES_KEY enc_key, dec_key;
