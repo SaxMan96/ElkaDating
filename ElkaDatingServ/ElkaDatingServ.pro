@@ -23,9 +23,15 @@ SOURCES += \
     Server.cpp \
     Message.cpp \
     Messagehandler.cpp \
-    Securehandler.cpp \
     Socketreader.cpp \
-    Myexceptions.cpp
+    Myexceptions.cpp \
+    SocketHandler.cpp \
+    SecureHandler.cpp \
+    SocketHandlerBSD.cpp \
+    SecureHandlerRSA_AES.cpp \
+    SecureHandlerAES.cpp \
+    SecureHandlerNoSecure.cpp \
+    SecureHandlerRSA.cpp
 
 HEADERS += \
     Client.hpp \
@@ -33,6 +39,12 @@ HEADERS += \
     Message.hpp \
     Server.hpp \
     Messagehandler.hpp \
-    Securehandler.hpp \
     Socketreader.hpp \
-    Myexceptions.hpp
+    Myexceptions.hpp \
+    SocketHandler.hpp \
+    SecureHandler.hpp \
+    SocketHandlerBSD.hpp \
+    SecureHandlerRSA_AES.hpp \
+    SecureHandlerAES.hpp \
+    SecureHandlerNoSecure.hpp \
+    SecureHandlerRSA.hpp

@@ -50,6 +50,7 @@ void* client_thread_read(void *client)
     }
 
     clientOfThread->pushMessage(new Message(CLIENT_DISCONNECT, 0, 0, 0, nullptr, 0));
+    // TODO żeby to nie było tak z tymi zerami!!!
 
     std::cout<<"CLIENT READ END ID "<<clientOfThread->getID()<<std::endl;
     return nullptr;
@@ -71,14 +72,10 @@ void* client_thread_logic(void *client)
     }
 
     clientOfThread->setStillRunningFalse();
-    std::cout<<"Client set ok\n";
     clientOfThread->closeConnection();
-    std::cout<<"Client close ok\n";
     clientOfThread->unregister();
-    std::cout<<"Client unregister ok\n";
 
     pthread_join(clientOfThread->getReadThreadID(), NULL);
-    std::cout<<"Client join ok\n";
 
     std::cout<<"Client ID "<<clientOfThread->getID()<<"disconnect.\n";
     delete clientOfThread;
@@ -90,7 +87,6 @@ void* client_thread_logic(void *client)
     // jeśli zostanie wygenerowany komunikat do kilenta o potrzebie rozłączenia
     // np. w wyniku ewidentnie błędnych danych
     // zostanie mu pierwszo wysłany komunikat i wtedy on rozłączy się z socketa
-
 }
 
 
@@ -100,7 +96,7 @@ int main(int argc, char *argv[])
 
     try
     {
-        SingletonSocketServer::getInstance().init(8000, 32);
+        SingletonSocketServer::getInstance().init(8000, 32); // nie zhardcodowne
 
 
         pthread_create(&creator, NULL, connection_creator_thread, NULL);

@@ -34,6 +34,7 @@ void SingletonSocketServer::acceptNewConnections()
         socklen_t length = sizeof(client_addr);
 
         clientSockfd = accept(sockfd_, &client_addr, &length);
+        // TODO przy cancel kod błedu z ERRNO
 
         if( clientSockfd ==-1){
             throw ServerAcceptError();

@@ -17,7 +17,13 @@
 
 #include "Message.hpp"
 #include "SingletonClientList.hpp"
-#include "Securehandler.hpp"
+
+#include "SecureHandler.hpp"
+#include "SecureHandlerAES.hpp"
+#include "SecureHandlerNoSecure.hpp"
+#include "SecureHandlerRSA.hpp"
+#include "SecureHandlerRSA_AES.hpp"
+
 #include "Messagehandler.hpp"
 #include "Socketreader.hpp"
 #include "Myexceptions.hpp"
@@ -47,10 +53,10 @@ private:
 
     bool isStillRunning_;
 
-    MessageHandler mh_;
+    MessageHandler *mh_;
     SecureHandler *sh_synchro_;
     SecureHandler *sh_asynchro_;
-    SocketReader *sr_;
+    SocketHandler *sr_;
 
     void sendMessage(Message *msg);
 
