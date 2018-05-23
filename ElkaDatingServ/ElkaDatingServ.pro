@@ -1,4 +1,5 @@
 QT -= gui
+QT += sql
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -22,17 +23,23 @@ SOURCES += \
     SingletonClientList.cpp \
     Server.cpp \
     Message.cpp \
-    Messagehandler.cpp \
-    Securehandler.cpp \
-    Socketreader.cpp \
-    Myexceptions.cpp
+    DBManager.cpp \
+    MessageHandlerDKPS.cpp \
+    SecureHandler.cpp \
+    MessageHandler.cpp \
+    SocketReader.cpp \
+    MyExceptions.cpp \
+    Term.cpp
 
 HEADERS += \
     Client.hpp \
     SingletonClientList.hpp \
     Message.hpp \
     Server.hpp \
-    Messagehandler.hpp \
-    Securehandler.hpp \
-    Socketreader.hpp \
-    Myexceptions.hpp
+    DBManager.hpp \
+    MessageHandlerDKPS.hpp \
+    MessageHandler.hpp \
+    MyExceptions.hpp \
+    SecureHandler.hpp \
+    SocketReader.hpp \
+    Term.hpp

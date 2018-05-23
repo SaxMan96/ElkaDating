@@ -4,12 +4,11 @@
 
 class MessageHandler
 {
+protected:
     Message *msg_;
 public:
-
-    MessageHandler()
-    {}
-    void handleMessage(Message*);
+    MessageHandler(){}
+    virtual void handleMessage(Message*) = 0;
 };
 
 #endif // MESSAGEHANDLER_HPP

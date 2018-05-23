@@ -7,6 +7,8 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     clientSockfd_=clientSockfd;
     client_addr_=client_addr;
     length_=length;
+    isLogged_ = false;
+    mh_ = new MessageHandlerDKPS();
 
     if(sem_init(&consumerSem_, 0, 0) == -1)
     {
@@ -74,13 +76,72 @@ Message* Client::getMessage()
 
 void Client::messageHandler(Message* msg)
 {
-    if(msg->getMsgType()==CLIENT_DISCONNECT)
+    if(!isLogged_)
     {
-        this->setStillRunningFalse();
-        return;
+        if(msg->getMsgType() == LOGIN)
+            loginNewUser(msg);
+        else if(msg->getMsgType() == REGISTRATION)
+            registerNewUser(msg);
+        else if(msg->getMsgType() == LOGOUT){}
+            //TODO nie można wylogować nie wylogowanego
     }
+    //TODO nie jest zalogowany a przychodzi pakiet inny niż logowanie i rejestracja
+    else if(msg->getMsgType() == LOGOUT){
+        isLogged_ = false;
+        //TODO logout
+    }
+    else if(msg->getMsgType() != LOGIN && msg->getMsgType() != REGISTRATION){
+        mh_->handleMessage(msg);
+    }
+}
 
-    mh_.handleMessage(msg);
+void loginNewUser(Message* msg)
+{
+    std::string userName = msg->getContent().getUserName();
+    std::string password = msg->getContent().getPassword();
+    if(!checkExistUserName(userName))
+    {
+        //wyślij użytkownikowi powiadomienie, że nie istnieje taki login
+    }
+    else if(!checkPasswordCorrect(password,userName))
+    {
+        //wyślij info, że jest nieodpowiednie hasło
+    }
+    else{
+        isLogged_ = true;
+
+        //wyślij powiadmienie że się udało
+        //jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
+    }
+}
+
+void registerNewUser(Message* msg)
+{
+    std::string userName = msg->getContent().getUserName();
+    std::string password = msg->getContent().getPassword();
+    std::string name = msg->getContent().getName();
+    std::string surname = msg->getContent().getSurname();
+    std::string studentNumber = msg->getContent().getStudentNumber();
+    if(checkExistUserName(userName))
+    {
+        //wyślij użytkownikowi powiadomienie, że już jest taki login
+    }
+    else if(!checkPasswordQualify(password))
+    {
+        //wyślij info, że jest nieodpowiednie hasło
+    }
+    else if(name.empty() ||
+            surname.empty() ||
+            studentNumber.empty() ||
+            name == "" ||
+            surname == "" ||
+            studentNumber == ""){
+        //wyślij powiadomienie
+        //niektóre pola są puste wypełnij je
+    }
+    else{
+        //rejestrujemy gościa
+    }
 }
 
 bool Client::login(){

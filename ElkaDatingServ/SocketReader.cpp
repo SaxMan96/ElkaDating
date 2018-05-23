@@ -1,4 +1,4 @@
-#include "Socketreader.hpp"
+#include "SocketReader.hpp"
 
 SocketReader::SocketReader(int socketfd)
     :socketfd_(socketfd)

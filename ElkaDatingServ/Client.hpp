@@ -17,10 +17,11 @@
 
 #include "Message.hpp"
 #include "SingletonClientList.hpp"
-#include "Securehandler.hpp"
-#include "Messagehandler.hpp"
-#include "Socketreader.hpp"
-#include "Myexceptions.hpp"
+#include "SecureHandler.hpp"
+#include "MessageHandler.hpp"
+#include "MessageHandlerDKPS.hpp"
+#include "SocketReader.hpp"
+#include "MyExceptions.hpp"
 
 
 
@@ -46,8 +47,9 @@ private:
     sem_t msgSem_;
 
     bool isStillRunning_;
+    bool isLogged_;
 
-    MessageHandler mh_;
+    MessageHandler *mh_;
     SecureHandler *sh_synchro_;
     SecureHandler *sh_asynchro_;
     SocketReader *sr_;

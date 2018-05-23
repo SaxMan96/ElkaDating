@@ -1,4 +1,4 @@
-#include "Securehandler.hpp"
+#include "SecureHandler.hpp"
 
 SecureHandler::SecureHandler(SocketReader *sc, int packetLength, int encryptedBuforSize, int decryptedBuforSize)
 {
