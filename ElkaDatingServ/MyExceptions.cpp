@@ -1,8 +1,8 @@
-#include "Myexceptions.hpp"
+#include "MyExceptions.hpp"
 
 const char* MyException::what() const throw()
 {
-    return "No specified user error!";
+    return "Not specified user error!";
 }
 
 const char* CannotOpenFile::what() const throw()
@@ -34,7 +34,7 @@ const char* CannotOpenPublicPem::what() const throw()
 
 const char* ServerException::what() const throw()
 {
-    return "No specified server error!\n";
+    return "Not specified server error!\n";
 }
 
 const char* ServerBindError::what() const throw()
@@ -56,7 +56,7 @@ const char* ServerListenError::what() const throw()
 
 const char* ClientException::what() const throw()
 {
-    return "No specified client error!\n";
+    return "Not specified client error!";
 }
 
 const char* ClientInitSemError::what() const throw()
@@ -67,4 +67,14 @@ const char* ClientInitSemError::what() const throw()
 const char* ClientCloseError::what() const throw()
 {
     return "Error when try to close client socket!";
+}
+
+const char* DBManagerException::what() const throw()
+{
+    return "Not specified database error!";
+}
+
+const char* DBManagerInitError::what() const throw()
+{
+    return "Error when try to init database connection!";
 }

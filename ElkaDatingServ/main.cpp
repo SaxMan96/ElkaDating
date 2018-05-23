@@ -20,6 +20,9 @@
 #include "Message.hpp"
 #include "Server.hpp"
 
+// database
+#include "DBManager.hpp"
+
 void* client_thread_read(void *connection);
 void* client_thread_logic(void *connection);
 void* connection_creator_thread(void*);
@@ -27,11 +30,11 @@ void* connection_creator_thread(void*);
 
 SingletonSocketServer *SingletonSocketServer::pInstance_ = nullptr;
 SingletonClientList *SingletonClientList::pInstance_ = nullptr;
+DBManager *DBManager::pInstance_ = nullptr;
 
 void* connection_creator_thread(void*)
 {
     SingletonSocketServer::getInstance().acceptNewConnections();
-
     return nullptr;
 }
 
@@ -96,6 +99,8 @@ int main(int argc, char *argv[])
 
     try
     {
+        DBManager::getInstance().testDataBaseConnection();
+
         SingletonSocketServer::getInstance().init(8000, 32); // nie zhardcodowne
 
 

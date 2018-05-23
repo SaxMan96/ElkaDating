@@ -7,10 +7,34 @@
 const int MESSAGE_HEADER_SIZE = 16;
 
 enum MessageType{
-    HAND_SHAKE,NOTIFICATION, CONFIRMATION, LOGIN,
-    /*REGISTRATION, TERM_CHOOSE, EDIT_TERMS, ACCEPT_TERMS*/
-    /*rozłączenie*/
+    REGISTRATION,
+    //rejestracja użytkownika
+    LOGIN,
+    //logowanie użytkownika
+    LOGOUT,
+    //wylogowanie użytkownika
+    TERM_PREF_STUDENT,
+    //ustawienie preferowanych terminów przez użytkownika u prowadzącego
+    TERM_PREF_TEACHER,
+    //ustawienie preferowanych terminów przez prowadzącego
+    ACCEPT_TERMS,
+    //ostateczna akceptacja terminów przez prowadzącego
+    CANCEL_TERMS,
+    //anulowanie wybranych terminów przez prowadzącego - wiąże się z wysłaniem powiadomień do zapisanych
+    ADD_NEW_TERM,
+    //dodanie terminu konsultacji - takiego który na pewno się odbędzie
+    //albo powiadomiewnie do wszystkich  którzy wybrali ten termin,
+    //albo do wszystkich, którzy chcą przyjść na kiedykolwiek
+    SEND_MSG_TO_STUDENTS,
+    //możliwość wysłania wiadomości do wszystkich
+    //studentów
+    //studentów u prowadzącego
+    //chcących przyjść na konsy
+    //którzy zostali umówieni
+    CONFIRM_TERM_STUDENT,
+    //potwierdzenie, lub przeciwnie przez studenta przyjścia na wyznaczony termin
     CLIENT_DISCONNECT
+
 };
 enum MessageSubType{
     /*logowanie*/

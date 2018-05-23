@@ -1,6 +1,27 @@
 #ifndef SECUREHANDLER_HPP
 #define SECUREHANDLER_HPP
 
+
+#include <fstream>
+#include <iostream>
+
+// crypt things
+#include <openssl/rsa.h>
+#include <openssl/ssl.h>
+#include <openssl/pem.h>
+#include <openssl/aes.h>
+#include <openssl/rand.h>
+
+#include "SocketReader.hpp"
+#include "MyExceptions.hpp"
+
+/**
+ * @brief The SecureHandler class
+ * It is basic class for all secure handlers. SecureHandler should provide functions:
+ *  - int getDecryptedData(int, char *)
+ *  - ...
+ */
+ 
 #include "stdio.h"
 
 #include "SocketHandler.hpp"
@@ -23,15 +44,6 @@ class SecureHandler
 {
 protected:
     int packetLength_;
-    int currentBuforSize_;
-
-    char *encrypted_bufor_;
-    char *decrypted_bufor_;
-
-    int decryptedBuforSize_;
-    int decryptedBuforIndex_;
-    int encryptedBuforSize_;
-    int encryptedBuforIndex_;
     SocketHandler *sc_;
 
 public:

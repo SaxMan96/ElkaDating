@@ -91,6 +91,17 @@ public:
     const char * what () const throw();
 };
 
+class DBManagerException : public MyException
+{
+public:
+    const char * what () const throw();
+};
+
+class DBManagerInitError: public MyException
+{
+public:
+    const char * what () const throw();
+};
 
 
 #endif // MYEXCEPTIONS_HPP
