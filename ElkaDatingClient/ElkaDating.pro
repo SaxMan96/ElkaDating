@@ -19,15 +19,15 @@ LIBS += -lssl -lcrypto
 SOURCES += \
         main.cpp \
     Package.cpp \
-    Myexceptions.cpp \
-    Socketreader.cpp \
-    Securehandler.cpp
+    Exceptions/Myexceptions.cpp \
+    Socket/Socketreader.cpp \
+    Secure/Securehandler.cpp
 
 HEADERS += \
     Package.hpp \
-    Securehandler.hpp \
-    Myexceptions.hpp \
-    Socketreader.hpp
+    Secure/Securehandler.hpp \
+    Exceptions/Myexceptions.hpp \
+    Socket/Socketreader.hpp
 
 DISTFILES += \
     crypto/cryptology_init.sh \
