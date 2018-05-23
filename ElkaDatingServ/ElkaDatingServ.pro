@@ -17,50 +17,42 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 LIBS += -lssl -lcrypto
 
-SOURCES += \
-        main.cpp \
+SOURCES += main.cpp \
+    DB/DBManager.cpp \
+    Exceptions/MyExceptions.cpp \
+    MessageHandler/MessageHandler.cpp \
+    MessageHandler/MessageHandlerDKPS.cpp \
+    Secure/SecureHandler.cpp \
+    Secure/SecureHandlerAES.cpp \
+    Secure/SecureHandlerNoSecure.cpp \
+    Secure/SecureHandlerRSA.cpp \
+    Secure/SecureHandlerRSA_AES.cpp \
+    Socket/SocketHandler.cpp \
+    Socket/SocketHandlerBSD.cpp \
+    Socket/SocketHandlerNoSecure.cpp \
     Client.cpp \
-    SingletonClientList.cpp \
-    Server.cpp \
     Message.cpp \
-    DBManager.cpp \
-    MessageHandlerDKPS.cpp \
-    SecureHandler.cpp \
-    MessageHandler.cpp \
+    Server.cpp \
+    SingletonClientList.cpp \
     SocketReader.cpp \
-    MyExceptions.cpp \
-    Term.cpp \
-    Messagehandler.cpp \
-    Socketreader.cpp \
-    Myexceptions.cpp \
-    SocketHandler.cpp \
-    SecureHandler.cpp \
-    SocketHandlerBSD.cpp \
-    SecureHandlerRSA_AES.cpp \
-    SecureHandlerAES.cpp \
-    SecureHandlerNoSecure.cpp \
-    SecureHandlerRSA.cpp
-
+    Term.cpp
 
 HEADERS += \
+    DB/DBManager.hpp \
+    Exceptions/MyExceptions.hpp \
+    MessageHandler/MessageHandler.hpp \
+    MessageHandler/MessageHandlerDKPS.hpp \
+    Secure/SecureHandler.hpp \
+    Secure/SecureHandlerAES.hpp \
+    Secure/SecureHandlerNoSecure.hpp \
+    Secure/SecureHandlerRSA.hpp \
+    Secure/SecureHandlerRSA_AES.hpp \
+    Socket/SocketHandler.hpp \
+    Socket/SocketHandlerBSD.hpp \
     Client.hpp \
-    SingletonClientList.hpp \
     Message.hpp \
     Server.hpp \
-    DBManager.hpp \
-    MessageHandlerDKPS.hpp \
-    MessageHandler.hpp \
-    MyExceptions.hpp \
-    SecureHandler.hpp \
+    SingletonClientList.hpp \
     SocketReader.hpp \
     Term.hpp \
-    Messagehandler.hpp \
-    Socketreader.hpp \
-    Myexceptions.hpp \
-    SocketHandler.hpp \
-    SecureHandler.hpp \
-    SocketHandlerBSD.hpp \
-    SecureHandlerRSA_AES.hpp \
-    SecureHandlerAES.hpp \
-    SecureHandlerNoSecure.hpp \
-    SecureHandlerRSA.hpp
+    Socket/SocketHandlerNoSecure.hpp

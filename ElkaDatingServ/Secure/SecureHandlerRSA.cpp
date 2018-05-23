@@ -1,6 +1,6 @@
 #include "SecureHandlerRSA.hpp"
 
-SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName)
+SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc, 256, 256, 245), paddingType_(RSA_PKCS1_PADDING)
 {
     FILE * fp;
@@ -44,7 +44,7 @@ int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rs
     return result;
 }
 
-int SecureHandler_RSA::getDecryptedData(int numberOfBytes, char *data_bufor)
+int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
 {
     int data_bufor_index = 0;
     int returnVal;
@@ -88,7 +88,7 @@ int SecureHandler_RSA::getDecryptedData(int numberOfBytes, char *data_bufor)
     return data_bufor_index;
 }
 
-int SecureHandler_RSA::getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted)
+int SecureHandler_RSA::sendData(unsigned char *data, int data_len, unsigned char *encrypted)
 {
     int encrypted_length = private_encrypt(data, data_len, rsaPrivateKey_, encrypted);
     if(encrypted_length == -1)

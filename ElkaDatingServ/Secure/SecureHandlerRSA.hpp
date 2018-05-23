@@ -29,6 +29,7 @@ public:
 
     int getData(int numberOfBytes, char *data_bufor);
     int sendData(unsigned char *data, int data_len, unsigned char *encrypted);
+
 };
 
 #endif // SECUREHANDLERRSA_HPP

@@ -2,7 +2,7 @@
 #define SERVER_HPP
 
 #include "Client.hpp"
-#include "MyExceptions.hpp"
+#include "Exceptions/MyExceptions.hpp"
 
 class SingletonSocketServer
 {

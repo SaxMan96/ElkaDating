@@ -24,7 +24,7 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 
     isStillRunning_=true;
 
-    sr_ = new SocketHandler();
+    sr_ = new SocketHandler(clientSockfd);
 
     sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
     unsigned char key [64];
@@ -76,6 +76,7 @@ Message* Client::getMessage()
     return msg;
 }
 
+
 void Client::messageHandler(Message* msg)
 {
     if(!isLogged_)
@@ -97,53 +98,53 @@ void Client::messageHandler(Message* msg)
     }
 }
 
-void loginNewUser(Message* msg)
+void Client::loginNewUser(Message* msg)
 {
-    std::string userName = msg->getContent().getUserName();
-    std::string password = msg->getContent().getPassword();
-    if(!checkExistUserName(userName))
-    {
-        //wyślij użytkownikowi powiadomienie, że nie istnieje taki login
-    }
-    else if(!checkPasswordCorrect(password,userName))
-    {
-        //wyślij info, że jest nieodpowiednie hasło
-    }
-    else{
-        isLogged_ = true;
+//    std::string userName = msg->getContent().getUserName();
+//    std::string password = msg->getContent().getPassword();
+//    if(!checkExistUserName(userName))
+//    {
+//        //wyślij użytkownikowi powiadomienie, że nie istnieje taki login
+//    }
+//    else if(!checkPasswordCorrect(password,userName))
+//    {
+//        //wyślij info, że jest nieodpowiednie hasło
+//    }
+//    else{
+//        isLogged_ = true;
 
-        //wyślij powiadmienie że się udało
-        //jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
-    }
+//        //wyślij powiadmienie że się udało
+//        //jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
+//    }
 }
 
-void registerNewUser(Message* msg)
+void Client::registerNewUser(Message* msg)
 {
-    std::string userName = msg->getContent().getUserName();
-    std::string password = msg->getContent().getPassword();
-    std::string name = msg->getContent().getName();
-    std::string surname = msg->getContent().getSurname();
-    std::string studentNumber = msg->getContent().getStudentNumber();
-    if(checkExistUserName(userName))
-    {
-        //wyślij użytkownikowi powiadomienie, że już jest taki login
-    }
-    else if(!checkPasswordQualify(password))
-    {
-        //wyślij info, że jest nieodpowiednie hasło
-    }
-    else if(name.empty() ||
-            surname.empty() ||
-            studentNumber.empty() ||
-            name == "" ||
-            surname == "" ||
-            studentNumber == ""){
-        //wyślij powiadomienie
-        //niektóre pola są puste wypełnij je
-    }
-    else{
-        //rejestrujemy gościa
-    }
+//    std::string userName = msg->getContent().getUserName();
+//    std::string password = msg->getContent().getPassword();
+//    std::string name = msg->getContent().getName();
+//    std::string surname = msg->getContent().getSurname();
+//    std::string studentNumber = msg->getContent().getStudentNumber();
+//    if(checkExistUserName(userName))
+//    {
+//        //wyślij użytkownikowi powiadomienie, że już jest taki login
+//    }
+//    else if(!checkPasswordQualify(password))
+//    {
+//        //wyślij info, że jest nieodpowiednie hasło
+//    }
+//    else if(name.empty() ||
+//            surname.empty() ||
+//            studentNumber.empty() ||
+//            name == "" ||
+//            surname == "" ||
+//            studentNumber == ""){
+//        //wyślij powiadomienie
+//        //niektóre pola są puste wypełnij je
+//    }
+//    else{
+//        //rejestrujemy gościa
+//    }
 }
 
 bool Client::login(){

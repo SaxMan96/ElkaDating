@@ -21,7 +21,7 @@
 #include "Server.hpp"
 
 // database
-#include "DBManager.hpp"
+#include "DB/DBManager.hpp"
 
 void* client_thread_read(void *connection);
 void* client_thread_logic(void *connection);

@@ -13,7 +13,7 @@
 #include <openssl/rand.h>
 
 #include "SocketReader.hpp"
-#include "MyExceptions.hpp"
+#include "Exceptions/MyExceptions.hpp"
 
 /**
  * @brief The SecureHandler class
@@ -24,7 +24,7 @@
  
 #include "stdio.h"
 
-#include "SocketHandler.hpp"
+#include "Socket/SocketHandler.hpp"
 
 static void hex_print(const void* pv, size_t len)
 {
@@ -45,6 +45,15 @@ class SecureHandler
 protected:
     int packetLength_;
     SocketHandler *sc_;
+    int currentBuforSize_;
+
+    char *encrypted_bufor_;
+    char *decrypted_bufor_;
+
+    int decryptedBuforSize_;
+    int decryptedBuforIndex_;
+    int encryptedBuforSize_;
+    int encryptedBuforIndex_;
 
 public:
     SecureHandler()

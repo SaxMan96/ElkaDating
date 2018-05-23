@@ -4,6 +4,14 @@ MessageHandlerDKPS::MessageHandlerDKPS(){
 
 }
 
+void MessageHandlerDKPS::handleMessage(Message *)
+{
+
+}
+
+
+
+/*
 void MessageHandlerDKPS::handleMessage(Message* msg){
 
     msg_ = msg;
@@ -51,3 +59,4 @@ void MessageHandlerDKPS::handleMessage(Message* msg){
 
     }
 }
+*/

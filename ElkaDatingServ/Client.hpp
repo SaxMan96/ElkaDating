@@ -18,16 +18,17 @@
 #include "Message.hpp"
 #include "SingletonClientList.hpp"
 
-#include "MessageHandler.hpp"
-#include "MessageHandlerDKPS.hpp"
-#include "SocketReader.hpp"
-#include "MyExceptions.hpp"
+#include "MessageHandler/MessageHandler.hpp"
+#include "MessageHandler/MessageHandlerDKPS.hpp"
 
-#include "SecureHandler.hpp"
-#include "SecureHandlerAES.hpp"
-#include "SecureHandlerNoSecure.hpp"
-#include "SecureHandlerRSA.hpp"
-#include "SecureHandlerRSA_AES.hpp"
+#include "SocketReader.hpp"
+#include "Exceptions/MyExceptions.hpp"
+
+#include "Secure/SecureHandler.hpp"
+#include "Secure/SecureHandlerAES.hpp"
+#include "Secure/SecureHandlerNoSecure.hpp"
+#include "Secure/SecureHandlerRSA.hpp"
+#include "Secure/SecureHandlerRSA_AES.hpp"
 
 class Client
 {
@@ -59,6 +60,8 @@ private:
 
     void sendMessage(Message *msg);
 
+    void registerNewUser(Message *msg);
+    void loginNewUser(Message *msg);
 public:
     Client(int clientSockfd, sockaddr client_addr, socklen_t length);  
 

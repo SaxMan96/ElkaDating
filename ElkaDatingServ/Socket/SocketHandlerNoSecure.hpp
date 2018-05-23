@@ -8,8 +8,8 @@
 #include <openssl/aes.h>
 #include <openssl/rand.h>
 
-#include "SocketHandler.hpp"
-#include "SecureHandler.hpp"
+#include "Socket/SocketHandler.hpp"
+#include "Secure/SecureHandler.hpp"
 
 class SecureHandlerNoSecure : public SecureHandler
 {

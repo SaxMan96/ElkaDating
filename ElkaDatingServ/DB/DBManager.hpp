@@ -1,7 +1,7 @@
 #ifndef DBMANAGER_HPP
 #define DBMANAGER_HPP
 
-#include "MyExceptions.hpp"
+#include "Exceptions/MyExceptions.hpp"
 #include <pthread.h>
 #include <QMutex>
 #include <QSqlDatabase>
@@ -40,6 +40,7 @@ private:
     static DBManager* pInstance_;
     mutable pthread_mutex_t dbMutex_;
     QSqlDatabase serverDB_;
+    void addStudentTermPref(char *a);
 };
 
 #endif // DBMANAGER_HPP

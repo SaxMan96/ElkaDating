@@ -65,6 +65,7 @@ public:
 
     std::string headerToString() const;
 
+
     /**
      * @brief getMsgDataLength
      * Function useful when you want to read data.
