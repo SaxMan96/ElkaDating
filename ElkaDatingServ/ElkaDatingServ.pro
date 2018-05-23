@@ -29,7 +29,18 @@ SOURCES += \
     MessageHandler.cpp \
     SocketReader.cpp \
     MyExceptions.cpp \
-    Term.cpp
+    Term.cpp \
+    Messagehandler.cpp \
+    Socketreader.cpp \
+    Myexceptions.cpp \
+    SocketHandler.cpp \
+    SecureHandler.cpp \
+    SocketHandlerBSD.cpp \
+    SecureHandlerRSA_AES.cpp \
+    SecureHandlerAES.cpp \
+    SecureHandlerNoSecure.cpp \
+    SecureHandlerRSA.cpp
+
 
 HEADERS += \
     Client.hpp \
@@ -42,4 +53,14 @@ HEADERS += \
     MyExceptions.hpp \
     SecureHandler.hpp \
     SocketReader.hpp \
-    Term.hpp
+    Term.hpp \
+    Messagehandler.hpp \
+    Socketreader.hpp \
+    Myexceptions.hpp \
+    SocketHandler.hpp \
+    SecureHandler.hpp \
+    SocketHandlerBSD.hpp \
+    SecureHandlerRSA_AES.hpp \
+    SecureHandlerAES.hpp \
+    SecureHandlerNoSecure.hpp \
+    SecureHandlerRSA.hpp

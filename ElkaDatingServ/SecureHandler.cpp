@@ -1,6 +1,7 @@
 #include "SecureHandler.hpp"
 
-SecureHandler::SecureHandler(SocketReader *sc, int packetLength, int encryptedBuforSize, int decryptedBuforSize)
+
+SecureHandler::SecureHandler(SocketHandler *sc, int packetLength, int encryptedBuforSize, int decryptedBuforSize)
 {
     sc_ = sc;
     packetLength_ = packetLength;
@@ -12,7 +13,9 @@ SecureHandler::SecureHandler(SocketReader *sc, int packetLength, int encryptedBu
     decrypted_bufor_ = nullptr;
 }
 
-SecureHandler::~SecureHandler(){
+
+SecureHandler::~SecureHandler()
+{
     delete [] encrypted_bufor_;
     delete [] decrypted_bufor_;
 }
@@ -21,7 +24,6 @@ int SecureHandler::getPacketLength() const
 {
     return packetLength_;
 }
-
 
 SecureHandler_RSA::SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc, 256, 256, 245), paddingType_(RSA_PKCS1_PADDING)
@@ -230,5 +232,3 @@ int SecureHandler_AES::getEncryptedData(unsigned char *data, int data_len, unsig
     AES_cbc_encrypt(data, encrypted, data_len, &enc_key, iv_enc, AES_ENCRYPT);
     return 1;
 }
-
-

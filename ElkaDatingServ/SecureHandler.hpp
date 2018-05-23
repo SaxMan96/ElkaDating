@@ -1,6 +1,7 @@
 #ifndef SECUREHANDLER_HPP
 #define SECUREHANDLER_HPP
 
+
 #include <fstream>
 #include <iostream>
 
@@ -20,6 +21,11 @@
  *  - int getDecryptedData(int, char *)
  *  - ...
  */
+ 
+#include "stdio.h"
+
+#include "SocketHandler.hpp"
+
 static void hex_print(const void* pv, size_t len)
 {
     const unsigned char * p = (const unsigned char*)pv;
@@ -27,7 +33,7 @@ static void hex_print(const void* pv, size_t len)
         printf("NULL");
     else
     {
-        size_t i = 0;
+        unsigned int i = 0;
         for (; i<len;++i)
             printf("%02X ", *p++);
     }
@@ -38,78 +44,17 @@ class SecureHandler
 {
 protected:
     int packetLength_;
-    SocketReader *sc_;
-    int currentBuforSize_;
-
-    char *encrypted_bufor_;
-    char *decrypted_bufor_;
-
-    int decryptedBuforSize_;
-    int decryptedBuforIndex_;
-    int encryptedBuforSize_;
-    int encryptedBuforIndex_;
+    SocketHandler *sc_;
 
 public:
+    SecureHandler()
+    {}
+    SecureHandler(SocketHandler *sc, int packetLength, int encryptedBuforSize, int decryptedBuforSize);
     ~SecureHandler();
-    SecureHandler(SocketReader*, int ,int,int );
-
-    virtual int getDecryptedData(int numberOfBytes, char *data_bufor) = 0;
-
-    virtual int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted) = 0;
-
+    // TODO WEKTOR ZAMIAST *char - oj tam oj tam
+    virtual int getData(int numberOfBytes, char* dataBufor);
+    virtual int sendData(int numberOfBytes, char* dataBufor);
     int getPacketLength() const;
 };
 
-class SecureHandler_No_Secure : public SecureHandler
-{
-
-};
-
-class SecureHandler_RSA : public SecureHandler
-{
-private:
-    const int padding = RSA_PKCS1_PADDING;
-    int paddingType_;
-    RSA *rsaPublicKey_;
-    RSA *rsaPrivateKey_;
-    int decryptedDataLength_;
-
-    int private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted);
-
-    int encrypt();
-    int private_encrypt(unsigned char *data, int data_len, RSA *rsa, unsigned char *encrypted);
-public:
-    ~SecureHandler_RSA();
-    SecureHandler_RSA(SocketReader *sc, std::string privateKeyFileName, std::string publicKeyFileName);
-
-    int getDecryptedData(int numberOfBytes, char *data_bufor);
-    int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted);
-};
-
-class SecureHandler_AES : public SecureHandler
-{
-    int AES_HEADER_LENGTH = 16;
-    unsigned char *iv_enc;
-    char *iv_dec;
-
-private:
-    int keyLength_;
-    unsigned char *aes_key_;
-    AES_KEY enc_key, dec_key;
-    bool loadHeader = true;
-    int encryptedDataLength_;
-    int decryptedDataLength_;
-    short dataLength_;
-
-    // SecureHandler interface
-    int private_encrypt(unsigned char *data, int data_len, unsigned char *encrypted);
-public:
-    ~SecureHandler_AES();
-    SecureHandler_AES(SocketReader *sc, int keyLength, unsigned char *aes_key);
-    int getDecryptedData(int numberOfBytes, char *data_bufor);
-    int getEncryptedData(unsigned char *data, int data_len, unsigned char *encrypted);
-};
-
 #endif // SECUREHANDLER_HPP
-
-

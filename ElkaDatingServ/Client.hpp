@@ -17,14 +17,17 @@
 
 #include "Message.hpp"
 #include "SingletonClientList.hpp"
-#include "SecureHandler.hpp"
+
 #include "MessageHandler.hpp"
 #include "MessageHandlerDKPS.hpp"
 #include "SocketReader.hpp"
 #include "MyExceptions.hpp"
 
-
-
+#include "SecureHandler.hpp"
+#include "SecureHandlerAES.hpp"
+#include "SecureHandlerNoSecure.hpp"
+#include "SecureHandlerRSA.hpp"
+#include "SecureHandlerRSA_AES.hpp"
 
 class Client
 {
@@ -52,7 +55,7 @@ private:
     MessageHandler *mh_;
     SecureHandler *sh_synchro_;
     SecureHandler *sh_asynchro_;
-    SocketReader *sr_;
+    SocketHandler *sr_;
 
     void sendMessage(Message *msg);
 

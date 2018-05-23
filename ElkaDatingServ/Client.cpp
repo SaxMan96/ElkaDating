@@ -20,9 +20,11 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
         throw ClientInitSemError();
     }
 
+    // TODO kolejka synchroniczna jako osobny obiekt!!!
+
     isStillRunning_=true;
 
-    sr_ = new SocketReader(clientSockfd_);
+    sr_ = new SocketHandler();
 
     sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
     unsigned char key [64];
@@ -175,7 +177,7 @@ Message * Client::readMessage(){
     char headerBufor[MESSAGE_HEADER_SIZE];
     Message *msg;
 
-    numOfReadBytes = sh_asynchro_->getDecryptedData(MESSAGE_HEADER_SIZE, headerBufor);
+    numOfReadBytes = sh_asynchro_->getData(MESSAGE_HEADER_SIZE, headerBufor);
 
     if( numOfReadBytes == 0)
     {
@@ -192,7 +194,7 @@ Message * Client::readMessage(){
 
     if(msg -> getMsgDataLength() != 0)
     {
-        numOfReadBytes = sh_asynchro_->getDecryptedData(msg->getMsgDataLength(), msg->getMsgDataBufor());
+        numOfReadBytes = sh_asynchro_->getData(msg->getMsgDataLength(), msg->getMsgDataBufor());
 
         if( numOfReadBytes != msg->getMsgDataLength())
         {
