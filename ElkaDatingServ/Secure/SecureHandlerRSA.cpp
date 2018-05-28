@@ -90,7 +90,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
     return data_bufor_index;
 }
 
-int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
+int SecureHandler_RSA::sendData(int numberOfBytes, char *data_buftor)
 {
     int tmp = numberOfBytes;
     int numberOfBlocks = 0;
@@ -99,33 +99,22 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
     while (tmp > 0){
         if (tmp >= decryptedBuforSize_)
         {
-            private_encrypt(*(data_bufor + numberOfBlocks*decryptedBuforSize_),
+            private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             decryptedBuforSize_,
                             rsaPrivateKey_,
                             toSendBufor);
 
-            sc_->sendData(encryptedBuforSize_,toSendBufor);
+            sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
         }
         else
         {
-            private_encrypt(*(data_bufor + numberOfBlocks*decryptedBuforSize_),
+            private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             tmp,
                             rsaPrivateKey_,
                             toSendBufor);
-            sc_->sendData(encryptedBuforSize_,tmp);
+            sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
         }
         tmp -= decryptedBuforSize_;
         ++numberOfBlocks;
     }
 }
-
-//int SecureHandler_RSA::sendData(unsigned char *data, int data_len, unsigned char *encrypted)
-//{
-//    int encrypted_length = private_encrypt(data, data_len, rsaPrivateKey_, encrypted);
-//    if(encrypted_length == -1)
-//    {
-//        printf("Public Encrypt failed \n");
-//        return -1;
-//    }
-//    return 1;
-//}
