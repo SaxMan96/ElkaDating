@@ -20,14 +20,25 @@ SOURCES += \
         main.cpp \
     Package.cpp \
     Exceptions/Myexceptions.cpp \
-    Socket/Socketreader.cpp \
-    Secure/Securehandler.cpp
+    Socket/SocketHandler.cpp \
+    Socket/SocketHandlerBSD.cpp \
+    Secure/SecureHandler.cpp \
+    Secure/SecureHandlerAES.cpp \
+    Secure/SecureHandlerNoSecure.cpp \
+    Secure/SecureHandlerRSA_AES.cpp \
+    Secure/SecureHandlerRSA.cpp
 
 HEADERS += \
     Package.hpp \
     Secure/Securehandler.hpp \
     Exceptions/Myexceptions.hpp \
-    Socket/Socketreader.hpp
+    Socket/SocketHandler.hpp \
+    Socket/SocketHandlerBSD.hpp \
+    Secure/SecureHandler.hpp \
+    Secure/SecureHandlerAES.hpp \
+    Secure/SecureHandlerNoSecure.hpp \
+    Secure/SecureHandlerRSA_AES.hpp \
+    Secure/SecureHandlerRSA.hpp
 
 DISTFILES += \
     crypto/cryptology_init.sh \

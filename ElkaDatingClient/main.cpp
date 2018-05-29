@@ -14,7 +14,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "Package.hpp"
-#include "Secure/Securehandler.hpp"
+#include "Secure/SecureHandler.hpp"
+#include "Secure/SecureHandlerRSA_AES.hpp"
+#include "Socket/SocketHandlerBSD.hpp"
 
 // crypt things
 #include <openssl/rsa.h>
@@ -24,8 +26,8 @@
 int main(int argc, char *argv[])
 {
     Package *package;
-    SecureHandler *secureHandler_RSA, *secureHandler_AES;
-    SocketReader *socketReader;
+    SecureHandler_RSA *secureHandler_RSA, *secureHandler_AES;
+    SocketHandler *socketHandler;
     unsigned char *encrypted = new unsigned char [256];
     int challangeSize = 10;
 
@@ -48,8 +50,8 @@ int main(int argc, char *argv[])
         std::cout<<"2\n";
         return 2;
     }
-    socketReader = new SocketReader(socketID);
-    secureHandler_RSA = new SecureHandler_RSA(socketReader,"public_key.pem");
+    socketHandler = new SocketHandlerBSD(socketID);
+    secureHandler_RSA = new SecureHandler_RSA(socketHandler,"public_key.pem");
 
 
     // sending  challange encrypted with RSA
@@ -59,13 +61,15 @@ int main(int argc, char *argv[])
     package = new Package(challange, challangeSize, 50,15,1431,1431);
 
     // encrypting package with server public key
-    secureHandler_RSA->getEncryptedData((unsigned char*)package->getPackage(),package->getPackageLength(),encrypted);
+    secureHandler_RSA->sendDataEncryptedByServerKey(package->getPackageLength(), (char*)package->getPackage());
 
-    // sending encrypted package with challange
-    if(write(socketID, encrypted, 256) == -1){
-        std::cout<<"3\n";
-        return 3;
-    }
+//    secureHandler_RSA->getEncryptedData((unsigned char*)package->getPackage(),package->getPackageLength(),encrypted);
+
+//    // sending encrypted package with challange
+//    if(write(socketID, encrypted, 256) == -1){
+//        std::cout<<"3\n";
+//        return 3;
+//    }
 
     // sending symetric key encrypted with RSA
 
@@ -76,14 +80,16 @@ int main(int argc, char *argv[])
     delete package;
     package = new Package(symetricKey, 64, 50,15,1431,1431);
 
-    // encrypting package
-    secureHandler_RSA->getEncryptedData((unsigned char*)package->getPackage(),package->getPackageLength(),encrypted);
+    secureHandler_RSA->sendDataEncryptedByServerKey(package->getPackageLength(),(char*)package->getPackage());
 
-    // sending encrypted package with random key
-    if(write(socketID, encrypted, 256) == -1){
-        std::cout<<"3\n";
-        return 3;
-    }
+    // encrypting package
+//    secureHandler_RSA->getEncryptedData((unsigned char*)package->getPackage(),package->getPackageLength(),encrypted);
+
+//    // sending encrypted package with random key
+//    if(write(socketID, encrypted, 256) == -1){
+//        std::cout<<"3\n";
+//        return 3;
+//    }
     //TODO: set key in server and change transmission encrypting to AES
 
 /*
