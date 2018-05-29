@@ -22,8 +22,6 @@
  *  - ...
  */
  
-#include "stdio.h"
-
 #include "Socket/SocketHandler.hpp"
 
 class SecureHandler
@@ -31,23 +29,10 @@ class SecureHandler
 protected:
     SocketHandler *sc_;
 
-//    int packetLength_;
-
-//    int currentBuforSize_;
-
-//    char *encrypted_bufor_;
-//    char *decrypted_bufor_;
-
-//    int decryptedBuforSize_;
-//    int decryptedBuforIndex_;
-//    int encryptedBuforSize_;
-//    int encryptedBuforIndex_;
-
 public:
-//    SecureHandler(SocketHandler *sc, int packetLength, int encryptedBuforSize, int decryptedBuforSize);
     SecureHandler(SocketHandler *sc);
     ~SecureHandler();
-    // TODO WEKTOR ZAMIAST *char - oj tam oj tam
+    // TODO WEKTOR ZAMIAST *char
     virtual int getData(int numberOfBytes, char* dataBufor) = 0;
     virtual int sendData(int numberOfBytes, char* dataBufor) = 0;
 };

@@ -10,22 +10,28 @@
 
 #include "SecureHandler.hpp"
 
+
 class SecureHandler_AES : public SecureHandler
 {
+private:
     int AES_HEADER_LENGTH = 16;
     unsigned char *iv_enc;
     char *iv_dec;
-
-private:
     int packetLength_;
     int currentBuforSize_;
+    int encrypted_bufor_to_send_size_;
+    int decrypted_bufor_to_send_size_;
     char *encrypted_bufor_;
     char *decrypted_bufor_;
+    char *decrypted_bufor_to_send_;
+    char *encrypted_bufor_to_send_;
     int decryptedBuforSize_;
     int decryptedBuforIndex_;
     int encryptedBuforSize_;
     int encryptedBuforIndex_;
 
+    const unsigned int ENCRYPTED_HEADER_LENGHT_AES = 32;
+    const unsigned int DECRYPTED_HEADER_LENGHT_AES = 16;
 
     int keyLength_;
     unsigned char *aes_key_;

@@ -9,9 +9,19 @@
 #include <openssl/rand.h>
 
 #include "SecureHandler.hpp"
+#include "SecureHandlerAES.hpp"
+#include "SecureHandlerRSA.hpp"
+#include <memory>
 
 class SecureHandlerRSA_AES : public SecureHandler
 {
+private:
+    bool ifConnectionEstablish_;
+    std::unique_ptr<SecureHandler_AES> aes_;
+    std::unique_ptr<SecureHandler_RSA> rsa_;
+
+    void initConnection();
+    bool tryHeader(char *);
 public:
     SecureHandlerRSA_AES(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName);
     int getData(int numberOfBytes, char* dataBufor);

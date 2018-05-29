@@ -40,8 +40,8 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
             delete [] encrypted_bufor_;
             delete [] decrypted_bufor_;
 
-            encryptedDataLength_ = 32; // (AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE;
-            decryptedDataLength_ = 16; // AES_HEADER_LENGTH;
+            encryptedDataLength_ = ENCRYPTED_HEADER_LENGHT_AES; // (AES_HEADER_LENGTH/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE;
+            decryptedDataLength_ = DECRYPTED_HEADER_LENGHT_AES; // AES_HEADER_LENGTH;
 
             encrypted_bufor_ = new char[encryptedDataLength_];
             decrypted_bufor_ = new char[decryptedDataLength_];
@@ -50,7 +50,7 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
             returnVal = sc_->readBytes(16, iv_dec);
             if(returnVal == 0)
                 return 0;
-            std::cout<<"iv_dec\n";
+//            std::cout<<"iv_dec\n";
 //            hex_print(iv_dec,16);
 
             returnVal = sc_->readBytes(encryptedDataLength_, encrypted_bufor_);
@@ -104,12 +104,29 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
 
 int SecureHandler_AES::sendData(int numberOfBytes, char* dataBufor)
 {
-    /*
-    // wylosuj InitVec i zapisz do encrypted
-    RAND_bytes(iv_enc, AES_BLOCK_SIZE);
-    memcpy(encrypted, iv_enc, AES_BLOCK_SIZE);
+   // wylosuj InitVec i zapisz do encrypted
+   encrypted_bufor_to_send_size_ = ((numberOfBytes + AES_BLOCK_SIZE)/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE;
+   decrypted_bufor_to_send_size_ = numberOfBytes + AES_BLOCK_SIZE;
 
-    AES_cbc_encrypt(data, encrypted, data_len, &enc_key, iv_enc, AES_ENCRYPT);
-    return 1;
-    */
+   decrypted_bufor_to_send_ = new char [decrypted_bufor_to_send_size_];// dataBufor size + initVec
+   encrypted_bufor_to_send_ = new char [encrypted_bufor_to_send_size_];
+
+   RAND_bytes(iv_enc, AES_BLOCK_SIZE);
+   memcpy(decrypted_bufor_to_send_, iv_enc, AES_BLOCK_SIZE);
+
+   memcpy( (decrypted_bufor_to_send_ + AES_BLOCK_SIZE), dataBufor, numberOfBytes);
+
+   AES_cbc_encrypt((unsigned char*) decrypted_bufor_to_send_,
+                   (unsigned char*) encrypted_bufor_to_send_,
+                   decrypted_bufor_to_send_size_,
+                   &enc_key,
+                   iv_enc,
+                   AES_ENCRYPT);
+
+   int returnVal = sc_->sendData(encrypted_bufor_to_send_size_, encrypted_bufor_to_send_);
+   if(returnVal == 0)
+       return 0;
+
+   return 1;
 }
+
