@@ -29,6 +29,7 @@
 #include "Secure/SecureHandlerNoSecure.hpp"
 #include "Secure/SecureHandlerRSA.hpp"
 #include "Secure/SecureHandlerRSA_AES.hpp"
+#include <limits.h>
 
 class Client
 {
@@ -58,10 +59,10 @@ private:
     SecureHandler *sh_asynchro_;
     SocketHandler *sr_;
 
+    int nextPacketID_;
+
     void sendMessage(Message *msg);
 
-    void registerNewUser(Message *msg);
-    void loginNewUser(Message *msg);
 public:
     Client(int clientSockfd, sockaddr client_addr, socklen_t length);  
 
@@ -73,7 +74,6 @@ public:
     void setStillRunningFalse();
     void setID(unsigned int clientID);
 
-    bool login();
     void closeConnection();
     void unregister();
 
@@ -81,6 +81,16 @@ public:
     void pushMessage(Message *msg);
     Message* getMessage();
     Message *readMessage();
+
+    //---------------
+    void loginUser(Message*);
+    bool checkExistUserName(std::string);
+    bool checkPasswordCorrect(std::string, std::string);
+    void registerNewUser(Message*);
+    void sendNotification(std::string , int ,int);
+    bool checkPasswordQualify(std::string);
+    bool checkStudentNumberValid(std::string);
+    int getPacketID();
 
     ~Client();
 };

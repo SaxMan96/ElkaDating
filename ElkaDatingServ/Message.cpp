@@ -1,6 +1,7 @@
 #include "Message.hpp"
 
 
+
 Message::Message(char* header){
     // we must start with datalength
     dataLength_ = *(short*)(header+14);
@@ -24,6 +25,8 @@ Message::Message(char* header){
     {
         msgBuf_[i]=header[i];
     }
+    //setMessageContent(type_);
+    //TODO
 }
 
 Message::Message(int type, int subType, int packetID, int sessionID, char *data, int dataLength)
@@ -121,6 +124,10 @@ char* Message::getMsgFullBufor() const {
 int Message::getMsgType() const
 {
     return static_cast<int>(type_);
+}
+
+MessageContent* Message::getContent() const{
+    return content_;
 }
 
 

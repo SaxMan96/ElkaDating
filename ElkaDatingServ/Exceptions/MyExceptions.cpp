@@ -78,3 +78,21 @@ const char* DBManagerInitError::what() const throw()
 {
     return "Error when try to init database connection!";
 }
+
+//---------------------------------------------------------------
+
+const char* MessageException::what() const throw()
+{
+    return "Not specified client error!";
+}
+
+const char* NotLoggedInWrongMessageTypeException::what() const throw()
+{
+    return "User must be logged in to handle this message type.";
+}
+
+const char* LoggedInWrongMessageTypeException::what() const throw()
+{
+    return "User can't be logged in to handle this message type.";
+}
+

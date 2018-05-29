@@ -65,14 +65,13 @@ void* client_thread_logic(void *client)
 
     std::cout<<"\n****************Client ID "<<clientOfThread->getID()<<"starts running.\n";
 
-    if(clientOfThread->login())
+
+    while(clientOfThread->checkIfStillRunning())
     {
-        while(clientOfThread->checkIfStillRunning())
-        {
-            Message *tmpMsg = clientOfThread->getMessage();
-            clientOfThread->messageHandler(tmpMsg);
-        }
+        Message *tmpMsg = clientOfThread->getMessage();
+        clientOfThread->messageHandler(tmpMsg);
     }
+
 
     clientOfThread->setStillRunningFalse();
     clientOfThread->closeConnection();

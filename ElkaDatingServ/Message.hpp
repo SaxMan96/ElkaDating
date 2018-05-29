@@ -4,6 +4,11 @@
 #include <string>
 #include <iostream>
 
+#include "MessageContent/LoginMessageContent.hpp"
+#include "MessageContent/RegistrationMessageContent.hpp"
+#include "MessageContent/MessageContent.hpp"
+
+
 const int MESSAGE_HEADER_SIZE = 16;
 
 enum MessageType{
@@ -37,8 +42,8 @@ enum MessageType{
 
 };
 enum MessageSubType{
-    /*logowanie*/
-    SUCCESFULL, WRONG_PASS, WRONG_USERNAME,
+    /*logowanie, rejestracja*/
+    SUCCESFULL, WRONG_PASS, WRONG_USERNAME,EMPTY_FIELDS,STUDENT_NO_NOT_VALID,
     /*powiadomienie zatwierdzenie, odrzucenie terminu przez prowadzącego*/
     ACCEPTANCE_OF_TERM, DECLINE_OF_TERM, CHANGE_OF_TERM, NEW_TERM,
     /*info od serwera*/
@@ -55,6 +60,7 @@ private:
     unsigned int packetID_;
     unsigned int sessionID_;
     unsigned short dataLength_;
+    MessageContent *content_;
 
     //data
     char *msgBuf_;
@@ -112,6 +118,16 @@ public:
      */
 
     int getMsgType() const;
+
+    /**
+     * @brief getContent
+     * MessageCongtent is virtual class, that have a lot of extending, which are connected with method types
+     * @return
+     * One of MessageContent classes
+     */
+
+    MessageContent* getContent() const;
+
 
     ~Message();
 };
