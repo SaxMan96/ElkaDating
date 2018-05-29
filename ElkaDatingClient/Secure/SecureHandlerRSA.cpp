@@ -50,7 +50,11 @@ SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyF
 
 int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
 {
-    int  result = RSA_private_decrypt(data_len, enc_data, decrypted, rsa, padding);
+    for (int i= 0; i < 256; ++i)
+        std::cout<<(int)*(enc_data+i);
+    std::cout<<std::endl;
+
+    int  result = RSA_public_decrypt(data_len, enc_data, decrypted, rsa, padding);
     if(result == -1 )
         throw DecryptError();
 
@@ -80,7 +84,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
         if(returnVal == 0)
             return 0;
 
-        decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
+        decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
     }
 
     while(data_bufor_index < numberOfBytes)
@@ -92,7 +96,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
             if(returnVal == 0)
                 return 0;
 
-            decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
+            decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
 
             decryptedBuforIndex_ = 0;
         }
@@ -120,7 +124,7 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
         {
             private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             decryptedBuforSize_,
-                            rsaPrivateKey_,
+                            rsaPublicKey_,
                             toSendBufor);
 
             sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
@@ -129,7 +133,7 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
         {
             private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             tmp,
-                            rsaPrivateKey_,
+                            rsaPublicKey_,
                             toSendBufor);
             sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
         }

@@ -33,7 +33,6 @@ private:
 
 
 public:
-    ~SecureHandler_RSA();
     SecureHandler_RSA(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName);
 
     int getData(int numberOfBytes, char *data_bufor);
