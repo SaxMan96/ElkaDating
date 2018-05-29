@@ -32,7 +32,6 @@ private:
     int private_encrypt(unsigned char *data, int data_len, RSA *rsa, unsigned char *encrypted);
 
 public:
-    ~SecureHandler_RSA();
     SecureHandler_RSA(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName);
 
     int getData(int numberOfBytes, char *data_bufor);

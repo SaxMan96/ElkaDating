@@ -13,14 +13,10 @@
 
 class SocketHandler
 {
-    int socketfd_;
-
 public:
-    SocketHandler(int socketfd);
-    virtual int getData(int numberOfBytes, char *dataBufor);
-    virtual int sendData(int numberOfBytes, char *dataBufor);
-
-    int readBytes(int numberOfBytes, char *bufor);
+    SocketHandler();
+    virtual int getData(int numberOfBytes, char *dataBufor) = 0;
+    virtual int sendData(int numberOfBytes, char *dataBufor) = 0;
 };
 
 #endif // SOCKETHANDLER_HPP

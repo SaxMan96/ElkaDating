@@ -68,6 +68,7 @@ void SingletonClientList::closeAllClientConnections()
     for (auto it = clients_.begin(); it != clients_.end(); ++it)
     {
         it->second->setStillRunningFalse();
+        it->second->closeConnection();
     }
 
     pthread_mutex_unlock(&mapMutex_);

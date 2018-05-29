@@ -40,7 +40,7 @@ int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA
 
 int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
 {
-    int result = RSA_public_encrypt(data_len,data,encrypted,rsa,padding);
+    int result = RSA_private_encrypt(data_len, data, encrypted, rsa,padding);
     if(result == -1 )
         throw EncryptError();
     return result;
@@ -57,10 +57,12 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
         encrypted_bufor_ = new char[encryptedBuforSize_];
         decrypted_bufor_ = new char[decryptedBuforSize_];
 
-        returnVal = sc_->readBytes(packetLength_, encrypted_bufor_);
+        returnVal = sc_->getData(packetLength_, encrypted_bufor_);
         if(returnVal == 0)
+        {
+            std::cout<<"zwraca 0";
             return 0;
-
+        }
         decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
     }
 
@@ -69,10 +71,12 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
 
         if(decryptedBuforIndex_ >= decryptedDataLength_)
         {
-            returnVal = sc_->readBytes(packetLength_, encrypted_bufor_);
+            returnVal = sc_->getData(packetLength_, encrypted_bufor_);
             if(returnVal == 0)
+            {
+                std::cout<<"zwraca 0 2 \n";
                 return 0;
-
+            }
             decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
 
             decryptedBuforIndex_ = 0;
@@ -104,6 +108,7 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
                             rsaPrivateKey_,
                             toSendBufor);
 
+
             sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
         }
         else
@@ -116,5 +121,10 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
         }
         tmp -= decryptedBuforSize_;
         ++numberOfBlocks;
+
+        for(int i = 0; i< encryptedBuforSize_; ++i)
+        {
+            std::cout<<(int)toSendBufor[i];
+        }
     }
 }
