@@ -14,7 +14,7 @@ Package::Package(unsigned char *data, int dataSize, int type, int subType, int p
     sessionID_ = sessionID;
 
     dataLength_ = dataSize+1;
-    std::cout<<"dataLength "<<dataLength_<<std::endl;
+    std::cout<<"Package made: dataLength "<<dataLength_<<std::endl;
 
     //allocating memory
     data_ = new unsigned char[HEADER_SIZE+dataLength_];
