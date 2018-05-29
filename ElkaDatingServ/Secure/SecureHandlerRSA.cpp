@@ -90,7 +90,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
     return data_bufor_index;
 }
 
-int SecureHandler_RSA::sendData(int numberOfBytes, char *data_buftor)
+int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
 {
     int tmp = numberOfBytes;
     int numberOfBlocks = 0;
