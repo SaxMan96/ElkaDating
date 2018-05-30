@@ -19,7 +19,6 @@
 #include "SingletonClientList.hpp"
 
 #include "MessageHandler/MessageHandler.hpp"
-#include "MessageHandler/MessageHandlerDKPS.hpp"
 
 #include "SocketReader.hpp"
 #include "Exceptions/MyExceptions.hpp"
@@ -30,6 +29,8 @@
 #include "Secure/SecureHandlerRSA.hpp"
 #include "Secure/SecureHandlerRSA_AES.hpp"
 #include <limits.h>
+
+class MessageHandler;
 
 class Client
 {

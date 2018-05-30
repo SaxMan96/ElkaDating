@@ -21,7 +21,6 @@ SOURCES += main.cpp \
     DB/DBManager.cpp \
     Exceptions/MyExceptions.cpp \
     MessageHandler/MessageHandler.cpp \
-    MessageHandler/MessageHandlerDKPS.cpp \
     Secure/SecureHandler.cpp \
     Secure/SecureHandlerAES.cpp \
     Secure/SecureHandlerNoSecure.cpp \
@@ -37,13 +36,14 @@ SOURCES += main.cpp \
     Term.cpp \
     MessageContent/MessageContent.cpp \
     MessageContent/LoginMessageContent.cpp \
-    MessageContent/RegistrationMessageContent.cpp
+    MessageContent/RegistrationMessageContent.cpp \
+    MessageContent/TermPrefMessageContent.cpp \
+    MessageContent/SendMultipleMessageContent.cpp
 
 HEADERS += \
     DB/DBManager.hpp \
     Exceptions/MyExceptions.hpp \
     MessageHandler/MessageHandler.hpp \
-    MessageHandler/MessageHandlerDKPS.hpp \
     Secure/SecureHandler.hpp \
     Secure/SecureHandlerAES.hpp \
     Secure/SecureHandlerNoSecure.hpp \
@@ -59,4 +59,6 @@ HEADERS += \
     Term.hpp \
     MessageContent/MessageContent.hpp \
     MessageContent/LoginMessageContent.hpp \
-    MessageContent/RegistrationMessageContent.hpp
+    MessageContent/RegistrationMessageContent.hpp \
+    MessageContent/TermPrefMessageContent.hpp \
+    MessageContent/SendMultipleMessageContent.hpp

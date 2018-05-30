@@ -9,7 +9,7 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     client_addr_=client_addr;
     length_=length;
     isLogged_ = false;
-    mh_ = new MessageHandlerDKPS();
+    mh_ = new MessageHandler(this);
 
     if(sem_init(&consumerSem_, 0, 0) == -1)
     {

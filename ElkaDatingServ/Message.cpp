@@ -126,6 +126,11 @@ int Message::getMsgType() const
     return static_cast<int>(type_);
 }
 
+int Message::getMsgSubType() const
+{
+    return static_cast<int>(subType_);
+}
+
 MessageContent* Message::getContent() const{
     return content_;
 }

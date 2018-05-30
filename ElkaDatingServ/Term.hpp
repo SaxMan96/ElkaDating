@@ -11,6 +11,7 @@ protected:
    int mon;   // month of year from 1 to 12
    int year;  // year since 2000
 public:
+    Term();
     Term(int,int,int,int,int);
 };
 

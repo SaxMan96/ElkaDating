@@ -16,10 +16,12 @@ enum MessageType{
     LOGIN,          //logowanie użytkownika
     LOGOUT,         //wylogowanie użytkownika
 
+    NOTIFICATION,   //powiadomienie dla użytkownika
+
     TERMS_STUDENT,    //ustawienie terminów przez studenta
     TERMS_TEACHER,    //ustawienie terminów przez prowadzącego
 
-    SEND_MSG_TO_STUDENTS,  //możliwość wysłania wiadomości do studentów
+    SEND_MULITIPLE_MSG_TO_STUDENTS,  //możliwość wysłania wiadomości do studentów
 
     CLIENT_DISCONNECT   //rozłączenie się klienta
 
@@ -27,6 +29,11 @@ enum MessageType{
 enum MessageSubType{
     /*logowanie, rejestracja*/
     SUCCESFULL, WRONG_PASS, WRONG_USERNAME,EMPTY_FIELDS,STUDENT_NO_NOT_VALID,
+    /*rodzaje powiadomień*/
+    //SUCCESFULL - wyżej
+    INFO,       //coś tam się stało
+    FAILURE,    //coś nie pykło
+
     /*decyzje odnośnie terminów  student*/
     PREF_TERMS,         //preferowane
     CANCEL_TERMS,       //anulowanie preferencji
@@ -109,6 +116,15 @@ public:
      */
 
     int getMsgType() const;
+
+    /**
+     * @brief getMsgSubType
+     * SubType are specified in documentation.
+     * @return
+     * SubType of message as int value.
+     */
+
+    int getMsgSubType() const;
 
     /**
      * @brief getContent
