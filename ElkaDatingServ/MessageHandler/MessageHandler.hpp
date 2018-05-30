@@ -21,6 +21,10 @@ protected:
 public:
     MessageHandler(Client*);
     void handleMessage(Message*);
+    void termsStudentMessageHandle(TermPrefMessageContent*);
+    void termsTeacherMessageHandle(TermPrefMessageContent*);
+    void sendMultipleMessagesHandle(SendMultipleMessageContent*);
+    void sendNotification(int, int,std::string,std::string,std::string);
 };
 
 #endif // MESSAGEHANDLER_HPP
