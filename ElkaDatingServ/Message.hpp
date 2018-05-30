@@ -12,42 +12,33 @@
 const int MESSAGE_HEADER_SIZE = 16;
 
 enum MessageType{
-    REGISTRATION,
-    //rejestracja użytkownika
-    LOGIN,
-    //logowanie użytkownika
-    LOGOUT,
-    //wylogowanie użytkownika
-    TERM_PREF_STUDENT,
-    //ustawienie preferowanych terminów przez użytkownika u prowadzącego
-    TERM_PREF_TEACHER,
-    //ustawienie preferowanych terminów przez prowadzącego
-    ACCEPT_TERMS,
-    //ostateczna akceptacja terminów przez prowadzącego
-    CANCEL_TERMS,
-    //anulowanie wybranych terminów przez prowadzącego - wiąże się z wysłaniem powiadomień do zapisanych
-    ADD_NEW_TERM,
-    //dodanie terminu konsultacji - takiego który na pewno się odbędzie
-    //albo powiadomiewnie do wszystkich  którzy wybrali ten termin,
-    //albo do wszystkich, którzy chcą przyjść na kiedykolwiek
-    SEND_MSG_TO_STUDENTS,
-    //możliwość wysłania wiadomości do wszystkich
-    //studentów
-    //studentów u prowadzącego
-    //chcących przyjść na konsy
-    //którzy zostali umówieni
-    CONFIRM_TERM_STUDENT,
-    //potwierdzenie, lub przeciwnie przez studenta przyjścia na wyznaczony termin
-    CLIENT_DISCONNECT
+    REGISTRATION,    //rejestracja użytkownika
+    LOGIN,          //logowanie użytkownika
+    LOGOUT,         //wylogowanie użytkownika
+
+    TERMS_STUDENT,    //ustawienie terminów przez studenta
+    TERMS_TEACHER,    //ustawienie terminów przez prowadzącego
+
+    SEND_MSG_TO_STUDENTS,  //możliwość wysłania wiadomości do studentów
+
+    CLIENT_DISCONNECT   //rozłączenie się klienta
 
 };
 enum MessageSubType{
     /*logowanie, rejestracja*/
     SUCCESFULL, WRONG_PASS, WRONG_USERNAME,EMPTY_FIELDS,STUDENT_NO_NOT_VALID,
-    /*powiadomienie zatwierdzenie, odrzucenie terminu przez prowadzącego*/
-    ACCEPTANCE_OF_TERM, DECLINE_OF_TERM, CHANGE_OF_TERM, NEW_TERM,
-    /*info od serwera*/
-    SERVER_FAILURE, SERVER_BREAK,
+    /*decyzje odnośnie terminów  student*/
+    PREF_TERMS,         //preferowane
+    CANCEL_TERMS,       //anulowanie preferencji
+    /*decyzje odnośnie terminów  prowadzący*/
+    NEW_TERMS,      //dodanie
+    DELETE_TERM,        //usuniecie
+    ACCEPT_TERMS,       //zaakceptowanie
+    DECLINE_TERMS,      //odwołanie zaakceptowanego
+    /*wysłanie wiadomości do studentów*/
+    ALL_STUDENTS,           //wszystkich
+    ALL_PREF_STUDENTS,      //wszystkich którzy złożyli preferencje
+    ALL_ACCEPTED_STUDENTS,  //wszystkich których termin został zaakceptowany
 
 };
 struct Message{
