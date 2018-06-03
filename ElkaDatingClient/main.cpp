@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     sockaddr_in server;
 
     server.sin_family = AF_INET; // połączenie TCP/!P
-    server.sin_addr.s_addr = inet_addr("192.168.1.100");
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
     server.sin_port = htons(8000);
 
     socketID = socket(AF_INET, SOCK_STREAM, 0 ); // TCP
@@ -53,9 +53,11 @@ int main(int argc, char *argv[])
         return 2;
     }
     socketHandler = new SocketHandlerBSD(socketID);
-    secureHandlerRSA_AES = new SecureHandlerRSA_AES(socketHandler, "public_key.pem", "public_key.pem");
+    secureHandlerRSA_AES = new SecureHandlerRSA_AES(socketHandler, "private_key.pem", "public_key.pem");
 
     secureHandlerRSA_AES->initConnection();
+
+
 //    secureHandler_RSA = new SecureHandler_RSA(socketHandler,"public_key.pem");
 /*
     // sending  challange encrypted with RSA
@@ -124,8 +126,6 @@ int main(int argc, char *argv[])
         return 3;
     }
 */
-    std::cin.get();
-
     close(socketID);
 
     std::cout<<"We are on a mission form God!\n";

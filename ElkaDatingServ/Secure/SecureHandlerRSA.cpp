@@ -21,7 +21,7 @@ SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyF
     fp = fopen(privateKeyFileName.c_str(), "rb");
     if(fp == NULL)
     {
-        throw CannotOpenPublicPem();
+        throw CannotOpenPrivatePem();
     }
 
     rsaPrivateKey_ = RSA_new();
@@ -74,7 +74,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
             returnVal = sc_->getData(packetLength_, encrypted_bufor_);
             if(returnVal == 0)
             {
-                std::cout<<"zwraca 0 2 \n";
+                std::cout<<"NIE POBRANO DANYCH Z SOCKETA\n";
                 return 0;
             }
             decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
@@ -121,10 +121,5 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
         }
         tmp -= decryptedBuforSize_;
         ++numberOfBlocks;
-
-        for(int i = 0; i< encryptedBuforSize_; ++i)
-        {
-            std::cout<<(int)toSendBufor[i];
-        }
     }
 }

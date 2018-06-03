@@ -28,16 +28,16 @@ private:
     int decryptedDataLength_;
 
     int private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted);
-    int encrypt();
     int private_encrypt(unsigned char *data, int data_len, RSA *rsa, unsigned char *encrypted);
 
-
+    int public_encrypt(unsigned char *data, int data_len, RSA *rsa, unsigned char *encrypted);
+    int public_decrypt(unsigned char *enc_data, int data_len, RSA *rsa, unsigned char *decrypted);
 public:
     SecureHandler_RSA(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName);
 
     int getData(int numberOfBytes, char *data_bufor);
     int sendData(int numberOfBytes, char *data_bufor);
-    int sendDataEncryptedByServerKey(int numberOfBytes, char *data_bufor);
+    int sendDataEncryptedByServerPublicKey(int numberOfBytes, char *data_bufor);
 
     SecureHandler_RSA(SocketHandler *sc, std::string publicKeyFileName);
 };

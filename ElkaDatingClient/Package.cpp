@@ -3,6 +3,7 @@
 Package::~Package()
 {
     delete [] data_;
+    data_ = nullptr;
 }
 
 Package::Package(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID)

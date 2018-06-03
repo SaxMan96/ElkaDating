@@ -4,7 +4,7 @@
 SecureHandlerRSA_AES::SecureHandlerRSA_AES(SocketHandler *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc)
 {
-    rsa_= std::unique_ptr<SecureHandler_RSA>(new SecureHandler_RSA(sc_, privateKeyFileName, publicKeyFileName));
+    rsa_= new SecureHandler_RSA(sc_, privateKeyFileName, publicKeyFileName);
     isConnectionEstablish_ = false;
 }
 
@@ -56,114 +56,27 @@ bool SecureHandlerRSA_AES::tryHeader(char *bufor)
 // faza 3. jeśli się zgadza to wygeneruj klucz AES i wyślij
 // faza 4. przyjmij liczbe, wyślij liczbe przesuniętą bitowo o 2 liczbe odtrzymana
 
-void SecureHandlerRSA_AES::initConnection()
+bool SecureHandlerRSA_AES::initConnection()
 {
-    const int CHALLENGE = 1;
-    const int DECRYPTED_CHALLANGE = 2;
-    const int AES_KEY = 3;
-    const int AES_CHALLENGE = 4;
-    const int AES_CHALLENGE_REPLY = 5;
-    const int ERROR = 6;
-
-    int type_;
-
     // faza 1. wyślij challenge
-    type_= CHALLENGE;
-    int challange = rand();
-    std::cout<<"challange: "<<challange<<std::endl;
+    int challange = sendRSAChallenge();
 
-    char *header = new char[16];
-    char receivedData[16];
-
-    putHeader(header);
-    header[11] = (type_>>24) & 0xFF;
-    header[10] = (type_>>16) & 0xFF;
-    header[9] = (type_>>8) & 0xFF;
-    header[8] = type_ & 0xFF;
-
-    header[15] = (challange>>24) & 0xFF;
-    header[14] = (challange>>16) & 0xFF;
-    header[13] = (challange>>8) & 0xFF;
-    header[12] = challange & 0xFF;
-    //*(header + 12) = challange;
-    rsa_->sendDataEncryptedByServerKey(16, header);
-
-    std::cout<<"faza 2. odbierz zaszyfowany kluczem publicznym challenge"<<std::endl;
     // faza 2. odbierz zaszyfowany kluczem publicznym challenge
-    rsa_->getData(16, receivedData);
-
-    std::cout<<"receivedData "<<receivedData<<std::endl;
-    if (tryHeader(receivedData)){
-
-        int receivedNumber = *(int*)(header + 12);
-        std::cout<<"receivedNumber "<<receivedNumber<<std::endl;
-        if (receivedNumber != challange)
-        {
-            type_ = ERROR;
-            *(header + 8) = type_;
-            rsa_->sendDataEncryptedByServerKey(16, header);
-        }
-        else
-        {
-            // faza 3. jeśli się zgadza to wygeneruj klucz AES i wyślij
-            type_ = AES_KEY;
-            delete [] header;
-            header = new char[80];
-            unsigned char symetricKey [64];
-            RAND_bytes(symetricKey, 64);
-            aes_ = std::unique_ptr<SecureHandler_AES>(new SecureHandler_AES(sc_, 64, symetricKey));
-
-            putHeader(header);
-            header[11] = (type_>>24) & 0xFF;
-            header[10] = (type_>>16) & 0xFF;
-            header[9] = (type_>>8) & 0xFF;
-            header[8] = type_ & 0xFF;
-
-            int tmp = 64;
-            header[15] = (tmp>>24) & 0xFF;
-            header[14] = (tmp>>16) & 0xFF;
-            header[13] = (tmp>>8) & 0xFF;
-            header[12] = tmp & 0xFF;
-
-            for (int i = 0; i < 64; ++i)
-            {
-                *(header + 16 + i) = symetricKey[i];
-            }
-            for (int i = 16; i < 80; ++i)
-            {
-                std::cout<<(int)*(header+i);
-            }
-            rsa_->sendData(80, header);
-        }
+    if (!receiveRSAChallangeRespone(challange)){
+        sendRSAError();
+        return false;
     }
-    else{
-        // TODO throw
+    else
+    {
+        // faza 3. jeśli się zgadza to wygeneruj klucz AES i wyślij
+        aes_ = sendAESKey();
     }
-
 
     // faza 4. przyjmij liczbe, wyślij liczbe przesuniętą bitowo o 2 liczbe odtrzymana
-    aes_->getData(16, receivedData);
+    int receivedNumber = receiveAESChallange();
+    sendAESChallangeResponse( receivedNumber );
 
-    if (tryHeader(receivedData) && *(receivedData + 8) == AES_CHALLENGE){
-        int receivedNumber = *(receivedData+12);
-        std::cout<<"recNum "<<receivedNumber<<std::endl;
-        receivedNumber  = receivedNumber >> 2;
-        delete []header;
-        type_ = AES_CHALLENGE_REPLY;
-
-        header = new char[16];
-        putHeader(header);
-        *(header + 8) = type_;
-        *(header + 12) = receivedNumber;
-
-        aes_->sendData(16, header);
-    }
-    else{
-        // TODO throw
-    }
-
-
-
+    std::cout<<"\nSECURE CONNECTION INITIALIZED\n";
 }
 
 void SecureHandlerRSA_AES::putHeader(char *bufor)
@@ -176,6 +89,119 @@ void SecureHandlerRSA_AES::putHeader(char *bufor)
     bufor[5]='A';
     bufor[6]='E';
     bufor[7]='S';
+}
+
+void SecureHandlerRSA_AES::putInt(char *bufor, int number){
+    bufor[3] = (number>>24) & 0xFF;
+    bufor[2] = (number>>16) & 0xFF;
+    bufor[1] = (number>>8) & 0xFF;
+    bufor[0] = number& 0xFF;
+}
+
+int SecureHandlerRSA_AES::sendRSAChallenge()
+{
+    char *header = new char[16];
+    type_= CHALLENGE;
+    int challange = rand();
+    std::cout<<"challange: "<<challange<<std::endl;
+
+    putHeader(header);
+    putInt(header+8, type_);
+    putInt(header+12, challange);
+
+    rsa_->sendDataEncryptedByServerPublicKey(16, header);
+    delete []header;
+    header = nullptr;
+
+    return challange;
+}
+
+int SecureHandlerRSA_AES::receiveRSAChallangeRespone(int challange)
+{
+    rsa_->getData(16, receivedData);
+
+    type_ = *(int*)(receivedData + 8);
+
+    if (tryHeader(receivedData) && type_ == DECRYPTED_CHALLANGE){
+        int receivedNumber = *(int*)(receivedData + 12);
+        if (receivedNumber != challange){
+            std::cout<<"Received bad challange number: "<<receivedData<<". Should be "<<challange<<std::endl;
+            return false;
+        }
+        else
+            return true;
+    }
+    else{
+        std::cout<<"Received bad package header or type"<<std::endl;
+        return false;
+    }
+}
+
+void SecureHandlerRSA_AES::sendRSAError()
+{
+    char *header = new char[16];
+    putHeader(header);
+    putInt(header+8, ERROR);
+
+    std::cout<<"\nBAD RSA CHALLANGE RESPONSE\n\n";
+    rsa_->sendDataEncryptedByServerPublicKey(16, header);
+    delete [] header;
+    header = nullptr;
+}
+
+SecureHandler_AES* SecureHandlerRSA_AES::sendAESKey()
+{
+    type_ = AES_KEY;
+    char *header = new char[48];
+
+    unsigned char symetricKey [32];
+    RAND_bytes(symetricKey, 32);
+    SecureHandler_AES *toRet = new SecureHandler_AES(sc_, 256, symetricKey);
+
+    putHeader(header);
+    putInt(header+8, AES_KEY);
+    putInt(header+12, 32);
+    for (int i = 0; i < 32; ++i)
+    {
+        *(header + 16 + i) = symetricKey[i];
+    }
+
+    rsa_->sendDataEncryptedByServerPublicKey(48, header);
+
+    delete [] header;
+    header = nullptr;
+    return toRet;
+}
+
+int SecureHandlerRSA_AES::receiveAESChallange()
+{
+    aes_->getData(16, receivedData);
+
+    if (tryHeader(receivedData) && *(receivedData + 8) == AES_CHALLENGE){
+        int receivedNumber = *(int*)(receivedData+12);
+        std::cout<<"recNum "<<receivedNumber<<std::endl;
+
+        return receivedNumber;
+    }
+    else{
+        std::cout<<"Received bad package header or type"<<std::endl;
+        //TODO throw
+        return 0;
+    }
+}
+
+void SecureHandlerRSA_AES::sendAESChallangeResponse(int toSendNumber)
+{
+    char *header = new char[16];
+
+    type_ = AES_CHALLENGE_REPLY;
+    putHeader(header);
+    putInt(header + 8, type_);
+    putInt(header + 12, toSendNumber);
+
+    aes_->sendData(16, header);
+    delete []header;
+    header = nullptr;
 }
 
 int SecureHandlerRSA_AES::getData(int numberOfBytes, char *dataBufor)

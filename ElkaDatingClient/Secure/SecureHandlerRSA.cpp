@@ -18,7 +18,6 @@ SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string publicKeyFi
     fclose(fp);
 }
 
-
 SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc)
 {
@@ -40,7 +39,7 @@ SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyF
     fp = fopen(privateKeyFileName.c_str(), "rb");
     if(fp == NULL)
     {
-        throw CannotOpenPublicPem();
+        throw CannotOpenPrivatePem();
     }
 
     rsaPrivateKey_ = RSA_new();
@@ -49,6 +48,23 @@ SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyF
 }
 
 int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
+{
+    int  result = RSA_private_decrypt(data_len, enc_data, decrypted, rsa, padding);
+    if(result == -1 )
+        throw DecryptError();
+
+    return result;
+}
+
+int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
+{
+    int result = RSA_private_encrypt(data_len,data,encrypted,rsa,padding);
+    if(result == -1 )
+        throw EncryptError();
+    return result;
+}
+
+int SecureHandler_RSA::public_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
 {
     for (int i= 0; i < 256; ++i)
         std::cout<<(int)*(enc_data+i);
@@ -61,7 +77,7 @@ int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA
     return result;
 }
 
-int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
+int SecureHandler_RSA::public_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
 {
     int result = RSA_public_encrypt(data_len,data,encrypted,rsa,padding);
     if(result == -1 )
@@ -84,7 +100,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
         if(returnVal == 0)
             return 0;
 
-        decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
+        decryptedDataLength_ = public_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
     }
 
     while(data_bufor_index < numberOfBytes)
@@ -96,7 +112,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
             if(returnVal == 0)
                 return 0;
 
-            decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
+            decryptedDataLength_ = public_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
 
             decryptedBuforIndex_ = 0;
         }
@@ -142,7 +158,7 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
     }
 }
 
-int SecureHandler_RSA::sendDataEncryptedByServerKey(int numberOfBytes, char *data_bufor)
+int SecureHandler_RSA::sendDataEncryptedByServerPublicKey(int numberOfBytes, char *data_bufor)
 {
     int tmp = numberOfBytes;
     int numberOfBlocks = 0;
@@ -151,7 +167,7 @@ int SecureHandler_RSA::sendDataEncryptedByServerKey(int numberOfBytes, char *dat
     while (tmp > 0){
         if (tmp >= decryptedBuforSize_)
         {
-            private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
+            public_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             decryptedBuforSize_,
                             rsaPublicKey_,
                             toSendBufor);
@@ -160,7 +176,7 @@ int SecureHandler_RSA::sendDataEncryptedByServerKey(int numberOfBytes, char *dat
         }
         else
         {
-            private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
+            public_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             tmp,
                             rsaPublicKey_,
                             toSendBufor);
