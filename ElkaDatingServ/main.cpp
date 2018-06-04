@@ -96,6 +96,7 @@ void* client_thread_logic(void *client)
 int main(int argc, char *argv[])
 {
     pthread_t creator;
+    srand(time(NULL));
 
     try
     {
@@ -119,6 +120,7 @@ int main(int argc, char *argv[])
     {
         std::cout<<ex.what()<<std::endl;
     }
+
     SingletonClientList::getInstance().closeAllClientConnections();
 
     return 0;
