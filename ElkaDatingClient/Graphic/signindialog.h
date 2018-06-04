@@ -15,6 +15,9 @@ public:
     explicit SignInDialog(QWidget *parent = 0);
     ~SignInDialog();
 
+private slots:
+    void on_apply_clicked();
+
 private:
     Ui::SignInDialog *ui;
 };

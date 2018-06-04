@@ -16,12 +16,14 @@ MainWindow::~MainWindow()
 void MainWindow::on_signInButton_clicked()
 {
     SignInDialog signInDialog;
+    signInDialog.setWindowTitle("Sign in");
     signInDialog.setModal(true);
     signInDialog.exec();
 }
 void MainWindow::on_signUpButton_clicked()
 {
     SignUpDialog signUpDialog;
+    signUpDialog.setWindowTitle("Sign up");
     signUpDialog.setModal(true);
     signUpDialog.exec();
 }
