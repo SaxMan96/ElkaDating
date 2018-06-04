@@ -12,8 +12,8 @@
 #include <openssl/aes.h>
 #include <openssl/rand.h>
 
-#include "SocketReader.hpp"
-#include "Exceptions/MyExceptions.hpp"
+#include "Socket/SocketHandler.hpp"
+#include "Exceptions/Myexceptions.hpp"
 
 /**
  * @brief The SecureHandler class

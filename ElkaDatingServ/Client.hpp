@@ -29,6 +29,7 @@
 #include "Secure/SecureHandlerNoSecure.hpp"
 #include "Secure/SecureHandlerRSA.hpp"
 #include "Secure/SecureHandlerRSA_AES.hpp"
+#include "Socket/SocketHandlerBSD.hpp"
 
 class Client
 {
@@ -54,9 +55,8 @@ private:
     bool isLogged_;
 
     MessageHandler *mh_;
-    SecureHandler *sh_synchro_;
-    SecureHandler *sh_asynchro_;
-    SocketHandler *sr_;
+    SecureHandler *secureH_;
+    SocketHandler *socketH_;
 
     void sendMessage(Message *msg);
 

@@ -24,15 +24,10 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 
     isStillRunning_=true;
 
-    sr_ = new SocketHandler(clientSockfd);
+    socketH_ = new SocketHandlerBSD(clientSockfd);
 
-    sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
-    unsigned char key [64];
-    int i = 0;
+    secureH_ = new SecureHandlerRSA_AES(socketH_, "private_key.pem", "public_key.pem");
 
-    for (char e :"52443563524435635244356352443563")
-        key[i++] = (unsigned char)e;
-    sh_synchro_ = new SecureHandler_AES(sr_, 256, (unsigned char*)key);
 
     isRegister_=SingletonClientList::getInstance().registerClient(this);
 
@@ -178,7 +173,7 @@ Message * Client::readMessage(){
     char headerBufor[MESSAGE_HEADER_SIZE];
     Message *msg;
 
-    numOfReadBytes = sh_asynchro_->getData(MESSAGE_HEADER_SIZE, headerBufor);
+    numOfReadBytes = secureH_->getData(MESSAGE_HEADER_SIZE, headerBufor);
 
     if( numOfReadBytes == 0)
     {
@@ -195,7 +190,7 @@ Message * Client::readMessage(){
 
     if(msg -> getMsgDataLength() != 0)
     {
-        numOfReadBytes = sh_asynchro_->getData(msg->getMsgDataLength(), msg->getMsgDataBufor());
+        numOfReadBytes = secureH_->getData(msg->getMsgDataLength(), msg->getMsgDataBufor());
 
         if( numOfReadBytes != msg->getMsgDataLength())
         {
@@ -224,100 +219,11 @@ Client::~Client()
         delete(msgQueue_.front());
         msgQueue_.pop();
     }
-    delete sr_;
-    delete sh_asynchro_;
-    delete sh_synchro_;
+    delete socketH_;
+    delete secureH_;
 }
 
 int Client::getID() const
 {
     return clientID_;
 }
-
-/*
-int Client::readBytes(int numberOfBytes, char *bufor)
-{
-    int index = 0;
-    int returnVal;
-
-    while(index != numberOfBytes)
-    {
-        returnVal = read(clientSockfd_, (bufor+index), numberOfBytes);
-
-        if(returnVal==0)
-        {
-            std::cout<<"CLIENT DISCONNECT ID:"<<clientID_<<std::endl;
-            isStillRunning_ = false;
-            return 0;
-        }
-        else if(returnVal==-1)
-        {
-            std::cout<<"READ ERROR CLIENT ID:"<<clientID_<<std::endl;
-            isStillRunning_ = false;
-            return 0;
-        }
-        else
-        {
-            index += returnVal;
-        }
-    }
-
-    return index;
-}
-*/
-
-
-
-/*
-std::cout<<"READ HEADER\n";
-
-returnVal_ = read(clientSockfd_, headerBufor, MESSAGE_HEADER_SIZE);
-if(returnVal_==0)
-{
-    std::cout<<"CLIENT DISCONNECT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-else if(returnVal_==-1)
-{
-    std::cout<<"READ ERROR CLIENT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-else if(returnVal_!=MESSAGE_HEADER_SIZE)
-{
-    std::cout<<"NOT ENOUGHT DATA TO READ HEADER CLIENT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-
-msg = new Message(headerBufor);
-std::cout<<msg->headerToSting();
-
-
-std::cout<<"READ MSG\n";
-
-returnVal_ = read(clientSockfd_, msg->getBufor(), msg->getDataLength());
-
-std::cout<<"RETURN "<<returnVal_<<std::endl;
-
-if(returnVal_==0)
-{
-    std::cout<<"CLIENT DISCONNECT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-else if(returnVal_==-1)
-{
-    std::cout<<"READ ERROR CLIENT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;;
-    return nullptr;
-}
-else if( returnVal_!=msg->getDataLength() )
-{
-    isStillRunning_ = false;
-    std::cout<<"NOT ENOUGHT DATA TO READ PACKET DATA! ID:"<<clientID_;
-    return nullptr;
-}
-printf("------>>>MESSAGE: %s \n", msg->getBufor());
-*/
