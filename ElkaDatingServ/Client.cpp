@@ -109,6 +109,11 @@ void Client::messageHandler(Message* msg)
         throw new LoggedInWrongMessageTypeException();
 }
 
+void Client::setIsLogged(bool isLogged)
+{
+    isLogged_ = isLogged;
+}
+
 void Client::registerNewUser(Message* msg)
 {
     mh_->handleRegisterMessage(msg);
@@ -124,7 +129,6 @@ void Client::sendNotification(std::string str, int type, int subType){
     Message *notification = new Message(type,subType,getPacketID(),0,data,strlen(data));
     pushMessage(notification);
 }
-
 
 int Client::getPacketID(){
     return (++ nextPacketID_ )%INT_MAX;
@@ -142,7 +146,6 @@ void Client::unregister()
 {
     //SingletonClientList::getInstance().unregisterClient(clientID_);
 }
-
 
 int Client::getSocket()const
 {
@@ -195,7 +198,6 @@ Message * Client::readMessage(){
 pthread_t Client::getReadThreadID() const{
     return readThread_;
 }
-
 
 Client::~Client()
 {

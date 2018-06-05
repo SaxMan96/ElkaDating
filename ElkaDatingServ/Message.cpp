@@ -135,60 +135,17 @@ MessageContent* Message::getContent() const{
     return content_;
 }
 
-
 Message::~Message()
 {
     delete []msgBuf_;
 }
 
-/*
-void Message::setMsgType(){
-
-    switch(type){
-        case 0:
-            msgType_ = MessageType.HAND_SHAKE;
-            break;
-        case 1:
-            msgType_ = MessageType.NOTIFICATION;
-            break;
-        case 2:
-            msgType_ = MessageType.CONFIRMATION;
-            break;
-        case 3:
-            msgType_ = MessageType.LOGIN;
-            break;
-    }
+Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email){
+    std::string str = "Name: "+name+"\nSurname: "+surname+"\nEmail: "+email+"\nPassword: "+password;
+    return new Message(REGISTRATION,0,0,0,(char*)str.c_str(),str.length());
 }
 
-void Message::setMsgSubType(){
-    switch(subType_){
-        case 0:
-            msgSubType_ = MessageSubType.SUCCESFULL;
-            break;
-        case 1:
-            msgSubType_ = MessageSubType.WRONG_PASS;
-            break;
-        case 2:
-            msgSubType_ = MessageSubType.WRONG_USERNAME;
-            break;
-        case 3:
-            msgSubType_ = MessageSubType.ACCEPTANCE_OF_TERM;
-            break;
-        case 4:
-            msgSubType_ = MessageSubType.DECLINE_OF_TERM;
-            break;
-        case 5:
-            msgSubType_ = MessageSubType.CHANGE_OF_TERM;
-            break;
-        case 6:
-            msgSubType_ = MessageSubType.NEW_TERM;
-            break;
-        case 7:
-            msgSubType_ = MessageSubType.SERVER_FAILURE;
-            break;
-        case 8:
-            msgSubType_ = MessageSubType.SERVER_BREAK;
-            break;
-    }
+Message *getSignInMessage(std::string email, std::string password){
+    std::string str = "Email: "+email+"\nPassword: "+password;
+    return new Message(LOGIN,0,0,0,(char*)str.c_str(),str.length());
 }
-*/

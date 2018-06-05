@@ -94,6 +94,7 @@ public:
     void unregister();
 
     bool isLogged();
+    void setIsLogged(bool isLogged);
 
     void messageHandler(Message *msg);
     void pushMessage(Message *msg);
