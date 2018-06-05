@@ -7,7 +7,7 @@ WeekView::WeekView(QWidget *parent) :
 {
     ui->setupUi(this);
 //    ui->header->setAlignment(Qt::AlignCenter);
-//    ui->dateHeader->setAlignment(Qt::AlignCenter);
+    ui->dateHeader->setAlignment(Qt::AlignCenter);
     //button(QDialogButtonBox::Apply)->setText("Sign in");
 
 
@@ -20,6 +20,21 @@ WeekView::~WeekView()
 
 void WeekView::on_lecturers_itemClicked(QListWidgetItem *item)
 {
-    QString tmp = item->text();
-    ui->userName->document()->setPlainText(tmp);
+//    QString tmp = item->text();
+//    ui->userName->document()->setPlainText(tmp);
+}
+
+void WeekView::on_logoutButton_clicked()
+{
+
+}
+
+void WeekView::on_forwardButton_clicked()
+{
+
+}
+
+void WeekView::on_backButton_clicked()
+{
+
 }

@@ -19,6 +19,12 @@ public:
 private slots:
     void on_lecturers_itemClicked(QListWidgetItem *item);
 
+    void on_logoutButton_clicked();
+
+    void on_forwardButton_clicked();
+
+    void on_backButton_clicked();
+
 private:
     Ui::WeekView *ui;
 };
