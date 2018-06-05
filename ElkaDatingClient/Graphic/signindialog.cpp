@@ -56,7 +56,11 @@ void SignInDialog::on_apply_clicked()
     QString password = ui->lineEdit_2->text();
     if (validateData(name, password))
     {
-        //TODO send data to server with login data
+        // TODO send data to server with login data
+        // TODO odbierz z serwera status uzytkownika
+        //jesli prowadzacy
+            // TODO odbierz z serwera eventy
+            // zmien "send" ukryj prowadzacych i wyswietla kalendarz
         this->close();
         WeekView weekView;
         weekView.setWindowTitle("Week view");

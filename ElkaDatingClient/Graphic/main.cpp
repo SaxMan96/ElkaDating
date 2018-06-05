@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 //    sockaddr_in server;
 
 //    server.sin_family = AF_INET; // połączenie TCP/!P
-//    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+//    server.sin_addr.s_addr = inet_addr("192.168.43.77");
 //    server.sin_port = htons(8000);
 
 //    socketID = socket(AF_INET, SOCK_STREAM, 0 ); // TCP
