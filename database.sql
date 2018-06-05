@@ -8,23 +8,25 @@ create table User(
 );
 
 create table Message(
-	ID INTEGER NOT NULL,
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
 	userID INTEGER NOT NULL,
-	data BLOB,
-	PRIMARY KEY(ID, userID),
+        data BLOB,
 	FOREIGN KEY(userID) REFERENCES User(ID)
 );
 
 create table Event(
-	ID INTEGER NOT NULL,
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
 	userID INTEGER NOT NULL,
 	lecturerID INTEGER,
+        accepted varchar(1),
+        teacherEvent varchar(1),
 	name TEXT,
   	description TEXT,
   	startTime varchar(12),
   	endTime varchar(12),
-	PRIMARY KEY(ID, userID),
-  	FOREIGN KEY(userID) REFERENCES User(ID),
+        FOREIGN KEY(userID) REFERENCES User(ID),
   	FOREIGN KEY(lecturerID) REFERENCES User(ID)
 );
+
+
 

@@ -45,6 +45,8 @@ enum MessageSubType{
     SERVER_FAILURE, SERVER_BREAK,
 
 };
+
+
 struct Message{
 
 private:

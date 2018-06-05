@@ -10,6 +10,9 @@
 #include <QTime>
 #include <QSqlRecord>
 
+#include "Event.hpp"
+#include "Term.hpp"
+
 const QString DATE_FORMAT = "yyyy.MM.dd.hh.mm";
 
 class DBManager

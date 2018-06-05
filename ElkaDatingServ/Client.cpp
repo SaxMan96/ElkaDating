@@ -29,7 +29,7 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     secureH_ = new SecureHandlerRSA_AES(socketH_, "private_key.pem", "public_key.pem");
 
 
-    isRegister_=SingletonClientList::getInstance().registerClient(this);
+    isRegister_=SingletonClientList::getInstance().connectClient(this);
 
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
@@ -37,8 +37,20 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     pthread_detach(logicThread_);
 }
 
-void Client::setID(unsigned int clientID){
-    clientID_=clientID;
+unsigned int Client::getLoggedClientID() const{
+    return loggedclientID_;
+}
+
+unsigned int Client::getNotLoggedClientID() const{
+    return notLoggedClientID_;
+}
+
+void Client::setLoggedClientID(unsigned int clientID){
+    loggedclientID_=clientID;
+}
+
+void Client::setNotLoggedClientID(unsigned int clientID){
+    notLoggedClientID_=clientID;
 }
 
 bool Client::checkIfStillRunning() const {
@@ -76,8 +88,14 @@ void Client::messageHandler(Message* msg)
 {
     if(!isLogged_)
     {
-        if(msg->getMsgType() == LOGIN)
+        if(msg->getMsgType() == LOGIN){
+            //zapisz id niezalogowanego jako stare id
+            //zmien  flage
+            //zmien id na te z bazy
+            //dodaj do listy zalogogwanych kopie
+            //usun z listy niezalogowanych po starym id
             loginNewUser(msg);
+        }
         else if(msg->getMsgType() == REGISTRATION)
             registerNewUser(msg);
         else if(msg->getMsgType() == LOGOUT){}
@@ -142,10 +160,6 @@ void Client::registerNewUser(Message* msg)
 //    }
 }
 
-bool Client::login(){
-    return true;
-}
-
 
 void Client::closeConnection()
 {
@@ -157,7 +171,7 @@ void Client::closeConnection()
 
 void Client::unregister()
 {
-    SingletonClientList::getInstance().unregisterClient(clientID_);
+    //SingletonClientList::getInstance().unregisterClient(clientID_);
 }
 
 
@@ -166,6 +180,10 @@ int Client::getSocket()const
     return clientSockfd_;
 }
 
+bool Client::isLogged()
+{
+    return isLogged_;
+}
 
 Message * Client::readMessage(){
 
@@ -221,9 +239,4 @@ Client::~Client()
     }
     delete socketH_;
     delete secureH_;
-}
-
-int Client::getID() const
-{
-    return clientID_;
 }

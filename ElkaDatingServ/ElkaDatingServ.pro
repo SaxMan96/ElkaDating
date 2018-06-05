@@ -34,7 +34,10 @@ SOURCES += main.cpp \
     Server.cpp \
     SingletonClientList.cpp \
     SocketReader.cpp \
-    Term.cpp
+    Term.cpp \
+    Event.cpp \
+    Term.cpp \
+    MessageContentParser.cpp
 
 HEADERS += \
     DB/DBManager.hpp \
@@ -53,4 +56,7 @@ HEADERS += \
     Server.hpp \
     SingletonClientList.hpp \
     SocketReader.hpp \
-    Term.hpp
+    Term.hpp \
+    Event.hpp \
+    Term.hpp \
+    MessageContentParser.hpp
