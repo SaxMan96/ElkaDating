@@ -6,10 +6,10 @@ MessageContentParser::MessageContentParser()
 
 void parseMessageContent(Message *msg)
 {
-    switch (msg->type_):
-    {
-        //case ...
-    }
+//    switch (msg->getMsgType()):
+//    {
+//        //case ...
+//    }
 }
 
 std::list<Event> parserEventList()

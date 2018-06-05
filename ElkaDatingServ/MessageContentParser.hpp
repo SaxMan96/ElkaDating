@@ -3,10 +3,12 @@
 
 #include "Event.hpp"
 #include "Message.hpp"
+#include <list>
 
 class MessageContentParser
 {
 public:
+    MessageContentParser();
     void parseMessageContent(Message *msg);
 
 private:

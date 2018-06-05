@@ -71,8 +71,8 @@ private:
     void sendMessage(Message *msg);
 
 
-    void registerNewUser(Message *msg);
-    void loginNewUser(Message *msg);
+    void registerNewUser(Message *);
+    void loginNewUser(Message *);
 
 
 public:
@@ -101,10 +101,8 @@ public:
     Message *readMessage();
 
     //---------------
-    void loginUser(Message*);
     bool checkExistUserName(std::string);
     bool checkPasswordCorrect(std::string, std::string);
-    void registerNewUser(Message*);
     void sendNotification(std::string , int ,int);
     bool checkPasswordQualify(std::string);
     bool checkStudentNumberValid(std::string);

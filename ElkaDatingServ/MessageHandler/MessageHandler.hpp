@@ -40,6 +40,8 @@ public:
 
     void sendMultipleMessagesHandle(SendMultipleMessageContent*);
     void sendNotification(int, int,std::string,std::string,std::string);
+    void handleRegisterMessage(Message *msg);
+    void handleLoginMessage(Message *msg);
 };
 
 #endif // MESSAGEHANDLER_HPP
