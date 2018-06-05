@@ -40,9 +40,6 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
             encryptedDataLenghtGet_ = (dataSizeInt/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE; // encrypted data
             decryptedDataLenghtGet_ = dataSizeInt;
 
-
-            delete [] decryptedBuforGet_;
-
             encryptedBuforGet_ = new char[encryptedDataLenghtGet_];
             decryptedBuforGet_ = new char[decryptedDataLenghtGet_];
 
@@ -68,8 +65,8 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
                 *(data_bufor + data_bufor_index) = *(decryptedBuforGet_ + decryptedBuforIndex_);
                 ++data_bufor_index;
             }
-            //delete [] decryptedBuforGet_;
-            //decryptedBuforGet_ = nullptr;
+            delete [] decryptedBuforGet_;
+            decryptedBuforGet_ = nullptr;
         }
     }
     return data_bufor_index;
@@ -78,6 +75,7 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
 int SecureHandler_AES::sendData(int numberOfBytes, char* dataBufor)
 {
     int encryptedDataToSendLenght_ = (numberOfBytes/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE + AES_BLOCK_SIZE + 4;//encryptedData + initVec + size
+
     encryptedBuforToSend_ = new char[encryptedDataToSendLenght_];
 
     // zapisz ilosc bajtow pakietu do encrypted

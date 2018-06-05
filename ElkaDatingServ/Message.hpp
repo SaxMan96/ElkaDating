@@ -48,6 +48,8 @@ enum MessageSubType{
     ALL_ACCEPTED_STUDENTS,  //wszystkich których termin został zaakceptowany
 
 };
+
+
 struct Message{
 
 private:

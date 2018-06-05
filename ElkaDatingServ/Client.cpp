@@ -25,17 +25,12 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 
     isStillRunning_=true;
 
-    sr_ = new SocketHandler(clientSockfd);
+    socketH_ = new SocketHandlerBSD(clientSockfd);
 
-    sh_asynchro_ = new SecureHandler_RSA(sr_, "private_key.pem", "public_key.pem");
-    unsigned char key [64];
-    int i = 0;
+    secureH_ = new SecureHandlerRSA_AES(socketH_, "private_key.pem", "public_key.pem");
 
-    for (char e :"52443563524435635244356352443563")
-        key[i++] = (unsigned char)e;
-    sh_synchro_ = new SecureHandler_AES(sr_, 256, (unsigned char*)key);
 
-    isRegister_=SingletonClientList::getInstance().registerClient(this);
+    isRegister_=SingletonClientList::getInstance().connectClient(this);
 
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
@@ -43,8 +38,20 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     pthread_detach(logicThread_);
 }
 
-void Client::setID(unsigned int clientID){
-    clientID_=clientID;
+unsigned int Client::getLoggedClientID() const{
+    return loggedclientID_;
+}
+
+unsigned int Client::getNotLoggedClientID() const{
+    return notLoggedClientID_;
+}
+
+void Client::setLoggedClientID(unsigned int clientID){
+    loggedclientID_=clientID;
+}
+
+void Client::setNotLoggedClientID(unsigned int clientID){
+    notLoggedClientID_=clientID;
 }
 
 bool Client::checkIfStillRunning() const {
@@ -82,8 +89,15 @@ void Client::messageHandler(Message* msg)
 {
     if(!isLogged_)
     {
-        if(msg->getMsgType() == LOGIN)
-            loginUser(msg);
+
+        if(msg->getMsgType() == LOGIN){
+            //zapisz id niezalogowanego jako stare id
+            //zmien  flage
+            //zmien id na te z bazy
+            //dodaj do listy zalogogwanych kopie
+            //usun z listy niezalogowanych po starym id
+            loginNewUser(msg);
+        }
         else if(msg->getMsgType() == REGISTRATION)
             registerNewUser(msg);
         else
@@ -181,6 +195,7 @@ void Client::sendNotification(std::string str, int type, int subType){
     pushMessage(notification);
 }
 
+
 int Client::getPacketID(){
     return (++ nextPacketID_ )%INT_MAX;
 }
@@ -219,7 +234,7 @@ void Client::closeConnection()
 
 void Client::unregister()
 {
-    SingletonClientList::getInstance().unregisterClient(clientID_);
+    //SingletonClientList::getInstance().unregisterClient(clientID_);
 }
 
 
@@ -228,6 +243,10 @@ int Client::getSocket()const
     return clientSockfd_;
 }
 
+bool Client::isLogged()
+{
+    return isLogged_;
+}
 
 Message * Client::readMessage(){
 
@@ -235,7 +254,7 @@ Message * Client::readMessage(){
     char headerBufor[MESSAGE_HEADER_SIZE];
     Message *msg;
 
-    numOfReadBytes = sh_asynchro_->getData(MESSAGE_HEADER_SIZE, headerBufor);
+    numOfReadBytes = secureH_->getData(MESSAGE_HEADER_SIZE, headerBufor);
 
     if( numOfReadBytes == 0)
     {
@@ -252,7 +271,7 @@ Message * Client::readMessage(){
 
     if(msg -> getMsgDataLength() != 0)
     {
-        numOfReadBytes = sh_asynchro_->getData(msg->getMsgDataLength(), msg->getMsgDataBufor());
+        numOfReadBytes = secureH_->getData(msg->getMsgDataLength(), msg->getMsgDataBufor());
 
         if( numOfReadBytes != msg->getMsgDataLength())
         {
@@ -281,12 +300,6 @@ Client::~Client()
         delete(msgQueue_.front());
         msgQueue_.pop();
     }
-    delete sr_;
-    delete sh_asynchro_;
-    delete sh_synchro_;
-}
-
-int Client::getID() const
-{
-    return clientID_;
+    delete socketH_;
+    delete secureH_;
 }

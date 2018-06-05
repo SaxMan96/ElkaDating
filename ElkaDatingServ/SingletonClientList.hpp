@@ -41,12 +41,13 @@ public:
         return *pInstance_;
     }
 
-    bool registerClient(Client *client);
-    bool unregisterClient(unsigned int clientID);
-    bool pushMessage(unsigned int clientID, Message* msg);
+    bool connectClient(Client *client);
+    bool logoutClient(Client *client);
+    bool loginClient(Client *client);
+    bool disconnect(Client *client);
+    bool pushMessageToLoggedClient(unsigned int clientID, Message *msg);
 
     void closeAllClientConnections();
-
     ~SingletonClientList();
 
 private:
@@ -55,9 +56,13 @@ private:
     SingletonClientList& operator=(const SingletonClientList&) = delete;
 
     static SingletonClientList* pInstance_;
-    std::unordered_map<unsigned int, Client*> clients_;
-    pthread_mutex_t mapMutex_;
-    unsigned int nextClientID_;
+
+    pthread_mutex_t loggedClientsMutex_;
+    std::unordered_map<unsigned int, Client*> loggedClients_;
+
+    unsigned int nextNotLoggedClientID_;
+    pthread_mutex_t notLoggedClientsMutex_;
+    std::unordered_map<unsigned int, Client*> notLoggedClients_;
 };
 
 

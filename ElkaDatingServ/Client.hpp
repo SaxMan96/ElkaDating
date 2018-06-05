@@ -28,14 +28,21 @@
 #include "Secure/SecureHandlerNoSecure.hpp"
 #include "Secure/SecureHandlerRSA.hpp"
 #include "Secure/SecureHandlerRSA_AES.hpp"
+
 #include <limits.h>
 
 class MessageHandler;
 
+#include "Socket/SocketHandlerBSD.hpp"
+
+#include <exception>
+
+
 class Client
 {
 private:
-    unsigned int clientID_;
+    unsigned int loggedclientID_;
+    unsigned int notLoggedClientID_;
 
     // thread things
     pthread_t readThread_;
@@ -56,27 +63,37 @@ private:
     bool isLogged_;
 
     MessageHandler *mh_;
-    SecureHandler *sh_synchro_;
-    SecureHandler *sh_asynchro_;
-    SocketHandler *sr_;
+    SecureHandler *secureH_;
+    SocketHandler *socketH_;
 
     int nextPacketID_;
 
     void sendMessage(Message *msg);
+
+
+    void registerNewUser(Message *msg);
+    void loginNewUser(Message *msg);
+
 
 public:
     Client(int clientSockfd, sockaddr client_addr, socklen_t length);  
 
     bool checkIfStillRunning() const;
     pthread_t getReadThreadID() const;
-    int getID() const;
-    int getSocket() const;
 
+    unsigned int getLoggedClientID() const;
+    unsigned int getNotLoggedClientID() const;
+
+    void setLoggedClientID(unsigned int clientID);
+    void setNotLoggedClientID(unsigned int clientID);
+
+    int getSocket() const;
     void setStillRunningFalse();
-    void setID(unsigned int clientID);
 
     void closeConnection();
     void unregister();
+
+    bool isLogged();
 
     void messageHandler(Message *msg);
     void pushMessage(Message *msg);

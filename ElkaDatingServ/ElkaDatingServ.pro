@@ -44,7 +44,9 @@ SOURCES += main.cpp \
     MessageContent/SendMultipleMessageContent.cpp \
     Event.cpp \
     MessageContent/AddTermPrefMessageContent.cpp \
-    MessageContent/EditTermPrefMessageContent.cpp
+    MessageContent/EditTermPrefMessageContent.cpp \
+    MessageContentParser.cpp
+
 
 HEADERS += \
     DB/DBManager.hpp \
@@ -69,7 +71,11 @@ HEADERS += \
     MessageContent/SendMultipleMessageContent.hpp \
     Event.hpp \
     MessageContent/AddTermPrefMessageContent.hpp \
-    MessageContent/EditTermPrefMessageContent.hpp
+    MessageContent/EditTermPrefMessageContent.hpp \
+    MessageContentParser.hpp
 
 DISTFILES += \
     ../database.sql
+
+   
+

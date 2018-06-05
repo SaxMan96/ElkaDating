@@ -13,6 +13,9 @@
 #include "Term.hpp"
 #include "Event.hpp"
 
+#include "Event.hpp"
+#include "Term.hpp"
+
 const QString DATE_FORMAT = "yyyy.MM.dd.hh.mm";
 
 enum DBoperationResult{

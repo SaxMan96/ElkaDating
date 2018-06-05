@@ -1,5 +1,23 @@
 #include "SecureHandlerRSA.hpp"
 
+SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string publicKeyFileName)
+    :SecureHandler(sc)
+{
+    // otwarcie klucza
+
+    FILE * fp;
+
+    fp = fopen(publicKeyFileName.c_str(), "rb");
+    if(fp == NULL)
+    {
+        throw CannotOpenPublicPem();
+    }
+
+    rsaPublicKey_ = RSA_new();
+    rsaPublicKey_ = PEM_read_RSA_PUBKEY(fp, &rsaPublicKey_, NULL, NULL);
+    fclose(fp);
+}
+
 SecureHandler_RSA::SecureHandler_RSA(SocketHandler  *sc, std::string privateKeyFileName, std::string publicKeyFileName)
     :SecureHandler(sc)
 {
@@ -40,7 +58,28 @@ int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA
 
 int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
 {
-    int result = RSA_private_encrypt(data_len, data, encrypted, rsa,padding);
+    int result = RSA_private_encrypt(data_len,data,encrypted,rsa,padding);
+    if(result == -1 )
+        throw EncryptError();
+    return result;
+}
+
+int SecureHandler_RSA::public_decrypt(unsigned char * enc_data,int data_len,RSA *rsa, unsigned char *decrypted)
+{
+    for (int i= 0; i < 256; ++i)
+        std::cout<<(int)*(enc_data+i);
+    std::cout<<std::endl;
+
+    int  result = RSA_public_decrypt(data_len, enc_data, decrypted, rsa, padding);
+    if(result == -1 )
+        throw DecryptError();
+
+    return result;
+}
+
+int SecureHandler_RSA::public_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
+{
+    int result = RSA_public_encrypt(data_len,data,encrypted,rsa,padding);
     if(result == -1 )
         throw EncryptError();
     return result;
@@ -59,11 +98,9 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
 
         returnVal = sc_->getData(packetLength_, encrypted_bufor_);
         if(returnVal == 0)
-        {
-            std::cout<<"zwraca 0";
             return 0;
-        }
-        decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
+
+        decryptedDataLength_ = public_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
     }
 
     while(data_bufor_index < numberOfBytes)
@@ -73,11 +110,9 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
         {
             returnVal = sc_->getData(packetLength_, encrypted_bufor_);
             if(returnVal == 0)
-            {
-                std::cout<<"NIE POBRANO DANYCH Z SOCKETA\n";
                 return 0;
-            }
-            decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
+
+            decryptedDataLength_ = public_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPublicKey_,(unsigned char*) decrypted_bufor_);
 
             decryptedBuforIndex_ = 0;
         }
@@ -105,9 +140,8 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
         {
             private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             decryptedBuforSize_,
-                            rsaPrivateKey_,
+                            rsaPublicKey_,
                             toSendBufor);
-
 
             sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
         }
@@ -115,7 +149,36 @@ int SecureHandler_RSA::sendData(int numberOfBytes, char *data_bufor)
         {
             private_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
                             tmp,
-                            rsaPrivateKey_,
+                            rsaPublicKey_,
+                            toSendBufor);
+            sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
+        }
+        tmp -= decryptedBuforSize_;
+        ++numberOfBlocks;
+    }
+}
+
+int SecureHandler_RSA::sendDataEncryptedByServerPublicKey(int numberOfBytes, char *data_bufor)
+{
+    int tmp = numberOfBytes;
+    int numberOfBlocks = 0;
+    unsigned char *toSendBufor = new unsigned char [encryptedBuforSize_];
+
+    while (tmp > 0){
+        if (tmp >= decryptedBuforSize_)
+        {
+            public_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
+                            decryptedBuforSize_,
+                            rsaPublicKey_,
+                            toSendBufor);
+
+            sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
+        }
+        else
+        {
+            public_encrypt((unsigned char *)(data_bufor + numberOfBlocks*decryptedBuforSize_),
+                            tmp,
+                            rsaPublicKey_,
                             toSendBufor);
             sc_->sendData(encryptedBuforSize_,(char*)toSendBufor);
         }

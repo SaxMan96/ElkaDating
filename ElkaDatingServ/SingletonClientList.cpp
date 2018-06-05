@@ -1,84 +1,104 @@
 #include<SingletonClientList.hpp>
-#include<stdio.h>
-
-#include<utility>
 
 SingletonClientList::SingletonClientList(){
-    mapMutex_ = PTHREAD_MUTEX_INITIALIZER;   // mutex to synchornize list od Clients
-    nextClientID_=1;
+    loggedClientsMutex_ = PTHREAD_MUTEX_INITIALIZER;        // mutex to synchoronize logged Clients
+    notLoggedClientsMutex_ = PTHREAD_MUTEX_INITIALIZER;     // mutex to synchoronize not logged Clients
+    nextNotLoggedClientID_=1;
 }
 
-bool SingletonClientList::registerClient(Client *client){
+bool SingletonClientList::connectClient(Client *client)
+{
+    pthread_mutex_lock(&notLoggedClientsMutex_);
 
-    pthread_mutex_lock(&mapMutex_);
+    client->setNotLoggedClientID(nextNotLoggedClientID_);
+    notLoggedClients_.insert(std::make_pair(nextNotLoggedClientID_, client));
 
-    ++nextClientID_;
-    client->setID(nextClientID_);
-    clients_.insert(std::make_pair(nextClientID_, client));
-
-    pthread_mutex_unlock(&mapMutex_);
+    ++nextNotLoggedClientID_;
+    pthread_mutex_unlock(&notLoggedClientsMutex_);
 
     return true;
 }
 
-bool SingletonClientList::unregisterClient(unsigned int clientID){
+bool SingletonClientList::loginClient(Client *client)
+{
+    pthread_mutex_lock(&notLoggedClientsMutex_);
+    pthread_mutex_lock(&loggedClientsMutex_);
 
-    pthread_mutex_lock(&mapMutex_);
+    auto foundInNotLoggedMap = notLoggedClients_.find(client->getNotLoggedClientID());
+    notLoggedClients_.erase(foundInNotLoggedMap);
 
-    bool success = true;
-    auto foundClient = clients_.find(clientID);
-
-    if(foundClient != clients_.end())
+    auto foundInLoggedMap = loggedClients_.find(client->getLoggedClientID());
+    if(foundInLoggedMap!=loggedClients_.end())
     {
-        clients_.erase(foundClient);
+        throw std::exception();
     }
-    else
-        success = false;
 
-    pthread_mutex_unlock(&mapMutex_);
+    loggedClients_.insert(std::make_pair(client->getLoggedClientID(), client));
 
-    return success;
+    pthread_mutex_unlock(&loggedClientsMutex_);
+    pthread_mutex_unlock(&notLoggedClientsMutex_);
+    return true;
 }
 
-bool SingletonClientList::pushMessage(unsigned int clientID, Message* msg){
+bool SingletonClientList::logoutClient(Client *client)
+{
+    pthread_mutex_lock(&notLoggedClientsMutex_);
+    pthread_mutex_lock(&loggedClientsMutex_);
 
-    pthread_mutex_lock(&mapMutex_);
+    auto foundInLoggedMap = loggedClients_.find(client->getLoggedClientID());
+    loggedClients_.erase(foundInLoggedMap);
 
-    bool success = true;
-    auto foundClient = clients_.find(clientID);
+    client->setNotLoggedClientID(nextNotLoggedClientID_);
 
-    if(foundClient != clients_.end())
+    notLoggedClients_.insert(std::make_pair(nextNotLoggedClientID_, client));
+
+    ++nextNotLoggedClientID_;
+    pthread_mutex_unlock(&loggedClientsMutex_);
+    pthread_mutex_unlock(&notLoggedClientsMutex_);
+    return true;
+}
+
+bool SingletonClientList::disconnect(Client *client)
+{
+    pthread_mutex_lock(&notLoggedClientsMutex_);
+    pthread_mutex_lock(&loggedClientsMutex_);
+
+
+    if(client->isLogged())
     {
-        (*foundClient).second->pushMessage(msg);
+        auto foundLogged = loggedClients_.find(client->getLoggedClientID());
+        loggedClients_.erase(foundLogged);
     }
     else
+    {
+        auto foundNotLogged = notLoggedClients_.find(client->getNotLoggedClientID());
+        notLoggedClients_.erase(foundNotLogged);
+    }
+
+    pthread_mutex_unlock(&loggedClientsMutex_);
+    pthread_mutex_unlock(&notLoggedClientsMutex_);
+    return true;
+}
+
+bool SingletonClientList::pushMessageToLoggedClient(unsigned int clientID, Message *msg)
+{
+    pthread_mutex_lock(&loggedClientsMutex_);
+
+    bool success = false;
+    auto foundLogged = loggedClients_.find(clientID);
+
+    if(foundLogged!=loggedClients_.end())
         success = false;
+    else
+        foundLogged->second->pushMessage(msg);
 
-    pthread_mutex_unlock(&mapMutex_);
-
-    return success;
+    pthread_mutex_unlock(&loggedClientsMutex_);
 }
 
 void SingletonClientList::closeAllClientConnections()
 {
-    pthread_mutex_lock(&mapMutex_);
 
-    std::cout << clients_.size()<<std::endl;
-    if(clients_.size()!=0)
-    for (auto it = clients_.begin(); it != clients_.end(); ++it)
-    {
-        it->second->setStillRunningFalse();
-    }
-
-    pthread_mutex_unlock(&mapMutex_);
-    // będzie się kręcił aż każdy klient zakończy się poprawnie
-    // a jak chce zakończyć szybko?
-    // to wtedy Ctrl+C! Jak mam zapewnić wtedy żeby wszystko się dobrze skończyło?
-    while(clients_.size()!=0);
-
-    pthread_mutex_destroy(&mapMutex_);
 }
-
 
 SingletonClientList::~SingletonClientList()
 {
