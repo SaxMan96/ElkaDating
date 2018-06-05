@@ -19,7 +19,6 @@
 #include "SingletonClientList.hpp"
 
 #include "MessageHandler/MessageHandler.hpp"
-#include "MessageHandler/MessageHandlerDKPS.hpp"
 
 #include "SocketReader.hpp"
 #include "Exceptions/MyExceptions.hpp"
@@ -29,6 +28,11 @@
 #include "Secure/SecureHandlerNoSecure.hpp"
 #include "Secure/SecureHandlerRSA.hpp"
 #include "Secure/SecureHandlerRSA_AES.hpp"
+
+#include <limits.h>
+
+class MessageHandler;
+
 #include "Socket/SocketHandlerBSD.hpp"
 
 #include <exception>
@@ -62,10 +66,14 @@ private:
     SecureHandler *secureH_;
     SocketHandler *socketH_;
 
+    int nextPacketID_;
+
     void sendMessage(Message *msg);
+
 
     void registerNewUser(Message *msg);
     void loginNewUser(Message *msg);
+
 
 public:
     Client(int clientSockfd, sockaddr client_addr, socklen_t length);  
@@ -91,6 +99,16 @@ public:
     void pushMessage(Message *msg);
     Message* getMessage();
     Message *readMessage();
+
+    //---------------
+    void loginUser(Message*);
+    bool checkExistUserName(std::string);
+    bool checkPasswordCorrect(std::string, std::string);
+    void registerNewUser(Message*);
+    void sendNotification(std::string , int ,int);
+    bool checkPasswordQualify(std::string);
+    bool checkStudentNumberValid(std::string);
+    int getPacketID();
 
     ~Client();
 };

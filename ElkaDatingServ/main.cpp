@@ -72,6 +72,7 @@ void* client_thread_logic(void *client)
         clientOfThread->messageHandler(tmpMsg);
     }
 
+
     clientOfThread->setStillRunningFalse();
     clientOfThread->closeConnection();
     clientOfThread->unregister();

@@ -103,5 +103,24 @@ public:
     const char * what () const throw();
 };
 
+//----------------------------------------------------------
+class MessageException: public MyException
+{
+public:
+    virtual const char * what() const throw();
+};
+
+class NotLoggedInWrongMessageTypeException: public MessageException
+{
+public:
+    const char * what () const throw();
+};
+
+
+class LoggedInWrongMessageTypeException: public MessageException
+{
+public:
+    const char * what () const throw();
+};
 
 #endif // MYEXCEPTIONS_HPP

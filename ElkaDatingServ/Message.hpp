@@ -4,45 +4,48 @@
 #include <string>
 #include <iostream>
 
+#include "MessageContent/LoginMessageContent.hpp"
+#include "MessageContent/RegistrationMessageContent.hpp"
+#include "MessageContent/MessageContent.hpp"
+
+
 const int MESSAGE_HEADER_SIZE = 16;
 
 enum MessageType{
-    REGISTRATION,
-    //rejestracja użytkownika
-    LOGIN,
-    //logowanie użytkownika
-    LOGOUT,
-    //wylogowanie użytkownika
-    TERM_PREF_STUDENT,
-    //ustawienie preferowanych terminów przez użytkownika u prowadzącego
-    TERM_PREF_TEACHER,
-    //ustawienie preferowanych terminów przez prowadzącego
-    ACCEPT_TERMS,
-    //ostateczna akceptacja terminów przez prowadzącego
-    CANCEL_TERMS,
-    //anulowanie wybranych terminów przez prowadzącego - wiąże się z wysłaniem powiadomień do zapisanych
-    ADD_NEW_TERM,
-    //dodanie terminu konsultacji - takiego który na pewno się odbędzie
-    //albo powiadomiewnie do wszystkich  którzy wybrali ten termin,
-    //albo do wszystkich, którzy chcą przyjść na kiedykolwiek
-    SEND_MSG_TO_STUDENTS,
-    //możliwość wysłania wiadomości do wszystkich
-    //studentów
-    //studentów u prowadzącego
-    //chcących przyjść na konsy
-    //którzy zostali umówieni
-    CONFIRM_TERM_STUDENT,
-    //potwierdzenie, lub przeciwnie przez studenta przyjścia na wyznaczony termin
-    CLIENT_DISCONNECT
+    REGISTRATION,    //rejestracja użytkownika
+    LOGIN,          //logowanie użytkownika
+    LOGOUT,         //wylogowanie użytkownika
+
+    NOTIFICATION,   //powiadomienie dla użytkownika
+
+    TERMS_STUDENT,    //ustawienie terminów przez studenta
+    TERMS_TEACHER,    //ustawienie terminów przez prowadzącego
+
+    SEND_MULITIPLE_MSG_TO_STUDENTS,  //możliwość wysłania wiadomości do studentów
+
+    CLIENT_DISCONNECT   //rozłączenie się klienta
 
 };
 enum MessageSubType{
-    /*logowanie*/
-    SUCCESFULL, WRONG_PASS, WRONG_USERNAME,
-    /*powiadomienie zatwierdzenie, odrzucenie terminu przez prowadzącego*/
-    ACCEPTANCE_OF_TERM, DECLINE_OF_TERM, CHANGE_OF_TERM, NEW_TERM,
-    /*info od serwera*/
-    SERVER_FAILURE, SERVER_BREAK,
+    /*logowanie, rejestracja*/
+    SUCCESFULL, WRONG_PASS, WRONG_USERNAME,EMPTY_FIELDS,STUDENT_NO_NOT_VALID,
+    /*rodzaje powiadomień*/
+    //SUCCESFULL - wyżej
+    INFO,       //coś tam się stało
+    FAILURE,    //coś nie pykło
+
+    /*decyzje odnośnie terminów  student*/
+    PREF_TERMS,         //preferowane
+    CANCEL_TERMS,       //anulowanie preferencji
+    /*decyzje odnośnie terminów  prowadzący*/
+    NEW_TERMS,      //dodanie
+    DELETE_TERM,        //usuniecie
+    ACCEPT_TERMS,       //zaakceptowanie
+    DECLINE_TERMS,      //odwołanie zaakceptowanego
+    /*wysłanie wiadomości do studentów*/
+    ALL_STUDENTS,           //wszystkich
+    ALL_PREF_STUDENTS,      //wszystkich którzy złożyli preferencje
+    ALL_ACCEPTED_STUDENTS,  //wszystkich których termin został zaakceptowany
 
 };
 
@@ -57,6 +60,7 @@ private:
     unsigned int packetID_;
     unsigned int sessionID_;
     unsigned short dataLength_;
+    MessageContent *content_;
 
     //data
     char *msgBuf_;
@@ -114,6 +118,25 @@ public:
      */
 
     int getMsgType() const;
+
+    /**
+     * @brief getMsgSubType
+     * SubType are specified in documentation.
+     * @return
+     * SubType of message as int value.
+     */
+
+    int getMsgSubType() const;
+
+    /**
+     * @brief getContent
+     * MessageCongtent is virtual class, that have a lot of extending, which are connected with method types
+     * @return
+     * One of MessageContent classes
+     */
+
+    MessageContent* getContent() const;
+
 
     ~Message();
 };

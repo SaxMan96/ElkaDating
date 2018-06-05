@@ -1,6 +1,8 @@
 create table User(
 	ID INTEGER PRIMARY KEY AUTOINCREMENT,
-	email varchar(30),
+  email varchar(70),
+  name varchar(50),
+  surname varchar(100),
 	password varchar(50),
 	active varchar(1),
 	isLecturer varchar(1),
@@ -27,6 +29,3 @@ create table Event(
         FOREIGN KEY(userID) REFERENCES User(ID),
   	FOREIGN KEY(lecturerID) REFERENCES User(ID)
 );
-
-
-
