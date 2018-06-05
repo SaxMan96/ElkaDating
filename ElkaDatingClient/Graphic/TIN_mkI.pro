@@ -26,7 +26,6 @@ LIBS += -lssl -lcrypto
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
     signindialog.cpp \
     signupdialog.cpp \
     datingmain.cpp \
@@ -38,10 +37,11 @@ SOURCES += \
     Secure/SecureHandlerRSA_AES.cpp \
     Socket/SocketHandler.cpp \
     Socket/SocketHandlerBSD.cpp \
-    Package.cpp
+    Package.cpp \
+    WeekView.cpp \
+    MainView.cpp
 
 HEADERS += \
-        mainwindow.h \
     signindialog.h \
     signupdialog.h \
     datingmain.h \
@@ -53,17 +53,21 @@ HEADERS += \
     Secure/SecureHandlerRSA_AES.hpp \
     Socket/SocketHandler.hpp \
     Socket/SocketHandlerBSD.hpp \
-    Package.hpp
+    Package.hpp \
+    WeekView.h \
+    MainView.h
 
 FORMS += \
-        mainwindow.ui \
     signindialog.ui \
     signupdialog.ui \
     datingmain.ui \
-    dialog.ui
+    dialog.ui \
+    WeekView.ui \
+    MainView.ui
 
 SUBDIRS += \
     ElkaDating.pro
 
 DISTFILES += \
-    letters.txt
+    letters.txt \
+    test/WeekViewGrid.qml

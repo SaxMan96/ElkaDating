@@ -1,5 +1,6 @@
-#include "mainwindow.h"
 #include <QApplication>
+#include "WeekView.h"
+#include "MainView.h"
 
 #include <iostream>
 #include <sys/types.h>
@@ -56,8 +57,13 @@ int main(int argc, char *argv[])
 //    secureHandlerRSA_AES->initConnection();
 
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+//    MainWindow w;
+//    w.show();
+    MainView mainView;
+    mainView.setWindowTitle("Week view");
+    mainView.setModal(true);
+    mainView.setWindowState(Qt::WindowMaximized);
+    mainView.exec();
 
     return a.exec();
 }

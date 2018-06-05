@@ -26,13 +26,13 @@ public:
 
 private:
     int validateData(QString name, QString surname, QString  email, QString password, QString  password2);
-    void showError();
-    QString errorText;
+    void showError(QString errorText);
 
 private slots:
     void on_reset_clicked();
     void on_apply_clicked();
 
+    void on_cancel_clicked();
 private:
     Ui::SignUpDialog *ui;
 };

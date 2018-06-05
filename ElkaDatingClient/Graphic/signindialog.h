@@ -17,9 +17,12 @@ public:
 
 private slots:
     void on_apply_clicked();
+    void on_close_clicked();
 
 private:
     Ui::SignInDialog *ui;
+    int validateData(QString name, QString password);
+    void showError(QString errorText);
 };
 
 #endif // SIGNINDIALOG_H
