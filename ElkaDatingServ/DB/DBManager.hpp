@@ -12,9 +12,7 @@
 #include <QtWidgets>
 #include "Term.hpp"
 #include "Event.hpp"
-
-#include "Event.hpp"
-#include "Term.hpp"
+#include "Message.hpp"
 
 const QString DATE_FORMAT = "yyyy.MM.dd.hh.mm";
 
@@ -22,10 +20,18 @@ enum DBoperationResult{
     //notUniqueLogin,
     //notPlayerWithSpecifiedLogin,
 
+    // modify Events
     addSuccess,
     deleteSuccess,
     cancelSuccess,//były decline
     acceptSuccess,
+
+    // register User
+    existUserName,
+    passNotQualify,
+    emptyFields,
+    registerSuccess,
+
 
     dateBaseError
 };
@@ -55,8 +61,8 @@ public:
     int deleteEvent(unsigned int,unsigned int);
     int acceptEvent(unsigned int,unsigned int);
     int declineEvent(unsigned int,unsigned int);
-
-
+    int registerNewUser(std::string,std::string,std::string,std::string,bool);
+    int loginExistingUser(std::string,std::string);
 
 private:
     DBManager();
@@ -67,11 +73,14 @@ private:
     pthread_mutex_t dbMutex_;
     QSqlDatabase serverDB_;
 
-    bool teacherHasTerm(unsigned int, Term,Term);
     QString constructDateTime(Term);
+    bool teacherHasTerm(unsigned int, Term,Term);
     bool userExists(unsigned int);
     bool eventExists(unsigned int);
 
+    bool checkExistUserName(std::string userName);
+    bool checkPasswordQualify(std::string password);
+    bool checkPasswordCorrect(std::string password, std::string userName);
 };
 
 #endif // DBMANAGER_HPP

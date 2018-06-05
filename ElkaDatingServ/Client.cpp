@@ -90,14 +90,8 @@ void Client::messageHandler(Message* msg)
     if(!isLogged_)
     {
 
-        if(msg->getMsgType() == LOGIN){
-            //zapisz id niezalogowanego jako stare id
-            //zmien  flage
-            //zmien id na te z bazy
-            //dodaj do listy zalogogwanych kopie
-            //usun z listy niezalogowanych po starym id
+        if(msg->getMsgType() == LOGIN)
             loginNewUser(msg);
-        }
         else if(msg->getMsgType() == REGISTRATION)
             registerNewUser(msg);
         else
@@ -106,6 +100,7 @@ void Client::messageHandler(Message* msg)
     else if(msg->getMsgType() == LOGOUT){
         isLogged_ = false;
         //TODO logout
+        sendNotification("Wylogowano poprawnie.",LOGOUT,SUCCESFULL);
     }
     else if(msg->getMsgType() != LOGIN && msg->getMsgType() != REGISTRATION){
         mh_->handleMessage(msg);
@@ -114,79 +109,14 @@ void Client::messageHandler(Message* msg)
         throw new LoggedInWrongMessageTypeException();
 }
 
-void Client::loginUser(Message* msg)
-{
-    LoginMessageContent* loginContent = static_cast<LoginMessageContent*>(msg->getContent());
-
-    std::string userName = loginContent->getUserName();
-    std::string password = loginContent->getPassword();
-    if(!checkExistUserName(userName))
-        sendNotification("Niepoprawny login.",LOGIN,WRONG_USERNAME);
-
-    else if(!checkPasswordCorrect(password,userName))
-        sendNotification("Niepoprawne hasło.",LOGIN,WRONG_PASS);
-
-    else{
-        isLogged_ = true;
-        sendNotification("Zalogowano poprawnie.",LOGIN,SUCCESFULL);
-        //TODO: jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
-
-    }
-}
-bool Client::checkExistUserName(std::string userName){
-
-    bool exists = false;
-    QSqlQuery query;
-    query.prepare("SELECT ID FROM User WHERE email = (:userName)");
-    query.bindValue(":userName", QString::fromStdString(userName));
-    if(query.exec())
-        if(query.next())
-            exists = true;
-    return exit;
-
-
-}
-bool Client::checkPasswordCorrect(std::string password, std::string userName){
-    bool exists = false;
-    QSqlQuery query;
-    query.prepare("SELECT ID FROM User WHERE ("
-                  "password = (:password) AND"
-                  "email = (:userName));");
-    query.bindValue(":userName", QString::fromStdString(userName));
-    query.bindValue(":password", QString::fromStdString(password));
-    if(query.exec())
-        if(query.next())
-            exists = true;
-    return exit;
-}
-
-
 void Client::registerNewUser(Message* msg)
 {
-    RegistrationMessageContent* loginContent = static_cast<RegistrationMessageContent*>(msg->getContent());
+    mh_->handleRegisterMessage(msg);
+}
 
-    std::string userName = loginContent->getUserName();
-    std::string password = loginContent->getPassword();
-    std::string name = loginContent->getName();
-    std::string surname = loginContent->getSurname();
-    std::string studentNumber = loginContent->getStudentNumber();
-
-    if(checkExistUserName(userName))
-        sendNotification("Nie istnieje taki login.",REGISTRATION,WRONG_USERNAME);
-
-    else if(!checkPasswordQualify(password))
-        sendNotification("Hasło nie spełnia wymogów, powinno mieć conajmniej 8 znaków",REGISTRATION,WRONG_PASS);
-
-    else if(name.empty() ||surname.empty() ||studentNumber.empty() ||name == "" ||surname == "" ||studentNumber == "")
-        sendNotification("Nietóre pola są puste, wypełnij je.",REGISTRATION,EMPTY_FIELDS);
-    else if(!checkStudentNumberValid(studentNumber)){
-        sendNotification("Numer studenta jest niepoprawny.",REGISTRATION,STUDENT_NO_NOT_VALID);
-    }
-    else{
-        //TODO: rejestrujemy gościa
-
-        sendNotification("Rejestracja przebiegła poprawnie.",REGISTRATION,SUCCESFULL);
-    }
+void Client::loginNewUser(Message *msg)
+{
+    mh_->handleLoginMessage(msg);
 }
 
 void Client::sendNotification(std::string str, int type, int subType){
@@ -198,30 +128,6 @@ void Client::sendNotification(std::string str, int type, int subType){
 
 int Client::getPacketID(){
     return (++ nextPacketID_ )%INT_MAX;
-}
-
-bool Client::checkPasswordQualify(std::string password)
-{
-    if(password.size()<8)
-        return false;
-    return true;
-}
-
-bool Client::checkStudentNumberValid(std::string strudentNo)
-{
-    int no;
-    try{
-        no = std::stoi(strudentNo);
-    }
-    catch(std::invalid_argument){
-        return false;
-    }
-    catch(std::out_of_range){
-        return false;
-    }
-    if(200000<no && no<300000)
-        return true;
-    return false;
 }
 
 void Client::closeConnection()

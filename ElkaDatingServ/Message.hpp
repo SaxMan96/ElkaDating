@@ -28,7 +28,7 @@ enum MessageType{
 };
 enum MessageSubType{
     /*logowanie, rejestracja*/
-    SUCCESFULL, WRONG_PASS, WRONG_USERNAME,EMPTY_FIELDS,STUDENT_NO_NOT_VALID,
+    SUCCESFULL, WRONG_PASS, WRONG_USERNAME,EMPTY_FIELDS,
     /*rodzaje powiadomień*/
     //SUCCESFULL - wyżej
     INFO,       //coś tam się stało
