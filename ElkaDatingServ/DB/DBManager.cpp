@@ -216,6 +216,8 @@ int DBManager::loginExistingUser(std::string userName, std::string password)
 {
      pthread_mutex_lock(&dbMutex_);
 
+     int result;
+
      if(!checkExistUserName(userName))
          result = wrongLogin;
      else if(!checkPasswordCorrect(password,userName))
