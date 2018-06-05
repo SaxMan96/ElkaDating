@@ -1,5 +1,9 @@
 QT -= gui
-QT += sql
+QT += core sql
+QT += core
+QT += widgets
+
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -37,8 +41,10 @@ SOURCES += main.cpp \
     MessageContent/MessageContent.cpp \
     MessageContent/LoginMessageContent.cpp \
     MessageContent/RegistrationMessageContent.cpp \
-    MessageContent/TermPrefMessageContent.cpp \
-    MessageContent/SendMultipleMessageContent.cpp
+    MessageContent/SendMultipleMessageContent.cpp \
+    Event.cpp \
+    MessageContent/AddTermPrefMessageContent.cpp \
+    MessageContent/EditTermPrefMessageContent.cpp
 
 HEADERS += \
     DB/DBManager.hpp \
@@ -60,5 +66,10 @@ HEADERS += \
     MessageContent/MessageContent.hpp \
     MessageContent/LoginMessageContent.hpp \
     MessageContent/RegistrationMessageContent.hpp \
-    MessageContent/TermPrefMessageContent.hpp \
-    MessageContent/SendMultipleMessageContent.hpp
+    MessageContent/SendMultipleMessageContent.hpp \
+    Event.hpp \
+    MessageContent/AddTermPrefMessageContent.hpp \
+    MessageContent/EditTermPrefMessageContent.hpp
+
+DISTFILES += \
+    ../database.sql

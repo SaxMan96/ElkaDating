@@ -120,12 +120,30 @@ void Client::loginUser(Message* msg)
     }
 }
 bool Client::checkExistUserName(std::string userName){
-    //TODO: zapytanie do bazy w poszukiwaniu userName
+
+    bool exists = false;
+    QSqlQuery query;
+    query.prepare("SELECT ID FROM User WHERE email = (:userName)");
+    query.bindValue(":userName", QString::fromStdString(userName));
+    if(query.exec())
+        if(query.next())
+            exists = true;
+    return exit;
 
 
 }
 bool Client::checkPasswordCorrect(std::string password, std::string userName){
-    //TODO: zapytanie do bazy sprawdzające password
+    bool exists = false;
+    QSqlQuery query;
+    query.prepare("SELECT ID FROM User WHERE ("
+                  "password = (:password) AND"
+                  "email = (:userName));");
+    query.bindValue(":userName", QString::fromStdString(userName));
+    query.bindValue(":password", QString::fromStdString(password));
+    if(query.exec())
+        if(query.next())
+            exists = true;
+    return exit;
 }
 
 
@@ -272,91 +290,3 @@ int Client::getID() const
 {
     return clientID_;
 }
-
-/*
-int Client::readBytes(int numberOfBytes, char *bufor)
-{
-    int index = 0;
-    int returnVal;
-
-    while(index != numberOfBytes)
-    {
-        returnVal = read(clientSockfd_, (bufor+index), numberOfBytes);
-
-        if(returnVal==0)
-        {
-            std::cout<<"CLIENT DISCONNECT ID:"<<clientID_<<std::endl;
-            isStillRunning_ = false;
-            return 0;
-        }
-        else if(returnVal==-1)
-        {
-            std::cout<<"READ ERROR CLIENT ID:"<<clientID_<<std::endl;
-            isStillRunning_ = false;
-            return 0;
-        }
-        else
-        {
-            index += returnVal;
-        }
-    }
-
-    return index;
-}
-*/
-
-
-
-/*
-std::cout<<"READ HEADER\n";
-
-returnVal_ = read(clientSockfd_, headerBufor, MESSAGE_HEADER_SIZE);
-if(returnVal_==0)
-{
-    std::cout<<"CLIENT DISCONNECT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-else if(returnVal_==-1)
-{
-    std::cout<<"READ ERROR CLIENT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-else if(returnVal_!=MESSAGE_HEADER_SIZE)
-{
-    std::cout<<"NOT ENOUGHT DATA TO READ HEADER CLIENT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-
-msg = new Message(headerBufor);
-std::cout<<msg->headerToSting();
-
-
-std::cout<<"READ MSG\n";
-
-returnVal_ = read(clientSockfd_, msg->getBufor(), msg->getDataLength());
-
-std::cout<<"RETURN "<<returnVal_<<std::endl;
-
-if(returnVal_==0)
-{
-    std::cout<<"CLIENT DISCONNECT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;
-    return nullptr;
-}
-else if(returnVal_==-1)
-{
-    std::cout<<"READ ERROR CLIENT ID:"<<clientID_<<std::endl;
-    isStillRunning_ = false;;
-    return nullptr;
-}
-else if( returnVal_!=msg->getDataLength() )
-{
-    isStillRunning_ = false;
-    std::cout<<"NOT ENOUGHT DATA TO READ PACKET DATA! ID:"<<clientID_;
-    return nullptr;
-}
-printf("------>>>MESSAGE: %s \n", msg->getBufor());
-*/
