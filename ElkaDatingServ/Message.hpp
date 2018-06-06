@@ -139,9 +139,11 @@ public:
 
 
     ~Message();
+
+    // --- do generowania ---
+    Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email);
+    Message *getSignInMessage(std::string email, std::string password);
 };
 
-// void setMsgSubType();
-// void setMsgType();
 
 #endif // MESSAGE_HPP

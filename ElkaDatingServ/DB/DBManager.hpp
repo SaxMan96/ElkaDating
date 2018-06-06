@@ -32,6 +32,10 @@ enum DBoperationResult{
     emptyFields,
     registerSuccess,
 
+    //login User
+    wrongLogin,
+    wrongPassword,
+    loginSuccess,
 
     dateBaseError
 };
