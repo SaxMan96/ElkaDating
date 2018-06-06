@@ -25,7 +25,7 @@
 
 int main(int argc, char *argv[])
 {
-    Package *package;
+    Message *package;
     SecureHandler_RSA *secureHandler_RSA, *secureHandler_AES;
     SecureHandlerRSA_AES *secureHandlerRSA_AES;
 

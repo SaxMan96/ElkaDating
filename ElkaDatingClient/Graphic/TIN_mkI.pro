@@ -37,9 +37,11 @@ SOURCES += \
     Secure/SecureHandlerRSA_AES.cpp \
     Socket/SocketHandler.cpp \
     Socket/SocketHandlerBSD.cpp \
-    Package.cpp \
     WeekView.cpp \
-    MainView.cpp
+    MainView.cpp \
+    Client.cpp \
+    Message.cpp \
+    Dialog.cpp
 
 HEADERS += \
     signindialog.h \
@@ -53,9 +55,11 @@ HEADERS += \
     Secure/SecureHandlerRSA_AES.hpp \
     Socket/SocketHandler.hpp \
     Socket/SocketHandlerBSD.hpp \
-    Package.hpp \
     WeekView.h \
-    MainView.h
+    MainView.h \
+    Client.hpp \
+    Message.hpp \
+    Dialog.h
 
 FORMS += \
     signindialog.ui \
@@ -63,7 +67,8 @@ FORMS += \
     datingmain.ui \
     dialog.ui \
     WeekView.ui \
-    MainView.ui
+    MainView.ui \
+    Dialog.ui
 
 SUBDIRS += \
     ElkaDating.pro

@@ -5,6 +5,7 @@
 #include <QDialog>
 #include "string"
 
+
 namespace Ui {
 class SignUpDialog;
 }

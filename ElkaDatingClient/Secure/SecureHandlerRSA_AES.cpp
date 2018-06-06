@@ -132,7 +132,7 @@ int SecureHandlerRSA_AES::receiveRSAChallangeRespone(int challange)
             return true;
     }
     else{
-        std::cout<<"Received bad package header or type"<<std::endl;
+        std::cout<<"receiveRSAChallangeRespone: Received bad package header or type"<<std::endl;
         return false;
     }
 }
@@ -184,7 +184,7 @@ int SecureHandlerRSA_AES::receiveAESChallange()
         return receivedNumber;
     }
     else{
-        std::cout<<"Received bad package header or type"<<std::endl;
+        std::cout<<"receiveAESChallange: Received bad package header or type"<<std::endl;
         //TODO throw
         return 0;
     }

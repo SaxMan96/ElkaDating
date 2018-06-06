@@ -2,6 +2,7 @@
 #include "ui_signupdialog.h"
 #include "QPushButton"
 #include "MainView.h"
+#include "Client.hpp"
 
 SignUpDialog::SignUpDialog(QWidget *parent) :
     QDialog(parent),
@@ -77,10 +78,13 @@ void SignUpDialog::on_apply_clicked()
     QString password = ui->lineEdit_4->text();
     QString password2 = ui->lineEdit_5->text();
 
-    //TODO valid password and email (from @elka.pw.edu.pl)
     if (validateData(name, surname, email, password, password2))
     {
-        //TODO send sign up package
+        Message msg;
+        Client::getInstance().sendMessage(msg.getSingUpPackage(name, surname, password, email));
+        // singUpPackage(name, surname, password, email)
+        // TODO send sign up package
+        // email nazwisko imie haslo lecturer
         this->close();
         SignInDialog signInDialog;
         signInDialog.setWindowTitle("Sign in");

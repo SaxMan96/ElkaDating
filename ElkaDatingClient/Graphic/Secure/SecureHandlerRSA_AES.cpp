@@ -76,6 +76,7 @@ bool SecureHandlerRSA_AES::initConnection()
     int receivedNumber = receiveAESChallange();
     sendAESChallangeResponse( receivedNumber );
 
+    isConnectionEstablish_ = true;
     std::cout<<"\nSECURE CONNECTION INITIALIZED\n";
 }
 
@@ -132,7 +133,7 @@ int SecureHandlerRSA_AES::receiveRSAChallangeRespone(int challange)
             return true;
     }
     else{
-        std::cout<<"Received bad package header or type"<<std::endl;
+        std::cout<<"receiveRSAChallangeRespone: Received bad package header or type"<<std::endl;
         return false;
     }
 }
@@ -184,7 +185,7 @@ int SecureHandlerRSA_AES::receiveAESChallange()
         return receivedNumber;
     }
     else{
-        std::cout<<"Received bad package header or type"<<std::endl;
+        std::cout<<"receiveAESChallange: Received bad package header or type"<<std::endl;
         //TODO throw
         return 0;
     }
@@ -206,10 +207,16 @@ void SecureHandlerRSA_AES::sendAESChallangeResponse(int toSendNumber)
 
 int SecureHandlerRSA_AES::getData(int numberOfBytes, char *dataBufor)
 {
+    if(!isConnectionEstablish_)
+        initConnection();
 
+    aes_->getData(numberOfBytes, dataBufor);
 }
 
 int SecureHandlerRSA_AES::sendData(int numberOfBytes, char *dataBufor)
 {
+    if(!isConnectionEstablish_)
+        initConnection();
 
+    aes_->sendData(numberOfBytes, dataBufor);
 }

@@ -1,12 +1,12 @@
 #include "Package.hpp"
 
-Package::~Package()
+Message::~Message()
 {
     delete [] data_;
     data_ = nullptr;
 }
 
-Package::Package(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID)
+Message::Message(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID)
 {
     dataSize_ = dataSize;
     type_ = type;
@@ -59,10 +59,10 @@ Package::Package(unsigned char *data, int dataSize, int type, int subType, int p
 //        std::cout<<"KONIEC\n";
 }
 
-unsigned char* Package::getPackage() const {
+unsigned char* Message::getPackage() const {
     return data_;
 }
 
-int Package::getPackageLength() const {
+int Message::getPackageLength() const {
     return dataLength_+16;
 }

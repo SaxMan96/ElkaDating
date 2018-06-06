@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-class Package
+class Message
 {
 private:
     unsigned char* data_;
@@ -18,8 +18,8 @@ private:
     int HEADER_SIZE = 16;
 
 public:
-    ~Package();
-    Package(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID);
+    ~Message();
+    Message(unsigned char *data, int dataSize, int type, int subType, int packetID, int sessionID);
     unsigned char* getPackage() const;
 
     int getPackageLength() const;

@@ -2,6 +2,7 @@
 #include "ui_WeekView.h"
 #include <QScrollBar>
 #include <QDate>
+#include "string"
 
 WeekView::WeekView(QWidget *parent) :
     QDialog(parent),
@@ -36,8 +37,17 @@ WeekView::~WeekView()
 
 void WeekView::on_lecturers_itemClicked(QListWidgetItem *item)
 {
-    // TODO wyslij zapytanie do serwera
-    // TODO odbierz liste terminow prowadzacego i swoja
+    int lecturerRowId = ui->lecturers->row(item);
+//    ui->userName->document()->setPlainText(QString::number(lecturerId));
+    unsigned int lecturerName;
+    //lecturerName = rowsNumber.find(lecturerRowId);
+    // TODO wyslij zapytanie do serwera o eventy prowadzacego
+    // TODO wyslij zapytanie do serwera o eventy swoje u prowadzacego
+
+    //sendRequest(userId, lecturersList.id(item->text());
+
+    // TODO odbierz liste terminow prowadzacego
+    // TODO odbierz liste terminow swoja
     // TODO zaznacz terminy
 
 //    QString tmp = item->text();
@@ -62,7 +72,7 @@ void WeekView::on_forwardButton_clicked()
 
 void WeekView::on_backButton_clicked()
 {
-    // TODO oblicz nastepny tydzien
+    // TODO oblicz poprzedni tydzien
     // TODO wyslij zapytanie do serwera
     // TODO wyswietl eventy
     // TODO zmien date

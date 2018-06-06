@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <unordered_map>
+#include <vector>
 
 namespace Ui {
 class WeekView;
@@ -25,6 +27,9 @@ private slots:
     void on_pushButton_clicked();
 
 private:
+    unsigned int userID;
+    std::unordered_map<unsigned int, std::pair<std::string, std::string>> lecturers;
+    std::unordered_map<int ,unsigned int> rowsNumber;
     Ui::WeekView *ui;
 };
 
