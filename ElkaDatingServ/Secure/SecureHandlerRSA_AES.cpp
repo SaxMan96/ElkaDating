@@ -118,9 +118,8 @@ int SecureHandlerRSA_AES::receiveRSAChallange(){
     rsa_->getData(16, header);
     type_ =*(header+8);
     int challengeNumber = *(int*)(header+12);
-
     if(!tryHeader(header) || type_ !=CHALLENGE || type_==ERROR){
-        std::cout<<"faza 1, ERROR, INVALID type: "<<type_<<" should be "<<CHALLENGE<<std::endl;
+        std::cout<<"SecureHandlerRSA_AES::receiveRSAChallange:\n ERROR, INVALID type: "<<type_<<" should be "<<CHALLENGE<<std::endl;
         //TODO throw
         return 0;
     }
@@ -148,7 +147,7 @@ void SecureHandlerRSA_AES::receiveAESKey(){
     int key_length = *(int*)(bufor+12);
     if(!tryHeader(bufor) || type_ != AES_KEY || type_ == ERROR)
     {
-         std::cout<<"ERROR, invalid AES key packet header, type: "<<type_<<std::endl;
+         std::cout<<"SecureHandlerRSA_AES::receiveAESKey(): ERROR, invalid AES key packet header, type: "<<type_<<std::endl;
          delete []bufor;
          bufor = nullptr;
          //TODO throw
@@ -187,10 +186,10 @@ bool SecureHandlerRSA_AES::receiveChallange(int challange){
 
     if(!tryHeader(bufor) || type_!=AES_CHALLENGE_REPLY || type_ == ERROR || challange != tmp)
     {
-             std::cout<<"faza 5, ERROR type:"<<type_<<", should be "<<AES_CHALLENGE_REPLY;
-             std::cout<<"\nchallange"<<tmp<<", should be "<<challange<<"\n";
-             //TODO throw
-             return false;
+         std::cout<<"SecureHandlerRSA_AES::receiveChallange: ERROR type:"<<type_<<", should be "<<AES_CHALLENGE_REPLY;
+         std::cout<<"\nchallange"<<tmp<<", should be "<<challange<<"\n";
+         //TODO throw
+         return false;
     }
     return true;
 }

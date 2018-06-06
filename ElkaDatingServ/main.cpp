@@ -48,16 +48,17 @@ void* client_thread_read(void *client)
 
     Client *clientOfThread =(Client*)client; //'owner' of thread
 
+    std::string str = "Name: Marian\nSurname: Opania\nEmail: mopania@wp.pl\nPassword: admin";
 
-  //    std::string str = "Name: Marian\nSurname: Opania\nEmail: mopania@wp.pl\nPassword: admin";
-//    Message* fakeMsg = new Message(0,0,0,0,(char*)str.c_str(),str.length());
+    Message* fakeMsg = new Message(0,0,0,0,(char*)str.c_str(),str.length());
     try{
         while(clientOfThread->checkIfStillRunning())
         {
             Message* msg = clientOfThread->readMessage();
 
             if(msg!=nullptr)
-                clientOfThread->pushMessage(msg);
+                clientOfThread->pushMessage(fakeMsg);
+//                clientOfThread->pushMessage(msg);
         }
     }
     catch(std::exception &ex)

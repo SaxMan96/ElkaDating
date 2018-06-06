@@ -1,10 +1,9 @@
 #include "Message.hpp"
 
-
-
 Message::Message(char* header){
-    // we must start with datalength
+
     dataLength_ = *(short*)(header+14);
+    delete [] msgBuf_;
 
     msgBuf_ = new char[MESSAGE_HEADER_SIZE + dataLength_];
 

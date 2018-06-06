@@ -23,7 +23,7 @@ void MessageContentParser::parseMessageContent(Message *msg)
     //    std::string str = "Name: Marian\nSurname: Opania";
     //    const char *d = str.c_str();
     //    parseRegistrationMessageContent((char*)d);
-
+   std::cout<<"parseMessageContent"<<std::endl;
     switch (msg->getMsgType())
     {
     case REGISTRATION:
@@ -32,7 +32,7 @@ void MessageContentParser::parseMessageContent(Message *msg)
     }
 }
 RegistrationMessageContent* MessageContentParser::parseRegistrationMessageContent(char* buffor){
-    //std::string content(buffor);
+
     RegistrationMessageContent* RMC = new RegistrationMessageContent();
     std::istringstream f(buffor);
     std::string line;
