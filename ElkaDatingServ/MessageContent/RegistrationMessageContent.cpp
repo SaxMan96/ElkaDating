@@ -10,8 +10,36 @@ bool RegistrationMessageContent::getIsLecturer() const
     return isLecturer_;
 }
 
-RegistrationMessageContent::RegistrationMessageContent(std::string userName,std::string password,std::string name, std::string surname, std::string studentNumber)
-    :LoginMessageContent(userName,password),name_(name),surname_(surname),studentNumber_(studentNumber)
+void RegistrationMessageContent::setEmail(const std::string &email)
+{
+    email_ = email;
+}
+
+void RegistrationMessageContent::setName(const std::string &name)
+{
+    name_ = name;
+}
+
+void RegistrationMessageContent::setSurname(const std::string &surname)
+{
+    surname_ = surname;
+}
+
+void RegistrationMessageContent::setIsLecturer(bool isLecturer)
+{
+    isLecturer_ = isLecturer;
+}
+
+RegistrationMessageContent::RegistrationMessageContent(std::string userName,std::string password,std::string name, std::string surname, std::string email, bool isLecturer)
+    :LoginMessageContent(userName,password),
+      name_(name),
+      surname_(surname),
+      isLecturer_(isLecturer)
+{
+
+}
+
+RegistrationMessageContent::RegistrationMessageContent()
 {
 
 }
@@ -24,9 +52,4 @@ std::string RegistrationMessageContent::getName()
 std::string RegistrationMessageContent::getSurname()
 {
     return surname_;
-}
-
-std::string RegistrationMessageContent::getStudentNumber()
-{
-    return studentNumber_;
 }

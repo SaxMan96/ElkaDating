@@ -87,9 +87,10 @@ Message* Client::getMessage()
 
 void Client::messageHandler(Message* msg)
 {
+
+
     if(!isLogged_)
     {
-
         if(msg->getMsgType() == LOGIN)
             loginNewUser(msg);
         else if(msg->getMsgType() == REGISTRATION)
@@ -116,6 +117,7 @@ void Client::setIsLogged(bool isLogged)
 
 void Client::registerNewUser(Message* msg)
 {
+    MessageContentParser::getInstance().parseRegistrationMessageContent(msg->getMsgDataBufor());
     mh_->handleRegisterMessage(msg);
 }
 

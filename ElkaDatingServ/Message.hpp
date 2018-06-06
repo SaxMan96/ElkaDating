@@ -136,6 +136,7 @@ public:
      */
 
     MessageContent* getContent() const;
+    void setContent(MessageContent*);
 
 
     ~Message();

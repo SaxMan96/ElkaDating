@@ -35,6 +35,8 @@ class MessageHandler;
 
 #include "Socket/SocketHandlerBSD.hpp"
 
+#include "MessageContentParser.hpp"
+
 #include <exception>
 
 
