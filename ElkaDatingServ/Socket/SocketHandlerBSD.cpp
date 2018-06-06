@@ -16,14 +16,14 @@ int SocketHandlerBSD::getData(int numberOfBytes, char *dataBufor)
 
         if(returnVal==0)
         {
-            std::cout<<"Socket bsd zwraca 0\n";
+            std::cout<<"SocketHandlerBSD::getData : Socket bsd zwraca 0\n";
             return 0;
         }
 
         else if(returnVal==-1)
         {
             // TODO THROW EXCEPTION
-            std::cout<<"READ -1!\n";
+            std::cout<<"SocketHandlerBSD::getData: READ -1!\n";
             return 0;
         }
 
@@ -44,7 +44,6 @@ int SocketHandlerBSD::sendData(int numberOfBytes, char *dataBufor)
     while(index != numberOfBytes)
     {
         returnVal = write(socketfd_, (dataBufor+index), numberOfBytes);
-        std::cout<<"co zwrócił write "<<returnVal<<std::endl;
         if(returnVal==0)
         {
             return 0;
@@ -53,7 +52,7 @@ int SocketHandlerBSD::sendData(int numberOfBytes, char *dataBufor)
         else if(returnVal==-1)
         {
             // TODO THROW EXCEPTION
-            std::cout<<"READ -1!\n";
+            std::cout<<"SocketHandlerBSD::sendData: READ -1!\n";
             return 0;
         }
 

@@ -32,6 +32,8 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 
     isRegister_=SingletonClientList::getInstance().connectClient(this);
 
+    std::cout<<"Client()"<<std::endl;
+
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
 
@@ -194,7 +196,7 @@ Message * Client::readMessage(){
         }
 
         std::cout<<msg->headerToString();
-        printf("------>>>MESSAGE: %s \n", msg->getMsgDataBufor());
+        printf("------>>>MESSAGE: \ngetMsgDataBufor:\n%s\n", msg->getMsgDataBufor());
     }
 
     return msg;
