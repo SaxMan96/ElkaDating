@@ -19,6 +19,7 @@ MessageContentParser &MessageContentParser::getInstance()
 
 void MessageContentParser::parseMessageContent(Message *msg)
 {
+
     //    std::string str = "Name: Marian\nSurname: Opania";
     //    const char *d = str.c_str();
     //    parseRegistrationMessageContent((char*)d);
@@ -53,7 +54,6 @@ RegistrationMessageContent* MessageContentParser::parseRegistrationMessageConten
 
 MessageContentParser::MessageContentParser()
 {
-
 }
 
 //std::list<Event> parserEventList()

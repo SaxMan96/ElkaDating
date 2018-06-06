@@ -214,6 +214,7 @@ int DBManager::registerNewUser(std::string email,std::string password,std::strin
 
 int DBManager::loginExistingUser(std::string userName, std::string password)
 {
+    /*
      pthread_mutex_lock(&dbMutex_);
 
      int result;
@@ -228,6 +229,7 @@ int DBManager::loginExistingUser(std::string userName, std::string password)
      pthread_mutex_unlock(&dbMutex_);
 
      return result;
+     */
 }
 bool DBManager::checkPasswordCorrect(std::string password, std::string userName){
     bool exists = false;

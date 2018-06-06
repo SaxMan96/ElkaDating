@@ -48,16 +48,21 @@ void* client_thread_read(void *client)
 
     Client *clientOfThread =(Client*)client; //'owner' of thread
 
-//    std::string str = "Name: Marian\nSurname: Opania\nEmail: mopania@wp.pl\nPassword: admin";
+
+  //    std::string str = "Name: Marian\nSurname: Opania\nEmail: mopania@wp.pl\nPassword: admin";
 //    Message* fakeMsg = new Message(0,0,0,0,(char*)str.c_str(),str.length());
+    try{
+        while(clientOfThread->checkIfStillRunning())
+        {
+            Message* msg = clientOfThread->readMessage();
 
-    while(clientOfThread->checkIfStillRunning())
+            if(msg!=nullptr)
+                clientOfThread->pushMessage(msg);
+        }
+    }
+    catch(std::exception &ex)
     {
-        Message* msg = clientOfThread->readMessage();
-
-        if(msg!=nullptr)
-//            clientOfThread->pushMessage(fakeMsg);
-            clientOfThread->pushMessage(msg);
+        std::cout<<ex.what()<<std::endl;
     }
 
     clientOfThread->pushMessage(getDisconectMessage());
@@ -69,12 +74,17 @@ void* client_thread_logic(void *client)
 {
     Client *clientOfThread =(Client*)client; // 'owner' of thread
 
-    while(clientOfThread->checkIfStillRunning())
-    {
-        Message *tmpMsg = clientOfThread->getMessage();
-        clientOfThread->messageHandler(tmpMsg);
+    try{
+        while(clientOfThread->checkIfStillRunning())
+        {
+            Message *tmpMsg = clientOfThread->getMessage();
+            clientOfThread->messageHandler(tmpMsg);
+        }
     }
-
+    catch(std::exception &ex)
+    {
+        std::cout<<ex.what()<<std::endl;
+    }
 
     clientOfThread->setStillRunningFalse();
     clientOfThread->closeConnection();
@@ -121,6 +131,7 @@ int main(int argc, char *argv[])
         std::cout<<ex.what()<<std::endl;
     }
 
+    SingletonSocketServer::getInstance().stopAcceptinNewConnections();
     SingletonClientList::getInstance().closeAllClientConnections();
 
     return 0;

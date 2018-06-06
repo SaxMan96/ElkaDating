@@ -36,6 +36,7 @@ int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA
         throw DecryptError();
 
     return result;
+
 }
 
 int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)

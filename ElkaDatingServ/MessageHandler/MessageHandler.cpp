@@ -199,6 +199,7 @@ void MessageHandler::handleRegisterMessage(Message* msg){
 
 void MessageHandler::handleLoginMessage(Message *msg)
 {
+    /*
     LoginMessageContent* loginContent = static_cast<LoginMessageContent*>(msg->getContent());
 
     std::string userName = loginContent->getUserName();
@@ -215,6 +216,5 @@ void MessageHandler::handleLoginMessage(Message *msg)
         client_->setIsLogged(true);
         client_->sendNotification("Zalogowano poprawnie.",LOGIN,SUCCESFULL);
         //TODO: jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
-
-    }
+    */
 }

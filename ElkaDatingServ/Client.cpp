@@ -94,7 +94,9 @@ void Client::messageHandler(Message* msg)
         if(msg->getMsgType() == LOGIN)
             loginNewUser(msg);
         else if(msg->getMsgType() == REGISTRATION)
-            registerNewUser(msg);
+        {
+              registerNewUser(msg);
+        }   
         else
             throw new NotLoggedInWrongMessageTypeException();
     }
@@ -107,7 +109,8 @@ void Client::messageHandler(Message* msg)
         mh_->handleMessage(msg);
     }
     else
-        throw new LoggedInWrongMessageTypeException();
+        throw LoggedInWrongMessageTypeException();
+
 }
 
 void Client::setIsLogged(bool isLogged)
@@ -146,7 +149,7 @@ void Client::closeConnection()
 
 void Client::unregister()
 {
-    //SingletonClientList::getInstance().unregisterClient(clientID_);
+    SingletonClientList::getInstance().disconnect(this);
 }
 
 int Client::getSocket()const

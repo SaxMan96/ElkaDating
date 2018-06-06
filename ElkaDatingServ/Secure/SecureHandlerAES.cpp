@@ -42,6 +42,7 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
 
 
             delete [] decryptedBuforGet_;
+            decryptedBuforGet_ = nullptr;
 
             encryptedBuforGet_ = new char[encryptedDataLenghtGet_];
             decryptedBuforGet_ = new char[decryptedDataLenghtGet_];
