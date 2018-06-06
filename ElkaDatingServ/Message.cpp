@@ -135,6 +135,11 @@ MessageContent* Message::getContent() const{
     return content_;
 }
 
+void Message::setContent(MessageContent *content)
+{
+    content_ = content;
+}
+
 Message::~Message()
 {
     delete []msgBuf_;

@@ -1,17 +1,28 @@
 #ifndef MESSAGECONTENTPARSER_HPP
 #define MESSAGECONTENTPARSER_HPP
 
+#include <QMutex>
+#include <sstream>
+#include <list>
+
 #include "Event.hpp"
 #include "Message.hpp"
-#include <list>
 
 class MessageContentParser
 {
 public:
-    MessageContentParser();
+
+    static MessageContentParser& getInstance();
     void parseMessageContent(Message *msg);
 
+    RegistrationMessageContent* parseRegistrationMessageContent(char *buffor);
+protected:
+    static MessageContentParser* pInstance_;
 private:
+    MessageContentParser();
+    MessageContentParser(const MessageContentParser&) = delete;
+    MessageContentParser& operator=(const MessageContentParser&) = delete;
+
     std::string getStringFormMsgData();
 
     std::list<Event> parseEventList();

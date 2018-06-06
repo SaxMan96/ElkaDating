@@ -88,19 +88,15 @@ Message* Client::getMessage()
 void Client::messageHandler(Message* msg)
 {
 
+
     if(!isLogged_)
     {
         if(msg->getMsgType() == LOGIN)
             loginNewUser(msg);
         else if(msg->getMsgType() == REGISTRATION)
         {
-          std::cout<<"nowy";
-          char bufor[] ={'J', 'E', 'S', 'T', '\0'};
-          Message msg(NOTIFICATION, 0, 0, 0, bufor, 5);
-          secureH_->sendData(msg.getMsgFullLength(), msg.getMsgFullBufor());
-        }
-
-        //    registerNewUser(msg);
+              registerNewUser(msg);
+        }   
         else
             throw new NotLoggedInWrongMessageTypeException();
     }
@@ -124,6 +120,7 @@ void Client::setIsLogged(bool isLogged)
 
 void Client::registerNewUser(Message* msg)
 {
+    MessageContentParser::getInstance().parseRegistrationMessageContent(msg->getMsgDataBufor());
     mh_->handleRegisterMessage(msg);
 }
 
