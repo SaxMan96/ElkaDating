@@ -178,6 +178,90 @@ int DBManager::declineEvent(unsigned int eventID, unsigned int teacherID)
     return result ;
 }
 
+int DBManager::registerNewUser(std::string email,std::string password,std::string name,std::string surname,bool isLecturer)
+{
+    pthread_mutex_lock(&dbMutex_);
+    int result;
+    if(checkExistUserName(email))
+        result = existUserName;
+    else if(!checkPasswordQualify(password))
+        result = passNotQualify;
+    else if(name.empty() ||surname.empty() ||name == "" ||surname == "")
+        result = emptyFields;
+    else{
+        QSqlQuery query;
+        query.prepare(
+            "INSERT INTO User("
+            "   email,   name,   surname,   password,   active,   isLecturer) "
+            "values ("
+            " (:email),(:name),(:surname),(:password),(:active),(:isLecturer))");
+        query.bindValue(":email",QString::fromStdString(email));
+        query.bindValue(":name",QString::fromStdString(name));
+        query.bindValue(":surname",QString::fromStdString("surname"));
+        query.bindValue(":password",QString::fromStdString("password"));
+        query.bindValue(":active",QString(QChar('t')));
+        query.bindValue(":isLecturer",QString(QChar(isLecturer?'t':'n')));
+
+
+        if(query.exec())
+            result = registerSuccess;
+        else
+            result = dateBaseError;
+    }
+
+    pthread_mutex_unlock(&dbMutex_);
+}
+
+int DBManager::loginExistingUser(std::string userName, std::string password)
+{
+    /*
+     pthread_mutex_lock(&dbMutex_);
+
+     int result;
+
+     if(!checkExistUserName(userName))
+         result = wrongLogin;
+     else if(!checkPasswordCorrect(password,userName))
+         result = wrongPassword;
+     else
+         result = loginSuccess;
+
+     pthread_mutex_unlock(&dbMutex_);
+
+     return result;
+     */
+}
+bool DBManager::checkPasswordCorrect(std::string password, std::string userName){
+    bool exists = false;
+    QSqlQuery query;
+    query.prepare("SELECT ID FROM User WHERE ("
+                  "password = (:password) AND"
+                  "email = (:userName));");
+    query.bindValue(":userName", QString::fromStdString(userName));
+    query.bindValue(":password", QString::fromStdString(password));
+    if(query.exec())
+        if(query.next())
+            exists = true;
+    return exit;
+}
+bool DBManager::checkExistUserName(std::string userName){
+
+    bool exists = false;
+    QSqlQuery query;
+    query.prepare("SELECT ID FROM User WHERE email = (:userName)");
+    query.bindValue(":userName", QString::fromStdString(userName));
+    if(query.exec())
+        if(query.next())
+            exists = true;
+    return exit;
+}
+bool DBManager::checkPasswordQualify(std::string password)
+{
+    if(password.size()<8)
+        return false;
+    return true;
+}
+
 QString DBManager::constructDateTime(Term term){
     QDateTime startTime;
     QDate* date = new QDate(term.year_, term.mon_, term.day_);

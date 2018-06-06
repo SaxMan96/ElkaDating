@@ -97,6 +97,21 @@ bool SingletonClientList::pushMessageToLoggedClient(unsigned int clientID, Messa
 
 void SingletonClientList::closeAllClientConnections()
 {
+    pthread_mutex_lock(&notLoggedClientsMutex_);
+    pthread_mutex_lock(&loggedClientsMutex_);
+
+    for( auto e : loggedClients_)
+    {
+       e.second->closeConnection();
+    }
+
+    for( auto e: notLoggedClients_)
+    {
+        e.second->closeConnection();
+    }
+
+    pthread_mutex_unlock(&loggedClientsMutex_);
+    pthread_mutex_unlock(&notLoggedClientsMutex_);
 
 }
 

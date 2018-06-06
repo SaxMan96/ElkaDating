@@ -8,12 +8,12 @@ void parseMessageContent(Message *msg)
 {
 //    switch (msg->getMsgType()):
 //    {
-//        case
 //    }
 }
 
 std::list<Event> parserEventList()
 {
+    /*
     REGISTRATION
 //    RegistrationMessageContent
 //    std::string userName = registrationContent ->getUserName();
@@ -62,7 +62,7 @@ std::list<Event> parserEventList()
 //    int type = content->getMessageType();
 //    int subType = content->getMessageSubType();
     CLIENT_DISCONNECT
-
+*/
 }
 
 std::string MessageContentParser::getStringFormMsgData()

@@ -40,7 +40,7 @@ void MessageHandler::addTermsStudent(AddTermPrefMessageContent* content){
     unsigned int teacherID = content->getTeacherID();
     std::list<Event> events = content->getEventsList();
 
-    unsigned int studentID = client_->getID();
+    unsigned int studentID = client_->getLoggedClientID();
 
     int termsCounter = 0;
 
@@ -56,7 +56,7 @@ void MessageHandler::addTermsStudent(AddTermPrefMessageContent* content){
 }
 void MessageHandler::cancelTermsStudent(EditTermPrefMessageContent* content){
     //TODO zmień typ contenta
-    unsigned int studentID = client_->getID();
+    unsigned int studentID = client_->getLoggedClientID();
     std::list<unsigned int> eventIDlist = content->getEventsIDList();
 
     int termsCounter = 0;
@@ -75,7 +75,7 @@ void MessageHandler::cancelTermsStudent(EditTermPrefMessageContent* content){
 
 void MessageHandler::addTermsTeacher(AddTermPrefMessageContent* content){
 
-    unsigned int teacherID = client_->getID();
+    unsigned int teacherID = client_->getLoggedClientID();
     std::list<Event> events = content->getEventsList();
 
     int termsCounter = 0;
@@ -93,7 +93,7 @@ void MessageHandler::addTermsTeacher(AddTermPrefMessageContent* content){
 }
 void MessageHandler::deleteTermsTeacher(EditTermPrefMessageContent* content){
 
-    unsigned int teacherID = client_->getID();
+    unsigned int teacherID = client_->getLoggedClientID();
     std::list<unsigned int> eventIDList= content->getEventsIDList();
 
     int termsCounter = 0;
@@ -110,7 +110,7 @@ void MessageHandler::deleteTermsTeacher(EditTermPrefMessageContent* content){
 }
 void MessageHandler::acceptTermsTeacher(EditTermPrefMessageContent* content){
 
-    unsigned int teacherID = client_->getID();
+    unsigned int teacherID = client_->getLoggedClientID();
     std::list<unsigned int> eventIDList= content->getEventsIDList();
 
     int termsCounter = 0;
@@ -127,7 +127,7 @@ void MessageHandler::acceptTermsTeacher(EditTermPrefMessageContent* content){
 }
 void MessageHandler::declineTermsTeacher(EditTermPrefMessageContent* content){
 
-    unsigned int teacherID = client_->getID();
+    unsigned int teacherID = client_->getLoggedClientID();
     std::list<unsigned int> eventIDList= content->getEventsIDList();
 
     int termsCounter = 0;
@@ -147,14 +147,14 @@ void MessageHandler::declineTermsTeacher(EditTermPrefMessageContent* content){
 void MessageHandler::sendMultipleMessagesHandle(SendMultipleMessageContent* content){
     std::list<unsigned int> studentIDList = content->getStudentsIDList();
     char* messageText = content->getMessageText();
-    unsigned int teacherID = client_->getID();
+    unsigned int teacherID = client_->getLoggedClientID();
     int type = content->getMessageType();
     int subType = content->getMessageSubType();
 
     Message* msg = new Message(type,subType,client_->getPacketID(),0,messageText,strlen(messageText));
     int addedTermsCounter = 0;
     for(unsigned int id: studentIDList){
-        SingletonClientList::getInstance().pushMessage(id,msg);
+        SingletonClientList::getInstance().pushMessageToLoggedClient(id,msg);
         addedTermsCounter++;
     }
     sendNotification(addedTermsCounter,studentIDList.size(),
@@ -171,4 +171,50 @@ void MessageHandler::sendNotification(int addedTermsCounter, int size,std::strin
     else if(addedTermsCounter == 0)
         client_->sendNotification(failure,NOTIFICATION,FAILURE);
 
+}
+
+void MessageHandler::handleRegisterMessage(Message* msg){
+
+    RegistrationMessageContent* registrationContent = static_cast<RegistrationMessageContent*>(msg->getContent());
+
+    std::string password = registrationContent->getPassword();
+    std::string name = registrationContent->getName();
+    std::string surname = registrationContent->getSurname();
+    std::string email = registrationContent->getEmail();
+    bool isLecturer = registrationContent->getIsLecturer();
+
+    int result = DBManager::getInstance().registerNewUser(email,password,name,surname,isLecturer);
+
+    if(result == existUserName)
+        client_->sendNotification("Istnieje już taki login (email).",REGISTRATION,WRONG_USERNAME);
+    else if(result == passNotQualify)
+        client_->sendNotification("Hasło nie spełnia wymogów, powinno mieć conajmniej 8 znaków",REGISTRATION,WRONG_PASS);
+    else if(result == emptyFields)
+        client_->sendNotification("Nietóre pola są puste, wypełnij je.",REGISTRATION,EMPTY_FIELDS);
+    else if(result == registerSuccess)
+        client_->sendNotification("Rejestracja przebiegła poprawnie.",REGISTRATION,SUCCESFULL);
+    else if(result == dateBaseError)
+        client_->sendNotification("Rejestacja nie powiodła się, błąd bazy danych.",REGISTRATION,FAILURE);
+}
+
+void MessageHandler::handleLoginMessage(Message *msg)
+{
+    /*
+    LoginMessageContent* loginContent = static_cast<LoginMessageContent*>(msg->getContent());
+
+    std::string userName = loginContent->getUserName();
+    std::string password = loginContent->getPassword();
+
+    int result = DBManager::getInstance().loginExistingUser(userName,password);
+    if(result == wrongLogin)
+        client_->sendNotification("Niepoprawny login.",LOGIN,WRONG_USERNAME);
+
+    else if(result == wrongPassword)
+        client_->sendNotification("Niepoprawne hasło.",LOGIN,WRONG_PASS);
+
+    else if(result == loginSuccess){
+        client_->isLogged_ = true;
+        client_->sendNotification("Zalogowano poprawnie.",LOGIN,SUCCESFULL);
+        //TODO: jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
+    */
 }
