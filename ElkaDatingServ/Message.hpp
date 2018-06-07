@@ -3,11 +3,13 @@
 
 #include <string>
 #include <iostream>
+#include <list>
 
 #include "MessageContent/LoginMessageContent.hpp"
 #include "MessageContent/RegistrationMessageContent.hpp"
 #include "MessageContent/MessageContent.hpp"
-
+#include "Event.hpp"
+#include "DB/DBManager.hpp"
 
 const int MESSAGE_HEADER_SIZE = 16;
 
@@ -142,8 +144,8 @@ public:
     ~Message();
 
     // --- do generowania ---
-    Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email);
-    Message *getSignInMessage(std::string email, std::string password);
+    static Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email);
+    static Message *getSignInMessage(std::string email, std::string password);
 };
 
 

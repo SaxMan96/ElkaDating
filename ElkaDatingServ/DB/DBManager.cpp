@@ -233,6 +233,23 @@ int DBManager::loginExistingUser(std::string userName, std::string password)
      return result;
 
 }
+
+std::unordered_map<unsigned int, std::pair<std::string, std::string>> DBManager::getTeacherMap()
+{
+    std::unordered_map<unsigned int, std::pair<std::string, std::string>> mapa;
+    QSqlQuery query;
+    query.prepare("SELECT ID,name,surname FROM User WHERE isLecturer == 't'");
+    if(query.exec()){
+        while(query.next()){
+            unsigned int teacherID = (unsigned int)query.value(0).toInt();
+            std::string name = query.value(1).toString().toUtf8().constData();
+            std::string surname = query.value(2).toString().toUtf8().constData();
+            std::pair<std::string, std::string> pair(name,surname);
+            mapa.insert(std::make_pair(teacherID,pair));
+        }
+    }
+    return mapa;
+}
 bool DBManager::checkPasswordCorrect(std::string password, std::string userName){
     bool exit = false;
     QSqlQuery query;

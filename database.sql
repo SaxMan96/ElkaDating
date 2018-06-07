@@ -3,8 +3,8 @@ create table User(
         email varchar(70),
         name varchar(50),
         surname varchar(100),
-	password varchar(50),
-	active varchar(1),
+        password varchar(50),
+        active varchar(1),
         isLecturer varchar(1)
 );
 
@@ -16,15 +16,15 @@ create table Message(
 );
 
 create table Event(
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
 	userID INTEGER NOT NULL,
 	lecturerID INTEGER,
-        accepted varchar(1),
-        teacherEvent varchar(1),
+    accepted varchar(1),
+    teacherEvent varchar(1),
 	name TEXT,
   	description TEXT,
   	startTime varchar(12),
   	endTime varchar(12),
-        FOREIGN KEY(userID) REFERENCES User(ID),
+    FOREIGN KEY(userID) REFERENCES User(ID),
   	FOREIGN KEY(lecturerID) REFERENCES User(ID)
 );

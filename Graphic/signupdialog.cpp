@@ -91,6 +91,7 @@ void SignUpDialog::on_apply_clicked()
             dialog.setWindowTitle("Sign in");
             dialog.setModal(true);
             dialog.exec();
+            dialog.changeText(recMsg->getMsgDataBufor());
 
 
         }

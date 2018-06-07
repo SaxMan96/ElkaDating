@@ -13,6 +13,9 @@
 #include "Term.hpp"
 #include "Event.hpp"
 #include "Message.hpp"
+#include <unordered_map>
+#include <string>
+#include <utility>
 
 const QString DATE_FORMAT = "yyyy.MM.dd.hh.mm";
 
@@ -67,6 +70,8 @@ public:
     int declineEvent(unsigned int,unsigned int);
     int registerNewUser(std::string,std::string,std::string,std::string,bool);
     int loginExistingUser(std::string,std::string);
+
+    std::unordered_map<unsigned int, std::pair<std::string, std::string>> getTeacherMap();
 
 private:
     DBManager();

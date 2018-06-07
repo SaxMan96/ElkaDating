@@ -75,6 +75,7 @@ private:
 
     void registerNewUser(Message *);
     void loginNewUser(Message *);
+    void logoutUser();
 
 
 public:

@@ -19,3 +19,14 @@ Term::Term(int tm_min,int tm_hour,int tm_day,int tm_mon,int tm_year)
 {
 
 }
+
+std::string Term::toString()
+{
+   std::string str("");
+   str += "\nMin: "+min_;
+   str += "\nHour: "+hour_;
+   str += "\nDay: "+day_;
+   str += "\nMonth:: "+mon_;
+   str += "\nYear: "+year_;
+   return str;
+}

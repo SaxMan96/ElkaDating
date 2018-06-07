@@ -15,3 +15,8 @@ Dialog::~Dialog()
     delete ui;
 }
 
+void Dialog::changeText(std::__cxx11::string tmp)
+{
+    ui->plainTextEdit->document()->setPlainText(QString::fromStdString(tmp));
+}
+
