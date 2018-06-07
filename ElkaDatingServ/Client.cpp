@@ -29,10 +29,7 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 
     secureH_ = new SecureHandlerRSA_AES(socketH_, "private_key.pem", "public_key.pem");
 
-
     isRegister_=SingletonClientList::getInstance().connectClient(this);
-
-    std::cout<<"Client()"<<std::endl;
 
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
@@ -89,8 +86,6 @@ Message* Client::getMessage()
 
 void Client::messageHandler(Message* msg)
 {
-
-
     if(!isLogged_)
     {
         if(msg->getMsgType() == LOGIN)
@@ -98,6 +93,7 @@ void Client::messageHandler(Message* msg)
         else if(msg->getMsgType() == REGISTRATION)
         {
               registerNewUser(msg);
+              sendNotification("Zarejestrowano poprawnie.",REGISTRATION,SUCCESFULL);
         }   
         else
             throw new NotLoggedInWrongMessageTypeException();
@@ -122,7 +118,7 @@ void Client::setIsLogged(bool isLogged)
 
 void Client::registerNewUser(Message* msg)
 {
-    MessageContentParser::getInstance().parseRegistrationMessageContent(msg->getMsgDataBufor());
+    MessageContentParser::getInstance().parseMessageContent(msg);
     mh_->handleRegisterMessage(msg);
 }
 
@@ -132,9 +128,8 @@ void Client::loginNewUser(Message *msg)
 }
 
 void Client::sendNotification(std::string str, int type, int subType){
-    char *data = &str[0u];
-    Message *notification = new Message(type,subType,getPacketID(),0,data,strlen(data));
-    pushMessage(notification);
+    Message *notification = new Message(type,subType,getPacketID(),0,(char*)str.c_str(),str.length());
+    secureH_->sendData(notification->getMsgFullLength(), notification->getMsgFullBufor());
 }
 
 int Client::getPacketID(){

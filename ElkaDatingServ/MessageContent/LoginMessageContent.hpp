@@ -12,6 +12,8 @@ public:
     LoginMessageContent();
     std::string getUserName();
     std::string getPassword();
+    void setPassword(const std::string &password);
+    void setUserName(const std::string &userName);
 };
 
 #endif // LOGINMESSAGECONTENT_H
