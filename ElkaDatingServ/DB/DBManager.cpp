@@ -181,6 +181,7 @@ int DBManager::declineEvent(unsigned int eventID, unsigned int teacherID)
 int DBManager::registerNewUser(std::string email,std::string password,std::string name,std::string surname,bool isLecturer)
 {
     pthread_mutex_lock(&dbMutex_);
+
     int result = -1;
     if(checkExistUserName(email))
         result = existUserName;
@@ -289,6 +290,7 @@ bool DBManager::eventExists(unsigned int eventID){
 bool DBManager::userExists(unsigned int userID)
 {
     bool exit = false;
+
     QSqlQuery query;
     query.prepare("SELECT ID FROM User WHERE ID = (:id)");
     query.bindValue(":id", userID);
@@ -300,6 +302,7 @@ bool DBManager::userExists(unsigned int userID)
 
 bool DBManager::teacherHasTerm(unsigned int teacherID, Term startTerm, Term endTerm)
 {
+
     bool exit = false;
     QSqlQuery query;
     query.prepare("SELECT ID FROM Event WHERE ("
