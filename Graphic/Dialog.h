@@ -14,8 +14,12 @@ class Dialog : public QDialog
 public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
+    void changeText(std::string);
 
 private slots:
+
+
+    void on_btnOK_clicked();
 
 private:
     Ui::Dialog *ui;

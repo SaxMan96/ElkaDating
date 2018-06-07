@@ -41,7 +41,15 @@ SOURCES += \
     MainView.cpp \
     Client.cpp \
     Message.cpp \
-    Dialog.cpp
+    Dialog.cpp \
+    ../ElkaDatingServ/MessageHandler/MessageHandler.cpp \
+    ../ElkaDatingServ/MessageContent/AddTermPrefMessageContent.cpp \
+    ../ElkaDatingServ/MessageContent/EditTermPrefMessageContent.cpp \
+    ../ElkaDatingServ/MessageContent/LoginMessageContent.cpp \
+    ../ElkaDatingServ/MessageContent/MessageContent.cpp \
+    ../ElkaDatingServ/MessageContent/RegistrationMessageContent.cpp \
+    ../ElkaDatingServ/MessageContent/SendMultipleMessageContent.cpp \
+    ../ElkaDatingServ/MessageContent/TeacherListMessageContent.cpp
 
 HEADERS += \
     signindialog.h \
@@ -59,7 +67,14 @@ HEADERS += \
     MainView.h \
     Client.hpp \
     Message.hpp \
-    Dialog.h
+    Dialog.h \
+    ../ElkaDatingServ/MessageHandler/MessageHandler.hpp \
+    ../ElkaDatingServ/MessageContent/AddTermPrefMessageContent.hpp \
+    ../ElkaDatingServ/MessageContent/EditTermPrefMessageContent.hpp \
+    ../ElkaDatingServ/MessageContent/LoginMessageContent.hpp \
+    ../ElkaDatingServ/MessageContent/MessageContent.hpp \
+    ../ElkaDatingServ/MessageContent/RegistrationMessageContent.hpp \
+    ../ElkaDatingServ/MessageContent/SendMultipleMessageContent.hpp
 
 FORMS += \
     signindialog.ui \
@@ -70,6 +85,7 @@ FORMS += \
     Dialog.ui
 
 SUBDIRS += \
+    ElkaDating.pro \
     ElkaDating.pro
 
 DISTFILES += \

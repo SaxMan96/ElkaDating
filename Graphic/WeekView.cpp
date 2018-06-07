@@ -26,8 +26,30 @@ WeekView::WeekView(QWidget *parent) :
     connect(ui->d6->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->d7->verticalScrollBar(), SLOT(setValue(int)));
     connect(ui->d7->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->d6->verticalScrollBar(), SLOT(setValue(int)));
 
+    QStringList listOfLecturers;
+    std::unordered_map<std::string, int>::iterator it = lecturers.begin();
+    QString tmp = "";
+    // Iterate over the map using iterator
+    while(it != lecturers.end())
+    {
+        tmp = "";
+        tmp += it->second->first;
+        tmp += " ";
+        tmp += it->second->second;
+        listOfLecturers += tmp;
+        it++;
+    }
+
+//    listOfLecturers.push_front();
+//    ui->lecturers->addItems()
+
 //    ui->dhour->setBaseSize(30,30);
-//    ui->dhour->set
+    //    ui->dhour->set
+}
+
+void WeekView::setLecturersMap(std::unordered_map<unsigned int, std::pair<std::__cxx11::string, std::__cxx11::string> > l)
+{
+    lecturers = l;
 }
 
 WeekView::~WeekView()

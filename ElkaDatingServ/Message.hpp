@@ -66,6 +66,7 @@ private:
     char *msgBuf_;
 
 public:
+    Message();
     Message(char* header);
     Message(int type, int subType, int packetID, int sessionID, char * data, int dataLen);
 
@@ -142,8 +143,8 @@ public:
     ~Message();
 
     // --- do generowania ---
-    Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email);
-    Message *getSignInMessage(std::string email, std::string password);
+    static Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email);
+    static Message *getSignInMessage(std::string email, std::string password);
 };
 
 

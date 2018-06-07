@@ -134,7 +134,7 @@ int Message::getMsgSubType() const
     return static_cast<int>(subType_);
 }
 
-Message *Message::getSingUpPackage(QString name, QString surname, QString password, QString email){
+Message *Message::getSignUpPackage(QString name, QString surname, QString password, QString email){
     QString str = "Name: "+name+"\nSurname: "+surname+"\nEmail: "+email+"\nPassword: "+password;
     std::string utf8_text = str.toUtf8().constData();
     return new Message(REGISTRATION,0,5,0, ((char*)utf8_text.c_str())+'\0',str.length()+1);
@@ -145,9 +145,9 @@ Message* Message::getSignInMessage(QString email, QString password){
     std::string utf8_text = str.toUtf8().constData();
     return new Message(LOGIN,0,5,0,((char*)utf8_text.c_str())+'\0',str.length()+1);
 }
-//MessageContent* Message::getContent() const{
-//    return content_;
-//}
+MessageContent* Message::getContent() const{
+    return content_;
+}
 
 
 Message::~Message()
