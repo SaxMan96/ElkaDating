@@ -1,6 +1,12 @@
 #ifndef SIGNINDIALOG_H
 #define SIGNINDIALOG_H
-
+#include "../ElkaDatingServ/MessageContentParser.hpp"
+#include "ui_signindialog.h"
+#include "QPushButton"
+#include "WeekView.h"
+#include "MainView.h"
+#include "Client.hpp"
+#include "Dialog.h"
 #include <QDialog>
 
 namespace Ui {

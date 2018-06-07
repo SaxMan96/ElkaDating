@@ -72,39 +72,3 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
-//    Package *package;
-//    SecureHandler_RSA *secureHandler_RSA, *secureHandler_AES;
-//    SecureHandlerRSA_AES *secureHandlerRSA_AES;
-
-//    SocketHandler *socketHandler;
-//    unsigned char *encrypted = new unsigned char [256];
-//    int challangeSize = 10;
-
-
-
-//    // connetcting with a server
-//    int socketID;
-//    sockaddr_in server;
-
-//    server.sin_family = AF_INET; // połączenie TCP/!P
-//    server.sin_addr.s_addr = inet_addr("192.168.43.77");
-//    server.sin_port = htons(8000);
-
-//    socketID = socket(AF_INET, SOCK_STREAM, 0 ); // TCP
-//    if(socketID == -1){
-//        std::cout<<"1\n";
-//        return 1;
-//    }
-//    if( connect(socketID, (struct sockaddr *) &server, sizeof(server)) == -1 ){
-//        std::cout<<"2\n";
-//        return 2;
-//    }
-//    socketHandler = new SocketHandlerBSD(socketID);
-//    secureHandlerRSA_AES = new SecureHandlerRSA_AES(socketHandler, "private_key.pem", "public_key.pem");
-
-//    secureHandlerRSA_AES->initConnection();
-
-
-//    MainWindow w;
-//    w.show();

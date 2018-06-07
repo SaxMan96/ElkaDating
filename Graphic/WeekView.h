@@ -16,6 +16,7 @@ class WeekView : public QDialog
 
 public:
     explicit WeekView(QWidget *parent = 0);
+    void setLecturersMap(std::unordered_map<unsigned int ,std::pair<std::string, std::string>> l);
     ~WeekView();
 
 private slots:
@@ -28,7 +29,7 @@ private slots:
 
 private:
     unsigned int userID;
-    std::unordered_map<unsigned int, std::pair<std::string, std::string>> lecturers;
+    std::unordered_map<unsigned int ,std::pair<std::string, std::string>> lecturers;
     std::unordered_map<int ,unsigned int> rowsNumber;
     Ui::WeekView *ui;
 };

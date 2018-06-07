@@ -83,26 +83,50 @@ void SignUpDialog::on_apply_clicked()
     if (validateData(name, surname, email, password, password2))
     {
         Message msg;
-        Client::getInstance().sendMessage(msg.getSingUpPackage(name, surname, password, email));
+        Client::getInstance().sendMessage(msg.getSignUpPackage(name, surname, password, email));
         Message *recMsg = Client::getInstance().getMessageFromQueue();
-        if (recMsg->getMsgType() == REGISTRATION && recMsg->getMsgSubType() == SUCCESFULL )
+        if (recMsg->getMsgType() == REGISTRATION)
         {
             Dialog dialog;
-            dialog.setWindowTitle("Sign in");
+
             dialog.setModal(true);
+            QString title = "";
+            bool succeded = false;
+            switch (recMsg->getMsgSubType())
+            {
+                case SUCCESFULL:
+                    succeded = true;
+                    title = "SUCCESFULL REGISTRATION";
+                    break;
+                case WRONG_PASS:
+                    title = "WRONG PASSWORD";
+                    break;
+                case WRONG_USERNAME:
+                    title = "WRONG USERNAME";
+                    break;
+                case EMPTY_FIELDS:
+                    title = "EMPTY FIELDS";
+                    break;
+                case FAILURE:
+                    title = "REGISTRATION FAILED";
+                    break;
+            }
+
+            dialog.setWindowTitle(title);
+            dialog.changeText(recMsg->getMsgDataBufor());
             dialog.exec();
             dialog.changeText(recMsg->getMsgDataBufor());
 
-
+            if (succeded)
+            {
+                this->close();
+                SignInDialog signInDialog;
+                signInDialog.setWindowTitle("Sign in");
+                signInDialog.setModal(true);
+                signInDialog.setWindowState(Qt::WindowMaximized);
+                signInDialog.exec();
+            }
         }
-        // TODO send sign up package
-        // email nazwisko imie haslo lecturer
-//        this->close();
-//        SignInDialog signInDialog;
-//        signInDialog.setWindowTitle("Sign in");
-//        signInDialog.setModal(true);
-//        signInDialog.setWindowState(Qt::WindowMaximized);
-//        signInDialog.exec();
     }
 }
 

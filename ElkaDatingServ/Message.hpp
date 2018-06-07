@@ -68,6 +68,7 @@ private:
     char *msgBuf_;
 
 public:
+    Message();
     Message(char* header);
     Message(int type, int subType, int packetID, int sessionID, char * data, int dataLen);
 

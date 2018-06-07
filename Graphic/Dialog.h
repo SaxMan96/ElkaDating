@@ -18,6 +18,9 @@ public:
 
 private slots:
 
+
+    void on_btnOK_clicked();
+
 private:
     Ui::Dialog *ui;
 };

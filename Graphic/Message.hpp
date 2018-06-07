@@ -139,12 +139,12 @@ public:
      * One of MessageContent classes
      */
 
-//    MessageContent* getContent() const;
+    MessageContent* getContent() const;
 
 
     ~Message();
-    Message *getSingUpPackage(QString, QString, QString, QString);
-    Message *getSignInMessage(QString, QString);
+    static Message *getSignUpPackage(QString, QString, QString, QString);
+    static Message *getSignInMessage(QString, QString);
 };
 
 // void setMsgSubType();

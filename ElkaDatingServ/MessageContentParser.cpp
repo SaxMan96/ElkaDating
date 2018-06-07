@@ -33,6 +33,7 @@ void MessageContentParser::parseMessageContent(Message *msg)
             break;
     }
 }
+
 RegistrationMessageContent* MessageContentParser::parseRegistrationMessageContent(char* buffor){
 
     RegistrationMessageContent* RMC = new RegistrationMessageContent();
