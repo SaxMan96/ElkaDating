@@ -3,11 +3,13 @@
 
 #include <string>
 #include <iostream>
+#include <list>
 
 #include "MessageContent/LoginMessageContent.hpp"
 #include "MessageContent/RegistrationMessageContent.hpp"
 #include "MessageContent/MessageContent.hpp"
-
+#include "Event.hpp"
+#include "DB/DBManager.hpp"
 
 const int MESSAGE_HEADER_SIZE = 16;
 

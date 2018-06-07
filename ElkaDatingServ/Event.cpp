@@ -94,3 +94,15 @@ Event::Event(Term startTerm,
 {
 
 }
+
+std::string Event::toString()
+{
+    std::string str("");
+    str += "\nUserID: "+studentID_;
+    str += "\nLecturerID: "+teacherID_;
+    str += "\nName: "+name_;
+    str += "\nDescription: "+description_;
+    str += startTerm_.toString();
+    str += endTerm_.toString();
+    return str;
+}

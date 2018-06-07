@@ -91,19 +91,14 @@ void Client::messageHandler(Message* msg)
         if(msg->getMsgType() == LOGIN)
             loginNewUser(msg);
         else if(msg->getMsgType() == REGISTRATION)
-        {
-              registerNewUser(msg);
-              sendNotification("Zarejestrowano poprawnie.",REGISTRATION,SUCCESFULL);
-        }   
+            registerNewUser(msg);
         else
             throw new NotLoggedInWrongMessageTypeException();
     }
-    else if(msg->getMsgType() == LOGOUT){
-        isLogged_ = false;
-        //TODO logout
-        sendNotification("Wylogowano poprawnie.",LOGOUT,SUCCESFULL);
-    }
+    else if(msg->getMsgType() == LOGOUT)
+        logoutUser();
     else if(msg->getMsgType() != LOGIN && msg->getMsgType() != REGISTRATION){
+        MessageContentParser::getInstance().parseMessageContent(msg);
         mh_->handleMessage(msg);
     }
     else
@@ -124,7 +119,14 @@ void Client::registerNewUser(Message* msg)
 
 void Client::loginNewUser(Message *msg)
 {
+    MessageContentParser::getInstance().parseMessageContent(msg);
     mh_->handleLoginMessage(msg);
+}
+
+void Client::logoutUser(){
+    setIsLogged(false);
+    //TODO logout
+    sendNotification("Wylogowano poprawnie.",LOGOUT,SUCCESFULL);
 }
 
 void Client::sendNotification(std::string str, int type, int subType){

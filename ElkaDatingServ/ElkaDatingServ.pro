@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     Event.cpp \
     MessageContent/AddTermPrefMessageContent.cpp \
     MessageContent/EditTermPrefMessageContent.cpp \
-    MessageContentParser.cpp
+    MessageContentParser.cpp \
+    MessageContent/TeacherMapMessageContent.cpp
 
 
 HEADERS += \
@@ -72,7 +73,8 @@ HEADERS += \
     Event.hpp \
     MessageContent/AddTermPrefMessageContent.hpp \
     MessageContent/EditTermPrefMessageContent.hpp \
-    MessageContentParser.hpp
+    MessageContentParser.hpp \
+    MessageContent/TeacherMapMessageContent.hpp
 
 DISTFILES += \
     ../database.sql

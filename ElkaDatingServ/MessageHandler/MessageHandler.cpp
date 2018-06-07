@@ -200,6 +200,7 @@ void MessageHandler::handleRegisterMessage(Message* msg){
 
 void MessageHandler::handleLoginMessage(Message *msg)
 {
+
     LoginMessageContent* loginContent = static_cast<LoginMessageContent*>(msg->getContent());
 
     std::string userName = loginContent->getUserName();

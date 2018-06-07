@@ -19,6 +19,7 @@ class Event
 public:
     Event();
     Event(Term, Term, std::string, std::string, unsigned int, unsigned int, bool, bool);
+    std::string toString();
 
     Term startTerm() const;
     Term endTerm() const;

@@ -115,6 +115,7 @@ void SignUpDialog::on_apply_clicked()
             dialog.setWindowTitle(title);
             dialog.changeText(recMsg->getMsgDataBufor());
             dialog.exec();
+            dialog.changeText(recMsg->getMsgDataBufor());
 
             if (succeded)
             {

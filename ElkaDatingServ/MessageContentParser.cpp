@@ -1,5 +1,8 @@
 #include "MessageContentParser.hpp"
 
+MessageContentParser::MessageContentParser()
+{
+}
 MessageContentParser * MessageContentParser::pInstance_ = NULL;
 
 MessageContentParser &MessageContentParser::getInstance()
@@ -22,8 +25,11 @@ void MessageContentParser::parseMessageContent(Message *msg)
 //    std::cout<<"parseMessageContent"<<std::endl;
     switch (msg->getMsgType())
     {
-    case REGISTRATION:
-        msg->setContent(parseRegistrationMessageContent(msg->getMsgDataBufor()));
+        case REGISTRATION:
+            msg->setContent(parseRegistrationMessageContent(msg->getMsgDataBufor()));
+            break;
+        case LOGIN:
+            msg->setContent(parseLoginMessageContent(msg->getMsgDataBufor()));
             break;
     }
 }
@@ -48,10 +54,23 @@ RegistrationMessageContent* MessageContentParser::parseRegistrationMessageConten
     }
     return RMC;
 }
+LoginMessageContent* MessageContentParser::parseLoginMessageContent(char* buffor){
 
-MessageContentParser::MessageContentParser()
-{
+    LoginMessageContent* LMC = new LoginMessageContent();
+    std::istringstream f(buffor);
+    std::string line;
+    while (std::getline(f, line))
+    {
+       std::string fieldType = line.substr(0, line.find(" "));
+       std::string fieldValue = line.substr(line.find(" ")+1, line.size());
+       if(fieldType == "Email:")
+           LMC->setUserName(fieldValue);
+       else if(fieldType == "Password:")
+           LMC->setPassword(fieldValue);
+    }
+    return LMC;
 }
+
 
 //std::list<Event> parserEventList()
 //{

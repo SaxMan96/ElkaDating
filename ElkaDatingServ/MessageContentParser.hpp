@@ -16,6 +16,7 @@ public:
     void parseMessageContent(Message *msg);
 
     RegistrationMessageContent* parseRegistrationMessageContent(char *buffor);
+    LoginMessageContent *parseLoginMessageContent(char *buffor);
 protected:
     static MessageContentParser* pInstance_;
 private:

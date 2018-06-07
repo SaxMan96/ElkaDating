@@ -26,3 +26,4 @@ void Dialog::on_btnOK_clicked()
 {
     close();
 }
+

@@ -1,6 +1,7 @@
 #ifndef TERM_H
 #define TERM_H
 
+#include <string>
 
 class Term
 {
@@ -13,6 +14,7 @@ public:
 public:
     Term();
     Term(int,int,int,int,int);
+    std::string toString();
 };
 
 #endif // TERM_H

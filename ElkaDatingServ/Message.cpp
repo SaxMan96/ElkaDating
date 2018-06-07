@@ -144,7 +144,7 @@ Message::~Message()
     delete []msgBuf_;
 }
 
-Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email){
+Message *getSignUpPackage(std::string name, std::string surname, std::string password, std::string email){
     std::string str = "Name: "+name+"\nSurname: "+surname+"\nEmail: "+email+"\nPassword: "+password;
     return new Message(REGISTRATION,0,0,0,(char*)str.c_str(),str.length());
 }
@@ -152,4 +152,77 @@ Message *getSingUpPackage(std::string name, std::string surname, std::string pas
 Message *getSignInMessage(std::string email, std::string password){
     std::string str = "Email: "+email+"\nPassword: "+password;
     return new Message(LOGIN,0,0,0,(char*)str.c_str(),str.length());
+}
+
+
+Message* getAddTermsStudentMessage(unsigned int teacherID,unsigned int studentID,std::list<Event> events){
+    std::string str = "TeacherID: "+std::to_string(teacherID)+"\nStudentID: "+std::to_string(studentID);
+    str += "\nEventsList: "+ events.size();
+    for(Event event: events){
+        event.setStudentID(studentID);
+        event.setStudentID(teacherID);
+        str += event.toString();
+    }
+    return new Message(TERMS_STUDENT,PREF_TERMS,0,0,(char*)str.c_str(),str.length());
+}
+Message* getCancelTermsStudentMessage(unsigned int studentID,std::list<unsigned int> eventIDlist){
+    std::string str = "StudentID: "+studentID;
+    str += "\nEventIDList: "+ eventIDlist.size();
+    for(unsigned int eventID: eventIDlist){
+        str += "ID: "+eventID;
+    }
+    return new Message(TERMS_STUDENT,CANCEL_TERMS,0,0,(char*)str.c_str(),str.length());
+
+}
+
+
+Message* getAddTermsTeacherMessage(unsigned int teacherID,unsigned int studentID,std::list<Event> events){
+    std::string str = "TeacherID: "+std::to_string(teacherID)+"\nStudentID: "+std::to_string(studentID);
+    str += "\nEventsList: "+ events.size();
+    for(Event event: events){
+        event.setStudentID(studentID);
+        event.setStudentID(teacherID);
+        str += event.toString();
+    }
+    return new Message(TERMS_TEACHER,NEW_TERMS,0,0,(char*)str.c_str(),str.length());
+}
+Message* getDeleteTermsTeacherMessage(unsigned int teacherID,std::list<unsigned int> eventIDlist){
+    std::string str = "TeacherID: "+teacherID;
+    str += "\nEventIDList: "+ eventIDlist.size();
+    for(unsigned int eventID: eventIDlist){
+        str += "ID: "+eventID;
+    }
+    return new Message(TERMS_STUDENT,DELETE_TERM,0,0,(char*)str.c_str(),str.length());
+
+}
+Message* getAcceptTermsTeacherMessage(unsigned int teacherID,std::list<unsigned int> eventIDlist){
+    std::string str = "TeacherID: "+teacherID;
+    str += "\nEventIDList: "+ eventIDlist.size();
+    for(unsigned int eventID: eventIDlist){
+        str += "ID: "+eventID;
+    }
+    return new Message(TERMS_STUDENT,ACCEPT_TERMS,0,0,(char*)str.c_str(),str.length());
+
+}
+Message* getDeclineTermsTeacherMessage(unsigned int teacherID,std::list<unsigned int> eventIDlist){
+    std::string str = "TeacherID: "+teacherID;
+    str += "\nEventIDList: "+ eventIDlist.size();
+    for(unsigned int eventID: eventIDlist){
+        str += "ID: "+eventID;
+    }
+    return new Message(TERMS_STUDENT,DECLINE_TERMS,0,0,(char*)str.c_str(),str.length());
+
+}
+
+Message* getTeachersListMessage(unsigned int teacherID){
+    //ID imie nazwisko
+    std::unordered_map<unsigned int, std::pair<std::string, std::string>> lecturers = DBManager::getInstance().getTeacherMap();
+
+}
+
+Message* getUserEvents(){
+    //
+}
+Message* getStudentEventsWithTeacherMessage(){
+    // spotkania studentów u teachera lista Eventów
 }
