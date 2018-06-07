@@ -1,18 +1,8 @@
 #include "RegistrationMessageContent.hpp"
 
-std::string RegistrationMessageContent::getEmail() const
-{
-    return email_;
-}
-
-bool RegistrationMessageContent::getIsLecturer() const
+bool RegistrationMessageContent::getIsLecturer()
 {
     return isLecturer_;
-}
-
-void RegistrationMessageContent::setEmail(const std::string &email)
-{
-    email_ = email;
 }
 
 void RegistrationMessageContent::setName(const std::string &name)
@@ -30,7 +20,7 @@ void RegistrationMessageContent::setIsLecturer(bool isLecturer)
     isLecturer_ = isLecturer;
 }
 
-RegistrationMessageContent::RegistrationMessageContent(std::string userName,std::string password,std::string name, std::string surname, std::string email, bool isLecturer)
+RegistrationMessageContent::RegistrationMessageContent(std::string userName,std::string password,std::string name, std::string surname, bool isLecturer)
     :LoginMessageContent(userName,password),
       name_(name),
       surname_(surname),

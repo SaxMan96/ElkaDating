@@ -181,7 +181,7 @@ int DBManager::declineEvent(unsigned int eventID, unsigned int teacherID)
 int DBManager::registerNewUser(std::string email,std::string password,std::string name,std::string surname,bool isLecturer)
 {
     pthread_mutex_lock(&dbMutex_);
-    int result;
+    int result = -1;
     if(checkExistUserName(email))
         result = existUserName;
     else if(!checkPasswordQualify(password))
@@ -210,11 +210,12 @@ int DBManager::registerNewUser(std::string email,std::string password,std::strin
     }
 
     pthread_mutex_unlock(&dbMutex_);
+    return result;
 }
 
 int DBManager::loginExistingUser(std::string userName, std::string password)
 {
-    /*
+
      pthread_mutex_lock(&dbMutex_);
 
      int result;
@@ -229,30 +230,32 @@ int DBManager::loginExistingUser(std::string userName, std::string password)
      pthread_mutex_unlock(&dbMutex_);
 
      return result;
-     */
+
 }
 bool DBManager::checkPasswordCorrect(std::string password, std::string userName){
-    bool exists = false;
+    bool exit = false;
     QSqlQuery query;
     query.prepare("SELECT ID FROM User WHERE ("
                   "password = (:password) AND"
                   "email = (:userName));");
     query.bindValue(":userName", QString::fromStdString(userName));
     query.bindValue(":password", QString::fromStdString(password));
-    if(query.exec())
-        if(query.next())
-            exists = true;
+    if(query.exec()){
+        if(query.next()){
+            exit = true;
+        }
+    }
     return exit;
 }
 bool DBManager::checkExistUserName(std::string userName){
 
-    bool exists = false;
+    bool exit = false;
     QSqlQuery query;
     query.prepare("SELECT ID FROM User WHERE email = (:userName)");
     query.bindValue(":userName", QString::fromStdString(userName));
     if(query.exec())
         if(query.next())
-            exists = true;
+            exit = true;
     return exit;
 }
 bool DBManager::checkPasswordQualify(std::string password)
@@ -273,31 +276,31 @@ QString DBManager::constructDateTime(Term term){
 }
 
 bool DBManager::eventExists(unsigned int eventID){
-    bool exists = false;
+    bool exit = false;
     QSqlQuery query;
     query.prepare("SELECT ID FROM Event WHERE ID = (:id)");
     query.bindValue(":id", eventID);
     if(query.exec())
         if(query.next())
-            exists = true;
+            exit = true;
     return exit;
 }
 
 bool DBManager::userExists(unsigned int userID)
 {
-    bool exists = false;
+    bool exit = false;
     QSqlQuery query;
     query.prepare("SELECT ID FROM User WHERE ID = (:id)");
     query.bindValue(":id", userID);
     if(query.exec())
         if(query.next())
-            exists = true;
+            exit = true;
     return exit;
 }
 
 bool DBManager::teacherHasTerm(unsigned int teacherID, Term startTerm, Term endTerm)
 {
-    bool exists = false;
+    bool exit = false;
     QSqlQuery query;
     query.prepare("SELECT ID FROM Event WHERE ("
                   "userID = (:teacherID)     AND"
@@ -313,7 +316,7 @@ bool DBManager::teacherHasTerm(unsigned int teacherID, Term startTerm, Term endT
     if(query.exec())
 
         if(query.next())
-            exists = true;
+            exit = true;
     return exit;
 }
 

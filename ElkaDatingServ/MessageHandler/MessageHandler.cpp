@@ -146,12 +146,13 @@ void MessageHandler::declineTermsTeacher(EditTermPrefMessageContent* content){
 
 void MessageHandler::sendMultipleMessagesHandle(SendMultipleMessageContent* content){
     std::list<unsigned int> studentIDList = content->getStudentsIDList();
-    char* messageText = content->getMessageText();
+    std::string messageText = content->getMessageText();
     unsigned int teacherID = client_->getLoggedClientID();
     int type = content->getMessageType();
     int subType = content->getMessageSubType();
 
-    Message* msg = new Message(type,subType,client_->getPacketID(),0,messageText,strlen(messageText));
+
+    Message* msg = new Message(type, subType, 0, 0, (char*)messageText.c_str(), (int)messageText.length());
     int addedTermsCounter = 0;
     for(unsigned int id: studentIDList){
         SingletonClientList::getInstance().pushMessageToLoggedClient(id,msg);
@@ -180,7 +181,7 @@ void MessageHandler::handleRegisterMessage(Message* msg){
     std::string password = registrationContent->getPassword();
     std::string name = registrationContent->getName();
     std::string surname = registrationContent->getSurname();
-    std::string email = registrationContent->getEmail();
+    std::string email = registrationContent->getUserName();
     bool isLecturer = registrationContent->getIsLecturer();
 
     int result = DBManager::getInstance().registerNewUser(email,password,name,surname,isLecturer);

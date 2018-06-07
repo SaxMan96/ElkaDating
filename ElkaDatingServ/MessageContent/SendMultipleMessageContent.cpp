@@ -10,7 +10,7 @@ std::list<unsigned int> SendMultipleMessageContent::getStudentsIDList()
     return studentsIDList_;
 }
 
-char *SendMultipleMessageContent::getMessageText()
+std::string SendMultipleMessageContent::getMessageText()
 {
     return messageText_;
 }

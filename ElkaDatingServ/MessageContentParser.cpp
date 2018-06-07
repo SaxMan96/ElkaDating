@@ -19,11 +19,7 @@ MessageContentParser &MessageContentParser::getInstance()
 
 void MessageContentParser::parseMessageContent(Message *msg)
 {
-
-    //    std::string str = "Name: Marian\nSurname: Opania";
-    //    const char *d = str.c_str();
-    //    parseRegistrationMessageContent((char*)d);
-   std::cout<<"parseMessageContent"<<std::endl;
+//    std::cout<<"parseMessageContent"<<std::endl;
     switch (msg->getMsgType())
     {
     case REGISTRATION:
@@ -45,9 +41,9 @@ RegistrationMessageContent* MessageContentParser::parseRegistrationMessageConten
        else if(fieldType == "Surname:")
            RMC->setSurname(fieldValue);
        else if(fieldType == "Email:")
-           RMC->setSurname(fieldValue);
+           RMC->setUserName(fieldValue);
        else if(fieldType == "Password:")
-           RMC->setSurname(fieldValue);
+           RMC->setPassword(fieldValue);
     }
     return RMC;
 }
