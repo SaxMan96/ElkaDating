@@ -36,6 +36,7 @@ int SecureHandler_RSA::private_decrypt(unsigned char * enc_data,int data_len,RSA
         throw DecryptError();
 
     return result;
+
 }
 
 int SecureHandler_RSA::private_encrypt(unsigned char * data,int data_len,RSA *rsa, unsigned char *encrypted)
@@ -60,7 +61,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
         returnVal = sc_->getData(packetLength_, encrypted_bufor_);
         if(returnVal == 0)
         {
-            std::cout<<"zwraca 0";
+            std::cout<<"SecureHandler_RSA::getData:  sc_->getData: \tzwraca 0";
             return 0;
         }
         decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);
@@ -74,7 +75,7 @@ int SecureHandler_RSA::getData(int numberOfBytes, char *data_bufor)
             returnVal = sc_->getData(packetLength_, encrypted_bufor_);
             if(returnVal == 0)
             {
-                std::cout<<"NIE POBRANO DANYCH Z SOCKETA\n";
+                std::cout<<"\nSecureHandler_RSA::getData: NIE POBRANO DANYCH Z SOCKETA\n";
                 return 0;
             }
             decryptedDataLength_ = private_decrypt((unsigned char*)encrypted_bufor_, packetLength_, rsaPrivateKey_,(unsigned char*) decrypted_bufor_);

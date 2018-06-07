@@ -19,7 +19,6 @@
 #include "SingletonClientList.hpp"
 
 #include "MessageHandler/MessageHandler.hpp"
-#include "MessageHandler/MessageHandlerDKPS.hpp"
 
 #include "SocketReader.hpp"
 #include "Exceptions/MyExceptions.hpp"
@@ -29,12 +28,23 @@
 #include "Secure/SecureHandlerNoSecure.hpp"
 #include "Secure/SecureHandlerRSA.hpp"
 #include "Secure/SecureHandlerRSA_AES.hpp"
+
+#include <limits.h>
+
+class MessageHandler;
+
 #include "Socket/SocketHandlerBSD.hpp"
+
+#include "MessageContentParser.hpp"
+
+#include <exception>
+
 
 class Client
 {
 private:
-    unsigned int clientID_;
+    unsigned int loggedclientID_;
+    unsigned int notLoggedClientID_;
 
     // thread things
     pthread_t readThread_;
@@ -58,29 +68,48 @@ private:
     SecureHandler *secureH_;
     SocketHandler *socketH_;
 
+    int nextPacketID_;
+
     void sendMessage(Message *msg);
 
-    void registerNewUser(Message *msg);
-    void loginNewUser(Message *msg);
+
+    void registerNewUser(Message *);
+    void loginNewUser(Message *);
+
+
 public:
     Client(int clientSockfd, sockaddr client_addr, socklen_t length);  
 
     bool checkIfStillRunning() const;
     pthread_t getReadThreadID() const;
-    int getID() const;
+
+    unsigned int getLoggedClientID() const;
+    unsigned int getNotLoggedClientID() const;
+
+    void setLoggedClientID(unsigned int clientID);
+    void setNotLoggedClientID(unsigned int clientID);
+
     int getSocket() const;
-
     void setStillRunningFalse();
-    void setID(unsigned int clientID);
 
-    bool login();
     void closeConnection();
     void unregister();
+
+    bool isLogged();
+    void setIsLogged(bool isLogged);
 
     void messageHandler(Message *msg);
     void pushMessage(Message *msg);
     Message* getMessage();
     Message *readMessage();
+
+    //---------------
+    bool checkExistUserName(std::string);
+    bool checkPasswordCorrect(std::string, std::string);
+    void sendNotification(std::string , int ,int);
+    bool checkPasswordQualify(std::string);
+    bool checkStudentNumberValid(std::string);
+    int getPacketID();
 
     ~Client();
 };

@@ -1,0 +1,3067 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WeekView</class>
+ <widget class="QDialog" name="WeekView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog{
+background-color: #a1a1a1;
+}
+QListWidget{
+background-color:#b5b5b5;
+border: 0px;
+color: #555753;
+}
+QListWidget.dhour::item{
+backgroung-color:#ff0000;
+color: #ff00ff;
+}
+QPlainTextEdit{
+background-color:#b5b5b5;
+border: 0px;
+color: #555753;
+padding: 5px
+}
+QListView {
+    show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+
+QListView::item:alternate {
+    background: #EEEEEE;
+}
+
+QListView::item:selected {
+    border: 1px solid #6a6ea9;
+}
+
+QListView::item:selected:!active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #ABAFE5, stop: 1 #8588B2);
+}
+
+QListView::item:selected:active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #6a6ea9, stop: 1 #888dd9);
+}
+
+QListView::item:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+}
+
+QTextEdit{
+background-color:#b5b5b5;
+border: 0px;
+color: #555753;
+vertical-align: middle;
+}
+
+QPushButton{
+background-color: #b5b5b5;
+border: 0px;
+color: #555753;
+}
+
+QHBoxLayout{
+border: 0px;
+color: #555753;
+}</string>
+  </property>
+  <widget class="QPlainTextEdit" name="userName">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>150</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string>userName</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="lecturers">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>50</y>
+     <width>150</width>
+     <height>681</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>150</width>
+     <height>0</height>
+    </size>
+   </property>
+   <item>
+    <property name="text">
+     <string>Wiktor B. Daszczuk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Krzysztof Cabaj</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Krzysztof Sacha</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Henryk Dobrowolski</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Krzysztof Pieńkosz</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>0</y>
+     <width>1031</width>
+     <height>44</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="header">
+    <item alignment="Qt::AlignLeft">
+     <widget class="QPushButton" name="modeButton">
+      <property name="minimumSize">
+       <size>
+        <width>51</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>51</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>MODE</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="dateHeader">
+      <item alignment="Qt::AlignLeft">
+       <widget class="QPushButton" name="backButton">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>10</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QTextEdit" name="dateRange">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;03-09.06.2018&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignRight">
+       <widget class="QPushButton" name="forwardButton">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item alignment="Qt::AlignRight">
+     <widget class="QPushButton" name="pushButton">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>SEND</string>
+      </property>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignRight">
+     <widget class="QPushButton" name="logoutButton">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Log out</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QListWidget" name="dhour">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>80</y>
+     <width>51</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="autoScrollMargin">
+    <number>16</number>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d1">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d2">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d3">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d4">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d5">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d6">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>920</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="d7">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>80</y>
+     <width>130</width>
+     <height>651</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::MultiSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectItems</enum>
+   </property>
+   <property name="verticalScrollMode">
+    <enum>QAbstractItemView::ScrollPerPixel</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="uniformItemSizes">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>08:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>08:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>09:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>12:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>14:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>15:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>17:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>18:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:00</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:15</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:30</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>19:45</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>20:00</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTextEdit" name="sun">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;SUN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="mon">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;MON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="tue">
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;TUE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="wed">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;WED&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="thu">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;THU&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="fri">
+   <property name="geometry">
+    <rect>
+     <x>920</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;FRI&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="sat">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>50</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>10</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1000</width>
+     <height>1000</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; dir='rtl' style=&quot; margin-top:15px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;SAT&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

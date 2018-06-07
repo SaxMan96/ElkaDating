@@ -79,6 +79,7 @@ int SecureHandler_AES::getData(int numberOfBytes, char *data_bufor)
 int SecureHandler_AES::sendData(int numberOfBytes, char* dataBufor)
 {
     int encryptedDataToSendLenght_ = (numberOfBytes/AES_BLOCK_SIZE + 1)* AES_BLOCK_SIZE + AES_BLOCK_SIZE + 4;//encryptedData + initVec + size
+
     encryptedBuforToSend_ = new char[encryptedDataToSendLenght_];
 
     // zapisz ilosc bajtow pakietu do encrypted

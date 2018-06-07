@@ -1,9 +1,11 @@
+
 #include "Message.hpp"
 
-Message::Message(char* header){
 
+
+Message::Message(char* header){
+    // we must start with datalength
     dataLength_ = *(short*)(header+14);
-    delete [] msgBuf_;
 
     msgBuf_ = new char[MESSAGE_HEADER_SIZE + dataLength_];
 
@@ -37,7 +39,7 @@ Message::Message(int type, int subType, int packetID, int sessionID, char *data,
 
     dataLength_ = dataLength;
 
-    msgBuf_ = new char[MESSAGE_HEADER_SIZE + dataLength_];
+    msgBuf_ = new char[MESSAGE_HEADER_SIZE + dataLength_ ];//+ 1
 
     //header name
     msgBuf_[0] = 'D';
@@ -74,6 +76,8 @@ Message::Message(int type, int subType, int packetID, int sessionID, char *data,
             *(msgBuf_+MESSAGE_HEADER_SIZE+i) = *(data+i);
         }
     }
+//    *(msgBuf_+MESSAGE_HEADER_SIZE+dataLength) = '\0';
+
 }
 
 
@@ -114,7 +118,7 @@ char* Message::getMsgDataBufor() const {
 
 int Message::getMsgFullLength() const {
     return MESSAGE_HEADER_SIZE + dataLength_;
-}
+ }
 
 char* Message::getMsgFullBufor() const {
     return msgBuf_;
@@ -130,26 +134,23 @@ int Message::getMsgSubType() const
     return static_cast<int>(subType_);
 }
 
-MessageContent* Message::getContent() const{
-    return content_;
+Message *Message::getSingUpPackage(QString name, QString surname, QString password, QString email){
+    QString str = "Name: "+name+"\nSurname: "+surname+"\nEmail: "+email+"\nPassword: "+password;
+    std::string utf8_text = str.toUtf8().constData();
+    return new Message(REGISTRATION,0,5,0, ((char*)utf8_text.c_str())+'\0',str.length()+1);
 }
 
-void Message::setContent(MessageContent *content)
-{
-    content_ = content;
+Message* Message::getSignInMessage(QString email, QString password){
+    QString str = "Email: "+email+"\nPassword: "+password;
+    std::string utf8_text = str.toUtf8().constData();
+    return new Message(LOGIN,0,5,0,((char*)utf8_text.c_str())+'\0',str.length()+1);
 }
+//MessageContent* Message::getContent() const{
+//    return content_;
+//}
+
 
 Message::~Message()
 {
     delete []msgBuf_;
-}
-
-Message *getSingUpPackage(std::string name, std::string surname, std::string password, std::string email){
-    std::string str = "Name: "+name+"\nSurname: "+surname+"\nEmail: "+email+"\nPassword: "+password;
-    return new Message(REGISTRATION,0,0,0,(char*)str.c_str(),str.length());
-}
-
-Message *getSignInMessage(std::string email, std::string password){
-    std::string str = "Email: "+email+"\nPassword: "+password;
-    return new Message(LOGIN,0,0,0,(char*)str.c_str(),str.length());
 }

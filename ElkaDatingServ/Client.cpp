@@ -1,14 +1,15 @@
 #include "Client.hpp"
-
+#include "Message.hpp"
 #include <iostream>
 
 Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 {
+    nextPacketID_ = 0;
     clientSockfd_=clientSockfd;
     client_addr_=client_addr;
     length_=length;
     isLogged_ = false;
-    mh_ = new MessageHandlerDKPS();
+    mh_ = new MessageHandler(this);
 
     if(sem_init(&consumerSem_, 0, 0) == -1)
     {
@@ -28,8 +29,7 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
 
     secureH_ = new SecureHandlerRSA_AES(socketH_, "private_key.pem", "public_key.pem");
 
-
-    isRegister_=SingletonClientList::getInstance().registerClient(this);
+    isRegister_=SingletonClientList::getInstance().connectClient(this);
 
     pthread_create(&readThread_, NULL, client_thread_read, (void*)this);
     pthread_create(&logicThread_, NULL, client_thread_logic, (void*)this);
@@ -37,8 +37,20 @@ Client::Client(int clientSockfd, sockaddr client_addr, socklen_t length)
     pthread_detach(logicThread_);
 }
 
-void Client::setID(unsigned int clientID){
-    clientID_=clientID;
+unsigned int Client::getLoggedClientID() const{
+    return loggedclientID_;
+}
+
+unsigned int Client::getNotLoggedClientID() const{
+    return notLoggedClientID_;
+}
+
+void Client::setLoggedClientID(unsigned int clientID){
+    loggedclientID_=clientID;
+}
+
+void Client::setNotLoggedClientID(unsigned int clientID){
+    notLoggedClientID_=clientID;
 }
 
 bool Client::checkIfStillRunning() const {
@@ -79,73 +91,50 @@ void Client::messageHandler(Message* msg)
         if(msg->getMsgType() == LOGIN)
             loginNewUser(msg);
         else if(msg->getMsgType() == REGISTRATION)
-            registerNewUser(msg);
-        else if(msg->getMsgType() == LOGOUT){}
-            //TODO nie można wylogować nie wylogowanego
+        {
+              registerNewUser(msg);
+              sendNotification("Zarejestrowano poprawnie.",REGISTRATION,SUCCESFULL);
+        }   
+        else
+            throw new NotLoggedInWrongMessageTypeException();
     }
-    //TODO nie jest zalogowany a przychodzi pakiet inny niż logowanie i rejestracja
     else if(msg->getMsgType() == LOGOUT){
         isLogged_ = false;
         //TODO logout
+        sendNotification("Wylogowano poprawnie.",LOGOUT,SUCCESFULL);
     }
     else if(msg->getMsgType() != LOGIN && msg->getMsgType() != REGISTRATION){
         mh_->handleMessage(msg);
     }
+    else
+        throw LoggedInWrongMessageTypeException();
+
 }
 
-void Client::loginNewUser(Message* msg)
+void Client::setIsLogged(bool isLogged)
 {
-//    std::string userName = msg->getContent().getUserName();
-//    std::string password = msg->getContent().getPassword();
-//    if(!checkExistUserName(userName))
-//    {
-//        //wyślij użytkownikowi powiadomienie, że nie istnieje taki login
-//    }
-//    else if(!checkPasswordCorrect(password,userName))
-//    {
-//        //wyślij info, że jest nieodpowiednie hasło
-//    }
-//    else{
-//        isLogged_ = true;
-
-//        //wyślij powiadmienie że się udało
-//        //jeżeli jest zalogowany to serwer powinien mu wysłać bierzące powiadomiania
-//    }
+    isLogged_ = isLogged;
 }
 
 void Client::registerNewUser(Message* msg)
 {
-//    std::string userName = msg->getContent().getUserName();
-//    std::string password = msg->getContent().getPassword();
-//    std::string name = msg->getContent().getName();
-//    std::string surname = msg->getContent().getSurname();
-//    std::string studentNumber = msg->getContent().getStudentNumber();
-//    if(checkExistUserName(userName))
-//    {
-//        //wyślij użytkownikowi powiadomienie, że już jest taki login
-//    }
-//    else if(!checkPasswordQualify(password))
-//    {
-//        //wyślij info, że jest nieodpowiednie hasło
-//    }
-//    else if(name.empty() ||
-//            surname.empty() ||
-//            studentNumber.empty() ||
-//            name == "" ||
-//            surname == "" ||
-//            studentNumber == ""){
-//        //wyślij powiadomienie
-//        //niektóre pola są puste wypełnij je
-//    }
-//    else{
-//        //rejestrujemy gościa
-//    }
+    MessageContentParser::getInstance().parseMessageContent(msg);
+    mh_->handleRegisterMessage(msg);
 }
 
-bool Client::login(){
-    return true;
+void Client::loginNewUser(Message *msg)
+{
+    mh_->handleLoginMessage(msg);
 }
 
+void Client::sendNotification(std::string str, int type, int subType){
+    Message *notification = new Message(type,subType,getPacketID(),0,(char*)str.c_str(),str.length());
+    secureH_->sendData(notification->getMsgFullLength(), notification->getMsgFullBufor());
+}
+
+int Client::getPacketID(){
+    return (++ nextPacketID_ )%INT_MAX;
+}
 
 void Client::closeConnection()
 {
@@ -157,15 +146,18 @@ void Client::closeConnection()
 
 void Client::unregister()
 {
-    SingletonClientList::getInstance().unregisterClient(clientID_);
+    SingletonClientList::getInstance().disconnect(this);
 }
-
 
 int Client::getSocket()const
 {
     return clientSockfd_;
 }
 
+bool Client::isLogged()
+{
+    return isLogged_;
+}
 
 Message * Client::readMessage(){
 
@@ -199,7 +191,7 @@ Message * Client::readMessage(){
         }
 
         std::cout<<msg->headerToString();
-        printf("------>>>MESSAGE: %s \n", msg->getMsgDataBufor());
+        printf("------>>>MESSAGE: \ngetMsgDataBufor:\n%s\n", msg->getMsgDataBufor());
     }
 
     return msg;
@@ -208,7 +200,6 @@ Message * Client::readMessage(){
 pthread_t Client::getReadThreadID() const{
     return readThread_;
 }
-
 
 Client::~Client()
 {
@@ -221,9 +212,4 @@ Client::~Client()
     }
     delete socketH_;
     delete secureH_;
-}
-
-int Client::getID() const
-{
-    return clientID_;
 }

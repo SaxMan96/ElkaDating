@@ -27,6 +27,11 @@ void* client_thread_read(void *connection);
 void* client_thread_logic(void *connection);
 void* connection_creator_thread(void*);
 
+Message *getDisconectMessage()
+{
+    return new Message(CLIENT_DISCONNECT, 0, 0, 0, nullptr, 0);
+}
+
 
 SingletonSocketServer *SingletonSocketServer::pInstance_ = nullptr;
 SingletonClientList *SingletonClientList::pInstance_ = nullptr;
@@ -43,19 +48,21 @@ void* client_thread_read(void *client)
 
     Client *clientOfThread =(Client*)client; //'owner' of thread
 
-
-    while(clientOfThread->checkIfStillRunning())
+    try{
+        while(clientOfThread->checkIfStillRunning())
+        {
+            Message* msg = clientOfThread->readMessage();
+            if(msg!=nullptr)
+                clientOfThread->pushMessage(msg);
+        }
+    }
+    catch(std::exception &ex)
     {
-        Message* msg = clientOfThread->readMessage();
-
-        if(msg!=nullptr)
-            clientOfThread->pushMessage(msg);
+        std::cout<<ex.what()<<std::endl;
     }
 
-    clientOfThread->pushMessage(new Message(CLIENT_DISCONNECT, 0, 0, 0, nullptr, 0));
-    // TODO żeby to nie było tak z tymi zerami!!!
+    clientOfThread->pushMessage(getDisconectMessage());
 
-    std::cout<<"CLIENT READ END ID "<<clientOfThread->getID()<<std::endl;
     return nullptr;
 }
 
@@ -63,15 +70,17 @@ void* client_thread_logic(void *client)
 {
     Client *clientOfThread =(Client*)client; // 'owner' of thread
 
-    std::cout<<"\n****************Client ID "<<clientOfThread->getID()<<"starts running.\n";
-
-    if(clientOfThread->login())
-    {
+    try{
         while(clientOfThread->checkIfStillRunning())
         {
             Message *tmpMsg = clientOfThread->getMessage();
+            std::cout<<"thread logic: "<<tmpMsg<<std::endl;
             clientOfThread->messageHandler(tmpMsg);
         }
+    }
+    catch(std::exception &ex)
+    {
+        std::cout<<ex.what()<<std::endl;
     }
 
     clientOfThread->setStillRunningFalse();
@@ -79,8 +88,6 @@ void* client_thread_logic(void *client)
     clientOfThread->unregister();
 
     pthread_join(clientOfThread->getReadThreadID(), NULL);
-
-    std::cout<<"Client ID "<<clientOfThread->getID()<<"disconnect.\n";
     delete clientOfThread;
     return nullptr;
 
@@ -121,6 +128,7 @@ int main(int argc, char *argv[])
         std::cout<<ex.what()<<std::endl;
     }
 
+    SingletonSocketServer::getInstance().stopAcceptinNewConnections();
     SingletonClientList::getInstance().closeAllClientConnections();
 
     return 0;

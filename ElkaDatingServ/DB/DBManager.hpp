@@ -9,8 +9,36 @@
 #include <QSqlError>
 #include <QTime>
 #include <QSqlRecord>
+#include <QtWidgets>
+#include "Term.hpp"
+#include "Event.hpp"
+#include "Message.hpp"
 
 const QString DATE_FORMAT = "yyyy.MM.dd.hh.mm";
+
+enum DBoperationResult{
+    //notUniqueLogin,
+    //notPlayerWithSpecifiedLogin,
+
+    // modify Events
+    addSuccess,
+    deleteSuccess,
+    cancelSuccess,//były decline
+    acceptSuccess,
+
+    // register User
+    existUserName,
+    passNotQualify,
+    emptyFields,
+    registerSuccess,
+
+    //login User
+    wrongLogin,
+    wrongPassword,
+    loginSuccess,
+
+    dateBaseError
+};
 
 class DBManager
 {
@@ -31,6 +59,14 @@ public:
     }
 
     void testDataBaseConnection();
+    int addStudentTermPref(unsigned int, unsigned int, Term, Term);
+    int cancelStudentTermPref(unsigned int,unsigned int);
+    int addEvent(Event);
+    int deleteEvent(unsigned int,unsigned int);
+    int acceptEvent(unsigned int,unsigned int);
+    int declineEvent(unsigned int,unsigned int);
+    int registerNewUser(std::string,std::string,std::string,std::string,bool);
+    int loginExistingUser(std::string,std::string);
 
 private:
     DBManager();
@@ -38,9 +74,17 @@ private:
     DBManager& operator=(const DBManager&) = delete;
 
     static DBManager* pInstance_;
-    mutable pthread_mutex_t dbMutex_;
+    pthread_mutex_t dbMutex_;
     QSqlDatabase serverDB_;
-    void addStudentTermPref(char *a);
+
+    QString constructDateTime(Term);
+    bool teacherHasTerm(unsigned int, Term,Term);
+    bool userExists(unsigned int);
+    bool eventExists(unsigned int);
+
+    bool checkExistUserName(std::string userName);
+    bool checkPasswordQualify(std::string password);
+    bool checkPasswordCorrect(std::string password, std::string userName);
 };
 
 #endif // DBMANAGER_HPP
